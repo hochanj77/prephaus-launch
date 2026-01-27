@@ -20,9 +20,9 @@
     --secondary: 222 47% 11%;
     --secondary-foreground: 0 0% 100%;
 
-    /* Blue - Accent */
-    --accent: 210 100% 50%;
-    --accent-foreground: 0 0% 100%;
+    /* Light Blue - Accent */
+    --accent: 200 80% 60%;
+    --accent-foreground: 222 47% 11%;
 
     /* Card & Popover - Light blue tinted */
     --card: 200 50% 99%;
@@ -72,8 +72,8 @@
     --secondary: 210 40% 96%;
     --secondary-foreground: 222 47% 11%;
 
-    --accent: 210 100% 50%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 200 80% 60%;
+    --accent-foreground: 222 47% 11%;
 
     --card: 222 47% 9%;
     --card-foreground: 210 40% 98%;
