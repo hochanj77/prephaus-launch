@@ -1,0 +1,279 @@
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { MapPin, Phone, Mail, Clock, CheckCircle } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+
+const gradeOptions = [
+  { value: "8", label: "8th Grade" },
+  { value: "9", label: "9th Grade" },
+  { value: "10", label: "10th Grade" },
+  { value: "11", label: "11th Grade" },
+  { value: "12", label: "12th Grade" },
+  { value: "college", label: "College" },
+];
+
+const subjectOptions = [
+  { value: "sat", label: "SAT Prep" },
+  { value: "act", label: "ACT Prep" },
+  { value: "math", label: "Math Tutoring" },
+  { value: "english", label: "English/Writing" },
+  { value: "science", label: "Science" },
+  { value: "other", label: "Other" },
+];
+
+const contactInfo = [
+  {
+    icon: MapPin,
+    title: "Visit Us",
+    details: ["123 Education Way", "Learning City, CA 90210"],
+  },
+  {
+    icon: Phone,
+    title: "Call Us",
+    details: ["(555) 123-4567"],
+  },
+  {
+    icon: Mail,
+    title: "Email Us",
+    details: ["info@prephaus.com"],
+  },
+  {
+    icon: Clock,
+    title: "Office Hours",
+    details: ["Mon-Fri: 9am - 8pm", "Sat-Sun: 10am - 5pm"],
+  },
+];
+
+export default function Contact() {
+  const { toast } = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    grade: "",
+    subjects: [] as string[],
+    message: "",
+    wantsCatalog: false,
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    // Simulate form submission
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    toast({
+      title: "Message Sent!",
+      description: "We'll get back to you within 24 hours.",
+    });
+    
+    setFormData({
+      name: "",
+      email: "",
+      phone: "",
+      grade: "",
+      subjects: [],
+      message: "",
+      wantsCatalog: false,
+    });
+    setIsSubmitting(false);
+  };
+
+  return (
+    <div className="pt-24">
+      {/* Hero Section */}
+      <section className="py-20 bg-muted">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center animate-fade-in-up">
+            <h1 className="text-4xl md:text-5xl font-bold text-secondary mb-6">
+              Contact <span className="text-accent">Us</span>
+            </h1>
+            <p className="text-xl text-muted-foreground leading-relaxed">
+              Ready to start your journey to SAT success? Get in touch with us today 
+              for a free consultation.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Form & Info */}
+      <section className="py-20 bg-background">
+        <div className="container mx-auto px-4">
+          <div className="grid lg:grid-cols-3 gap-12">
+            {/* Contact Form */}
+            <div className="lg:col-span-2">
+              <div className="bg-card rounded-2xl p-8 shadow-lg border border-border animate-fade-in-up">
+                <h2 className="text-2xl font-bold text-secondary mb-6">Send Us a Message</h2>
+                
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="name">Full Name *</Label>
+                      <Input
+                        id="name"
+                        placeholder="Your name"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="email">Email Address *</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="your@email.com"
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="phone">Phone Number</Label>
+                      <Input
+                        id="phone"
+                        type="tel"
+                        placeholder="(555) 123-4567"
+                        value={formData.phone}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="grade">Student Grade Level</Label>
+                      <Select
+                        value={formData.grade}
+                        onValueChange={(value) => setFormData({ ...formData, grade: value })}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select grade" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {gradeOptions.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Subject(s) of Interest</Label>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                      {subjectOptions.map((option) => (
+                        <div key={option.value} className="flex items-center space-x-2">
+                          <Checkbox
+                            id={option.value}
+                            checked={formData.subjects.includes(option.value)}
+                            onCheckedChange={(checked) => {
+                              if (checked) {
+                                setFormData({ ...formData, subjects: [...formData.subjects, option.value] });
+                              } else {
+                                setFormData({ ...formData, subjects: formData.subjects.filter(s => s !== option.value) });
+                              }
+                            }}
+                          />
+                          <Label htmlFor={option.value} className="text-sm font-normal cursor-pointer">
+                            {option.label}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="message">Message *</Label>
+                    <Textarea
+                      id="message"
+                      placeholder="Tell us about your goals and how we can help..."
+                      rows={5}
+                      value={formData.message}
+                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                      required
+                    />
+                  </div>
+
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="catalog"
+                      checked={formData.wantsCatalog}
+                      onCheckedChange={(checked) => setFormData({ ...formData, wantsCatalog: checked as boolean })}
+                    />
+                    <Label htmlFor="catalog" className="text-sm font-normal cursor-pointer">
+                      I'd like to receive the course catalog via email
+                    </Label>
+                  </div>
+
+                  <Button variant="hero" size="lg" type="submit" disabled={isSubmitting} className="w-full">
+                    {isSubmitting ? "Sending..." : "Send Message"}
+                  </Button>
+                </form>
+              </div>
+            </div>
+
+            {/* Contact Info */}
+            <div className="space-y-6 animate-fade-in-up animate-fade-in-delay">
+              {contactInfo.map((item) => (
+                <div key={item.title} className="bg-card rounded-xl p-6 shadow-md border border-border">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center shrink-0">
+                      <item.icon className="h-6 w-6 text-secondary" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-secondary mb-1">{item.title}</h3>
+                      {item.details.map((detail, i) => (
+                        <p key={i} className="text-muted-foreground text-sm">{detail}</p>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ))}
+
+              {/* Map Placeholder */}
+              <div className="bg-muted rounded-xl h-64 flex items-center justify-center">
+                <div className="text-center text-muted-foreground">
+                  <MapPin className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                  <p className="text-sm">Google Maps Integration</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-20 bg-warm">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-6">
+            Prefer to Talk to Someone?
+          </h2>
+          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+            Schedule a free phone or in-person consultation with one of our academic advisors.
+          </p>
+          <Button variant="hero" size="xl" asChild>
+            <a href="tel:5551234567">
+              Call (555) 123-4567
+            </a>
+          </Button>
+        </div>
+      </section>
+    </div>
+  );
+}
