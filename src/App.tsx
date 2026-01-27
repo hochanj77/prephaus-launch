@@ -15,12 +15,19 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+// When deployed under a sub-path (e.g. GitHub Pages /repo-name/),
+// this keeps routing working and prevents white screens.
+const routerBasename = (() => {
+  const base = import.meta.env.BASE_URL?.replace(/\/$/, "");
+  return base && base !== "/" ? base : undefined;
+})();
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <BrowserRouter basename={routerBasename}>
         <Layout>
           <Routes>
             <Route path="/" element={<Index />} />
