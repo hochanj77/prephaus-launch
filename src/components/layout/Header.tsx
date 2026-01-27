@@ -9,7 +9,6 @@ const navItems = [
   { label: "Course Descriptions", href: "/courses" },
   { label: "Consulting", href: "/consulting" },
   { label: "Contact", href: "/contact" },
-  { label: "Social Media", href: "/social" },
 ];
 
 export function Header() {
