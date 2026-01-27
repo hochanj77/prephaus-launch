@@ -179,35 +179,6 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-20 bg-secondary">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-secondary-foreground mb-4">
-              What Families Are <span className="text-accent">Saying</span>
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div
-                key={index}
-                className="bg-secondary-foreground/5 backdrop-blur-sm rounded-2xl p-8 animate-fade-in-up"
-                style={{ animationDelay: `${index * 0.15}s` }}
-              >
-                <Quote className="h-10 w-10 text-accent mb-4" />
-                <p className="text-secondary-foreground/90 text-lg mb-6 italic">
-                  "{testimonial.quote}"
-                </p>
-                <div>
-                  <div className="font-bold text-secondary-foreground">{testimonial.author}</div>
-                  <div className="text-secondary-foreground/60 text-sm">{testimonial.role}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* CTA Section */}
       <section className="py-20 bg-warm">
