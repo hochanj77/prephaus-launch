@@ -8,8 +8,8 @@
 
 @layer base {
   :root {
-    /* Core Brand Colors */
-    --background: 0 0% 100%;
+    /* Core Brand Colors - Light Blue Theme */
+    --background: 200 60% 98%;
     --foreground: 222 47% 11%;
 
     /* Sky Blue - Primary */
@@ -24,38 +24,38 @@
     --accent: 16 100% 66%;
     --accent-foreground: 0 0% 100%;
 
-    /* Card & Popover */
-    --card: 0 0% 100%;
+    /* Card & Popover - Light blue tinted */
+    --card: 200 50% 99%;
     --card-foreground: 222 47% 11%;
-    --popover: 0 0% 100%;
+    --popover: 200 50% 99%;
     --popover-foreground: 222 47% 11%;
 
-    /* Muted Tones */
-    --muted: 210 40% 96%;
+    /* Muted Tones - Light Blue tinted */
+    --muted: 200 40% 94%;
     --muted-foreground: 215 16% 47%;
 
-    /* Peach/Warm Tone for sections */
-    --warm: 30 100% 94%;
+    /* Light Blue Warm Tone for sections */
+    --warm: 200 50% 92%;
     --warm-foreground: 222 47% 11%;
 
     /* Destructive */
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Utilities */
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
+    /* Utilities - Light blue tinted */
+    --border: 200 30% 88%;
+    --input: 200 30% 88%;
     --ring: 197 71% 73%;
     --radius: 0.75rem;
 
     /* Sidebar */
-    --sidebar-background: 0 0% 98%;
+    --sidebar-background: 200 50% 97%;
     --sidebar-foreground: 222 47% 11%;
     --sidebar-primary: 222 47% 11%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 197 71% 93%;
     --sidebar-accent-foreground: 222 47% 11%;
-    --sidebar-border: 214 32% 91%;
+    --sidebar-border: 200 30% 88%;
     --sidebar-ring: 197 71% 73%;
 
     /* Typography */
