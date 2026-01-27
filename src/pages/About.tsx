@@ -1,9 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { CheckCircle, Award, Users, BookOpen, Target, Heart } from "lucide-react";
-import tutor1 from "@/assets/tutor-1.jpg";
-import tutor2 from "@/assets/tutor-2.jpg";
-import tutor3 from "@/assets/tutor-3.jpg";
+import { CheckCircle, Award, Users, BookOpen, Target, Heart, User } from "lucide-react";
 import classroomImage from "@/assets/classroom.jpg";
 
 const values = [
@@ -34,19 +31,16 @@ const team = [
     name: "Dr. Sarah Mitchell",
     role: "Founder & Lead Instructor",
     bio: "15+ years of experience in standardized test preparation with a Ph.D. in Education.",
-    image: tutor1,
   },
   {
     name: "Michael Chen",
     role: "SAT Math Specialist",
     bio: "Former math olympiad coach with a passion for making numbers accessible to everyone.",
-    image: tutor2,
   },
   {
     name: "Emily Rodriguez",
     role: "Reading & Writing Expert",
     bio: "Published author and language arts educator with 10 years of tutoring experience.",
-    image: tutor3,
   },
 ];
 
@@ -153,16 +147,14 @@ export default function About() {
 
           <div className="grid md:grid-cols-3 gap-8">
             {team.map((member, index) => (
-              <div
-                key={member.name}
-                className="bg-card rounded-2xl overflow-hidden shadow-lg hover-lift animate-fade-in-up"
-                style={{ animationDelay: `${index * 0.15}s` }}
-              >
-                <img
-                  src={member.image}
-                  alt={member.name}
-                  className="w-full h-64 object-cover object-top"
-                />
+                <div
+                  key={member.name}
+                  className="bg-card rounded-2xl overflow-hidden shadow-lg hover-lift animate-fade-in-up"
+                  style={{ animationDelay: `${index * 0.15}s` }}
+                >
+                  <div className="w-full h-64 bg-muted flex items-center justify-center">
+                    <User className="h-24 w-24 text-muted-foreground/40" />
+                  </div>
                 <div className="p-6">
                   <h3 className="text-xl font-bold text-secondary">{member.name}</h3>
                   <p className="text-accent font-medium mb-3">{member.role}</p>
