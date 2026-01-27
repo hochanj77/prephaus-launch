@@ -93,29 +93,6 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Warm Accent Bar */}
-      <div className="h-24 bg-warm" />
-
-      {/* Stats Section */}
-      <section className="py-20 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <div 
-                key={stat.label}
-                className="text-center animate-fade-in-up"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/20 mb-4">
-                  <stat.icon className="h-8 w-8 text-secondary" />
-                </div>
-                <div className="text-4xl md:text-5xl font-black text-secondary">{stat.value}</div>
-                <div className="text-muted-foreground font-medium mt-1">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Mission Section */}
       <section className="py-20 bg-muted">
