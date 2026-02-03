@@ -67,18 +67,13 @@ export function Header() {
             ))}
           </nav>
 
-          {/* CTA Buttons */}
+          {/* CTA Button */}
           <div className="hidden lg:flex items-center gap-3">
             <Link to="/parent-portal">
-              <Button variant="outline" size="sm">
-                Parent Portal
+              <Button variant="accent" size="sm">
+                Portal Login
               </Button>
             </Link>
-            <Button variant="accent" size="sm" asChild>
-              <a href="#" target="_blank" rel="noopener noreferrer">
-                Student Login
-              </a>
-            </Button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -115,15 +110,10 @@ export function Header() {
               ))}
               <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-border">
                 <Link to="/parent-portal">
-                  <Button variant="outline" className="w-full">
-                    Parent Portal
+                  <Button variant="accent" className="w-full">
+                    Portal Login
                   </Button>
                 </Link>
-                <Button variant="accent" className="w-full" asChild>
-                  <a href="#" target="_blank" rel="noopener noreferrer">
-                    Student Login
-                  </a>
-                </Button>
               </div>
             </nav>
           </div>
