@@ -133,38 +133,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Team Section */}
-      <section className="py-20 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-4">
-              Meet Our <span className="text-accent">Team</span>
-            </h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Expert educators passionate about helping students succeed.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {team.map((member, index) => (
-                <div
-                  key={member.name}
-                  className="bg-card rounded-2xl overflow-hidden shadow-lg hover-lift animate-fade-in-up"
-                  style={{ animationDelay: `${index * 0.15}s` }}
-                >
-                  <div className="w-full h-64 bg-muted flex items-center justify-center">
-                    <User className="h-24 w-24 text-muted-foreground/40" />
-                  </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-secondary">{member.name}</h3>
-                  <p className="text-accent font-medium mb-3">{member.role}</p>
-                  <p className="text-muted-foreground text-sm">{member.bio}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* What Makes Us Different */}
       <section className="py-20 bg-secondary">
