@@ -36,8 +36,8 @@ export function Header() {
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-background",
         isScrolled
-          ? "shadow-md py-3"
-          : "py-5"
+          ? "shadow-md py-4"
+          : "py-6"
       )}
     >
       <div className="container mx-auto px-4">
@@ -47,12 +47,12 @@ export function Header() {
             <img 
               src={prephausLogo} 
               alt="PrepHaus" 
-              className="h-12 w-auto transition-transform group-hover:scale-105"
+              className="h-16 w-auto transition-transform group-hover:scale-105"
             />
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav className="hidden lg:flex items-center gap-2">
             {navItems.map((item) => 
               item.external ? (
                 <a
@@ -60,7 +60,7 @@ export function Header() {
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-4 py-2 text-sm font-medium transition-colors rounded-md text-foreground hover:text-accent"
+                  className="px-5 py-2 text-base font-medium transition-colors rounded-md text-foreground hover:text-accent"
                 >
                   {item.label}
                 </a>
@@ -69,7 +69,7 @@ export function Header() {
                   key={item.href}
                   to={item.href}
                   className={cn(
-                    "px-4 py-2 text-sm font-medium transition-colors rounded-md",
+                    "px-5 py-2 text-base font-medium transition-colors rounded-md",
                     location.pathname === item.href
                       ? "text-accent"
                       : "text-foreground hover:text-accent"
@@ -84,7 +84,7 @@ export function Header() {
           {/* CTA Button */}
           <div className="hidden lg:flex items-center gap-3">
             <Link to="/parent-portal">
-              <Button variant="accent" size="sm">
+              <Button variant="accent" size="default">
                 Portal Login
               </Button>
             </Link>
