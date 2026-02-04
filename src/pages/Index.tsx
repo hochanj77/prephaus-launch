@@ -1,14 +1,12 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { TrendingUp, Users, Award, BookOpen, CheckCircle, ArrowRight, Quote } from "lucide-react";
-import heroImage from "@/assets/hero-study-desk.jpg";
+import { Star, TrendingUp, CheckCircle, ArrowRight, BookOpen } from "lucide-react";
 import classroomImage from "@/assets/classroom.jpg";
 
 const stats = [
-  { value: "500+", label: "Students Helped", icon: Users },
-  { value: "150+", label: "Avg. Point Improvement", icon: TrendingUp },
-  { value: "98%", label: "Parent Satisfaction", icon: Award },
-  { value: "15+", label: "Years Experience", icon: BookOpen },
+  { value: "1500+", label: "Avg. Elite Score", icon: TrendingUp },
+  { value: "Guaranteed", label: "Score Improvement", icon: CheckCircle },
+  { value: "+180", label: "Average student gain", icon: TrendingUp },
 ];
 
 const features = [
@@ -16,26 +14,6 @@ const features = [
   "Expert tutors with proven track records",
   "Comprehensive practice tests and materials",
   "Flexible scheduling to fit busy lives",
-  "Regular progress reports for parents",
-  "Small group and one-on-one options",
-];
-
-const testimonials = [
-  {
-    quote: "PrepHaus helped my daughter increase her SAT score by 200 points! The personalized attention made all the difference.",
-    author: "Sarah M.",
-    role: "Parent",
-  },
-  {
-    quote: "The tutors really care about your success. I went from anxious about the test to confident and prepared.",
-    author: "James T.",
-    role: "Student",
-  },
-  {
-    quote: "Worth every penny. Our son got into his dream school thanks to his improved scores.",
-    author: "The Rodriguez Family",
-    role: "Parents",
-  },
 ];
 
 const courses = [
@@ -60,77 +38,106 @@ export default function Index() {
   return (
     <div className="overflow-hidden">
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center">
-        {/* Background Image */}
-        <div 
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${heroImage})` }}
-        >
-          <div className="absolute inset-0 bg-secondary/20" />
-        </div>
+      <section className="pt-32 pb-16 bg-background">
+        <div className="container mx-auto px-4">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left Content */}
+            <div className="animate-fade-in-up">
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 bg-primary/10 text-primary px-4 py-2 rounded-full mb-6">
+                <Star className="h-4 w-4 fill-primary" />
+                <span className="text-sm font-semibold">TOP RATED SAT PREPARATION</span>
+              </div>
 
-        {/* Hero Card */}
-        <div className="relative z-10 container mx-auto px-4 py-32">
-          <div className="hero-card text-center animate-scale-in">
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-black leading-tight text-secondary">
-              AT <span className="text-primary">PREPHAUS</span>, WE FOCUS ON{" "}
-              <span className="text-emphasis">EXCELLENCE</span> TO CREATE A{" "}
-              <span className="text-emphasis">STRONG EDUCATIONAL EXPERIENCE</span> FOR EACH STUDENT.
-            </h1>
-            <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/contact">
-                <Button variant="hero" size="xl">
-                  Get Started Today
-                </Button>
-              </Link>
-              <Link to="/courses">
-                <Button variant="hero-outline" size="xl">
-                  Explore Courses
-                </Button>
-              </Link>
+              {/* Headline */}
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-secondary leading-tight mb-6">
+                Unlock Your{" "}
+                <span className="text-primary">Ivy League</span>{" "}
+                Potential.
+              </h1>
+
+              {/* Subheading */}
+              <p className="text-lg text-muted-foreground mb-8 max-w-lg">
+                Expert-led prep programs designed to boost your scores and confidence. 
+                Join over 5,000 students who achieved their dream scores with PrepHaus.
+              </p>
+
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 mb-12">
+                <Link to="/contact">
+                  <Button variant="hero" size="lg" className="w-full sm:w-auto">
+                    Start Free Trial
+                    <ArrowRight className="h-5 w-5" />
+                  </Button>
+                </Link>
+                <Link to="/courses">
+                  <Button variant="hero-outline" size="lg" className="w-full sm:w-auto">
+                    View Programs
+                  </Button>
+                </Link>
+              </div>
+
+              {/* Stats Row */}
+              <div className="flex flex-wrap gap-8 pt-8 border-t border-border">
+                {stats.map((stat) => (
+                  <div key={stat.label} className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                      <stat.icon className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <div className="font-bold text-secondary">{stat.value}</div>
+                      <div className="text-sm text-muted-foreground">{stat.label}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right Image */}
+            <div className="relative animate-fade-in-up animate-fade-in-delay">
+              <img
+                src={classroomImage}
+                alt="Students learning at PrepHaus"
+                className="rounded-2xl shadow-2xl w-full object-cover aspect-[4/3]"
+              />
+              {/* Floating Stats Card */}
+              <div className="absolute bottom-6 right-6 bg-card rounded-xl shadow-lg p-4 flex items-center gap-3">
+                <div className="w-12 h-12 rounded-lg bg-primary flex items-center justify-center">
+                  <span className="text-primary-foreground font-bold">+180</span>
+                </div>
+                <div>
+                  <div className="font-semibold text-secondary">Points Boost</div>
+                  <div className="text-sm text-muted-foreground">Average student gain</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-
       {/* Mission Section */}
       <section className="py-20 bg-muted">
         <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="animate-fade-in-up">
-              <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-6">
-                Your Path to <span className="text-accent">SAT Success</span> Starts Here
-              </h2>
-              <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-                At PrepHaus, we believe every student has the potential to excel. Our proven methodology combines 
-                personalized instruction, comprehensive materials, and unwavering support to help students achieve 
-                their best possible scores.
-              </p>
-              <ul className="space-y-4">
-                {features.slice(0, 4).map((feature, index) => (
-                  <li key={index} className="flex items-start gap-3">
-                    <CheckCircle className="h-6 w-6 text-accent shrink-0 mt-0.5" />
-                    <span className="text-foreground">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-8">
-                <Link to="/about">
-                  <Button variant="accent" size="lg">
-                    Learn More About Us
-                    <ArrowRight className="h-5 w-5" />
-                  </Button>
-                </Link>
+          <div className="max-w-3xl mx-auto text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-6">
+              Your Path to <span className="text-primary">SAT Success</span> Starts Here
+            </h2>
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              At PrepHaus, we believe every student has the potential to excel. Our proven methodology combines 
+              personalized instruction, comprehensive materials, and unwavering support.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {features.map((feature, index) => (
+              <div 
+                key={index} 
+                className="bg-card rounded-xl p-6 shadow-sm border border-border animate-fade-in-up"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <CheckCircle className="h-8 w-8 text-primary mb-4" />
+                <p className="text-foreground font-medium">{feature}</p>
               </div>
-            </div>
-            <div className="animate-fade-in-up animate-fade-in-delay">
-              <img
-                src={classroomImage}
-                alt="Students learning at PrepHaus"
-                className="rounded-2xl shadow-2xl"
-              />
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -140,7 +147,7 @@ export default function Index() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-4">
-              Our <span className="text-accent">Programs</span>
+              Our <span className="text-primary">Programs</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Comprehensive test preparation programs designed to help students reach their full potential.
@@ -154,14 +161,14 @@ export default function Index() {
                 className="bg-card rounded-2xl p-8 shadow-lg hover-lift border border-border animate-fade-in-up"
                 style={{ animationDelay: `${index * 0.15}s` }}
               >
-                <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center mb-6">
-                  <BookOpen className="h-6 w-6 text-secondary" />
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6">
+                  <BookOpen className="h-6 w-6 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold text-secondary mb-3">{course.title}</h3>
                 <p className="text-muted-foreground mb-4">{course.description}</p>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-accent">{course.duration}</span>
-                  <Link to="/courses" className="text-sm font-semibold text-secondary hover:text-accent transition-colors">
+                  <span className="text-sm font-medium text-primary">{course.duration}</span>
+                  <Link to="/courses" className="text-sm font-semibold text-secondary hover:text-primary transition-colors">
                     Learn More →
                   </Link>
                 </div>
@@ -179,9 +186,8 @@ export default function Index() {
         </div>
       </section>
 
-
       {/* CTA Section */}
-      <section className="py-20 bg-warm">
+      <section className="py-20 bg-muted">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-6">
             Ready to Start Your Journey?
