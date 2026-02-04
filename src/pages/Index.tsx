@@ -64,15 +64,10 @@ export default function Index() {
 
               {/* CTA Buttons */}
               <div className="flex flex-col sm:flex-row gap-4 mb-12">
-                <Link to="/contact">
-                  <Button variant="hero" size="lg" className="w-full sm:w-auto">
-                    Start Free Trial
-                    <ArrowRight className="h-5 w-5" />
-                  </Button>
-                </Link>
                 <Link to="/courses">
-                  <Button variant="hero-outline" size="lg" className="w-full sm:w-auto">
+                  <Button variant="hero" size="lg" className="w-full sm:w-auto">
                     View Programs
+                    <ArrowRight className="h-5 w-5" />
                   </Button>
                 </Link>
               </div>
