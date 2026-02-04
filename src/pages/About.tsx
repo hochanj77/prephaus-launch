@@ -1,57 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { CheckCircle, Award, Users, BookOpen, Target, Heart, User } from "lucide-react";
 import classroomImage from "@/assets/classroom.jpg";
-
-const values = [
-  {
-    icon: Target,
-    title: "Excellence",
-    description: "We strive for the highest standards in everything we do.",
-  },
-  {
-    icon: Heart,
-    title: "Care",
-    description: "Every student is treated as an individual with unique needs.",
-  },
-  {
-    icon: Users,
-    title: "Community",
-    description: "We build lasting relationships with students and families.",
-  },
-  {
-    icon: BookOpen,
-    title: "Growth",
-    description: "Continuous improvement is at the heart of our approach.",
-  },
-];
-
-const team = [
-  {
-    name: "Dr. Sarah Mitchell",
-    role: "Founder & Lead Instructor",
-    bio: "15+ years of experience in standardized test preparation with a Ph.D. in Education.",
-  },
-  {
-    name: "Michael Chen",
-    role: "SAT Math Specialist",
-    bio: "Former math olympiad coach with a passion for making numbers accessible to everyone.",
-  },
-  {
-    name: "Emily Rodriguez",
-    role: "Reading & Writing Expert",
-    bio: "Published author and language arts educator with 10 years of tutoring experience.",
-  },
-];
-
-const differentiators = [
-  "Small class sizes (max 8 students) for personalized attention",
-  "Proprietary curriculum developed over 15 years",
-  "Regular practice tests with detailed score analysis",
-  "Parent communication every step of the way",
-  "Money-back guarantee if targets aren't met",
-  "Flexible scheduling including weekends",
-];
 
 export default function About() {
   return (
@@ -106,59 +55,6 @@ export default function About() {
         </div>
       </section>
 
-      {/* Values Section */}
-      <section className="py-20 bg-warm">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-4">
-              Our <span className="text-accent">Values</span>
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {values.map((value, index) => (
-              <div
-                key={value.title}
-                className="bg-card rounded-2xl p-8 text-center hover-lift animate-fade-in-up"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/20 mb-6">
-                  <value.icon className="h-8 w-8 text-secondary" />
-                </div>
-                <h3 className="text-xl font-bold text-secondary mb-3">{value.title}</h3>
-                <p className="text-muted-foreground">{value.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-
-      {/* What Makes Us Different */}
-      <section className="py-20 bg-secondary">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-secondary-foreground mb-4">
-                What Makes Us <span className="text-accent">Different</span>
-              </h2>
-            </div>
-
-            <div className="space-y-4">
-              {differentiators.map((item, index) => (
-                <div
-                  key={index}
-                  className="flex items-start gap-4 bg-secondary-foreground/5 rounded-xl p-4 animate-fade-in-up"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <CheckCircle className="h-6 w-6 text-accent shrink-0 mt-0.5" />
-                  <span className="text-secondary-foreground">{item}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* CTA */}
       <section className="py-20 bg-warm">
