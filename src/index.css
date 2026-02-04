@@ -10,18 +10,18 @@
   :root {
     /* Core Brand Colors - Midnight Navy Theme #0F172A */
     --background: 0 0% 100%;
-    --foreground: 222 47% 16%;
+    --foreground: 222 47% 11%;
 
-    /* Midnight Navy - Primary */
-    --primary: 222 47% 16%;
+    /* Midnight Navy - Primary #0F172A */
+    --primary: 222 47% 11%;
     --primary-foreground: 0 0% 100%;
 
     /* Midnight Navy - Secondary/Headers */
-    --secondary: 222 47% 16%;
+    --secondary: 222 47% 11%;
     --secondary-foreground: 0 0% 100%;
 
-    /* Midnight Navy - Accent */
-    --accent: 222 47% 16%;
+    /* Midnight Navy - Accent #0F172A */
+    --accent: 222 47% 11%;
     --accent-foreground: 0 0% 100%;
 
     /* Card & Popover */
