@@ -26,7 +26,7 @@ const gradeOptions = [
 const subjectOptions = [
   { value: "sat", label: "SAT Prep" },
   { value: "act", label: "ACT Prep" },
-  { value: "math", label: "Math Tutoring" },
+  { value: "math", label: "Math" },
   { value: "english", label: "English/Writing" },
   { value: "science", label: "Science" },
   { value: "other", label: "Other" },
@@ -93,33 +93,32 @@ export default function Contact() {
   };
 
   return (
-    <div className="pt-24">
+    <div className="pt-20">
       {/* Hero Section */}
-      <section className="py-20 bg-muted">
+      <section className="py-10 bg-muted">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center animate-fade-in-up">
-            <h1 className="text-4xl md:text-5xl font-bold text-secondary mb-6">
+            <h1 className="text-3xl md:text-4xl font-bold text-secondary mb-3">
               Contact <span className="text-accent">Us</span>
             </h1>
-            <p className="text-xl text-muted-foreground leading-relaxed">
-              Ready to start your journey to SAT success? Get in touch with us today 
-              for a free consultation.
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              Ready to start your journey to SAT success? Get in touch for a free consultation.
             </p>
           </div>
         </div>
       </section>
 
       {/* Contact Form & Info */}
-      <section className="py-20 bg-background">
+      <section className="py-12 bg-background">
         <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-3 gap-12">
+          <div className="grid lg:grid-cols-3 gap-8">
             {/* Contact Form */}
             <div className="lg:col-span-2">
-              <div className="bg-card rounded-2xl p-8 shadow-lg border border-border animate-fade-in-up">
-                <h2 className="text-2xl font-bold text-secondary mb-6">Send Us a Message</h2>
+              <div className="bg-card rounded-2xl p-6 shadow-lg border border-border animate-fade-in-up">
+                <h2 className="text-xl font-bold text-secondary mb-4">Send Us a Message</h2>
                 
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="grid md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="name">Full Name *</Label>
                       <Input
@@ -143,7 +142,7 @@ export default function Contact() {
                     </div>
                   </div>
 
-                  <div className="grid md:grid-cols-2 gap-6">
+                  <div className="grid md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="phone">Phone Number</Label>
                       <Input
@@ -259,15 +258,15 @@ export default function Contact() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-warm">
+      <section className="py-12 bg-warm">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-6">
+          <h2 className="text-2xl md:text-3xl font-bold text-secondary mb-4">
             Prefer to Talk to Someone?
           </h2>
-          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+          <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
             Schedule a free phone or in-person consultation with one of our academic advisors.
           </p>
-          <Button variant="hero" size="xl" asChild>
+          <Button variant="hero" size="lg" asChild>
             <a href="tel:5551234567">
               Call (555) 123-4567
             </a>
