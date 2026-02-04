@@ -5,20 +5,6 @@ import classroomImage from "@/assets/classroom.jpg";
 export default function About() {
   return (
     <div className="pt-24">
-      {/* Hero Section */}
-      <section className="py-20 bg-muted">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center animate-fade-in-up">
-            <h1 className="text-4xl md:text-5xl font-bold text-secondary mb-6">
-              About <span className="text-accent">PrepHaus</span>
-            </h1>
-            <p className="text-xl text-muted-foreground leading-relaxed">
-              Founded in 2009, PrepHaus has been dedicated to helping students achieve their academic dreams 
-              through personalized test preparation and unwavering support.
-            </p>
-          </div>
-        </div>
-      </section>
 
       {/* Story Section */}
       <section className="py-20 bg-background">
