@@ -8,20 +8,20 @@
 
 @layer base {
   :root {
-    /* Core Brand Colors - Blue Theme */
+    /* Core Brand Colors - Dark Navy Theme #0F172A */
     --background: 0 0% 100%;
     --foreground: 222 47% 11%;
 
-    /* Vibrant Blue - Primary */
-    --primary: 217 91% 60%;
+    /* Dark Navy - Primary #0F172A */
+    --primary: 222 47% 11%;
     --primary-foreground: 0 0% 100%;
 
     /* Dark Navy - Secondary/Headers */
     --secondary: 222 47% 11%;
     --secondary-foreground: 0 0% 100%;
 
-    /* Blue - Accent */
-    --accent: 217 91% 60%;
+    /* Dark Navy - Accent #0F172A */
+    --accent: 222 47% 11%;
     --accent-foreground: 0 0% 100%;
 
     /* Card & Popover */
@@ -45,7 +45,7 @@
     /* Utilities */
     --border: 214 32% 91%;
     --input: 214 32% 91%;
-    --ring: 217 91% 60%;
+    --ring: 222 47% 11%;
     --radius: 0.75rem;
 
     /* Sidebar */
