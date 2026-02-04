@@ -61,8 +61,8 @@ export default function ParentPortal() {
 
           <p className="text-center text-sm text-muted-foreground mt-6">
             Don't have an account?{" "}
-            <a href="/contact" className="text-accent hover:underline">
-              Contact us
+            <a href="#" className="text-accent hover:underline">
+              Sign up
             </a>
           </p>
         </div>
