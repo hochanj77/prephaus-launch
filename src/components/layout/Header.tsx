@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, GraduationCap } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import prephausLogo from "@/assets/prephaus-logo.jpg";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -40,13 +41,12 @@ export function Header() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="bg-accent rounded-lg p-2 transition-transform group-hover:scale-105">
-              <GraduationCap className="h-6 w-6 text-accent-foreground" />
-            </div>
-            <span className="text-2xl font-bold text-secondary">
-              Prep<span className="text-accent">Haus</span>
-            </span>
+          <Link to="/" className="group">
+            <img 
+              src={prephausLogo} 
+              alt="PrepHaus" 
+              className="h-12 w-auto transition-transform group-hover:scale-105"
+            />
           </Link>
 
           {/* Desktop Navigation */}
