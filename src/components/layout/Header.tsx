@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Settings } from "lucide-react";
 import prephausLogo from "@/assets/prephaus-logo.jpg";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
 
 const navItems = [
   { label: "About Us", href: "/about" },
@@ -18,6 +19,7 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const { user, isAdmin } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -83,6 +85,14 @@ export function Header() {
 
           {/* CTA Button */}
           <div className="hidden lg:flex items-center gap-3">
+            {user && isAdmin && (
+              <Link to="/admin">
+                <Button variant="outline" size="default" className="gap-2">
+                  <Settings className="h-4 w-4" />
+                  Admin
+                </Button>
+              </Link>
+            )}
             <Link to="/parent-portal">
               <Button variant="accent" size="default">
                 Portal Login
@@ -135,6 +145,14 @@ export function Header() {
                 )
               )}
               <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-border">
+                {user && isAdmin && (
+                  <Link to="/admin">
+                    <Button variant="outline" className="w-full gap-2">
+                      <Settings className="h-4 w-4" />
+                      Admin Dashboard
+                    </Button>
+                  </Link>
+                )}
                 <Link to="/parent-portal">
                   <Button variant="accent" className="w-full">
                     Portal Login
