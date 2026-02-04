@@ -30,17 +30,15 @@ export default function About() {
               </h2>
               <div className="space-y-4 text-muted-foreground leading-relaxed">
                 <p>
-                  PrepHaus was born from a simple belief: every student deserves access to high-quality 
-                  test preparation that meets them where they are and takes them where they want to go.
+                  We at PrepHaus believe that all students have the right to receive a good education. 
+                  Moreover, the past 20 years of experience has taught me that good education is impossible 
+                  without sharing life together with the students.
                 </p>
                 <p>
-                  Our founder, Dr. Sarah Mitchell, started tutoring students from her living room, 
-                  developing personalized strategies that consistently delivered results. Word spread, 
-                  and what began as one-on-one sessions grew into the comprehensive academy we are today.
-                </p>
-                <p>
-                  After helping over 500 students improve their scores and gain admission to their 
-                  dream schools, we remain committed to the same personal touch that started it all.
+                  Education is the process of reaching our dreams and not the end goal. Therefore, we strive 
+                  to be more than mere vessels for transferring knowledge. We try our best to leave no regrets 
+                  to help students develop character alongside academic prowess every step of the way until the 
+                  student can have a secure future.
                 </p>
               </div>
             </div>
