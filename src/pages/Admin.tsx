@@ -10,7 +10,7 @@ import CoursesTab from '@/components/admin/CoursesTab';
 import TutorsTab from '@/components/admin/TutorsTab';
 
 const Admin = () => {
-  const { user, loading, isAdmin } = useAuth();
+  const { user, loading, isAdmin, isAdminLoading } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,12 +20,14 @@ const Admin = () => {
   }, [user, loading, navigate]);
 
   useEffect(() => {
-    if (!loading && user && !isAdmin) {
+    // Only redirect if we're done loading and done checking admin status
+    if (!loading && !isAdminLoading && user && !isAdmin) {
       navigate('/');
     }
-  }, [user, loading, isAdmin, navigate]);
+  }, [user, loading, isAdmin, isAdminLoading, navigate]);
 
-  if (loading) {
+  // Show loading while auth or admin check is in progress
+  if (loading || isAdminLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
