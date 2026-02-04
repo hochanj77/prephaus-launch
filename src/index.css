@@ -8,20 +8,20 @@
 
 @layer base {
   :root {
-    /* Core Brand Colors - Midnight Navy Theme #0F172A */
+    /* Core Brand Colors - Blue Theme */
     --background: 0 0% 100%;
     --foreground: 222 47% 11%;
 
-    /* Midnight Navy - Primary #0F172A */
-    --primary: 222 47% 11%;
+    /* Vibrant Blue - Primary */
+    --primary: 217 91% 60%;
     --primary-foreground: 0 0% 100%;
 
-    /* Midnight Navy - Secondary/Headers */
+    /* Dark Navy - Secondary/Headers */
     --secondary: 222 47% 11%;
     --secondary-foreground: 0 0% 100%;
 
-    /* Midnight Navy - Accent #0F172A */
-    --accent: 222 47% 11%;
+    /* Blue - Accent */
+    --accent: 217 91% 60%;
     --accent-foreground: 0 0% 100%;
 
     /* Card & Popover */
@@ -45,7 +45,7 @@
     /* Utilities */
     --border: 214 32% 91%;
     --input: 214 32% 91%;
-    --ring: 222 47% 11%;
+    --ring: 217 91% 60%;
     --radius: 0.75rem;
 
     /* Sidebar */
