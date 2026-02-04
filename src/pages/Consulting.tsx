@@ -8,8 +8,7 @@ import {
   Target, 
   FileText,
   MessageSquare,
-  ArrowRight,
-  Star
+  ArrowRight
 } from "lucide-react";
 
 const consultationBenefits = [
@@ -42,21 +41,6 @@ const whatToExpect = [
   "Overview of PrepHaus programs and pricing",
   "Q&A session to address all your questions",
   "No pressure, no commitment required",
-];
-
-const testimonials = [
-  {
-    quote: "The consultation gave us so much clarity. We knew exactly what James needed and which program was right for him.",
-    author: "Lisa M.",
-    role: "Parent",
-    rating: 5,
-  },
-  {
-    quote: "I appreciated how thorough they were without being pushy. It really felt like they cared about finding the right fit.",
-    author: "Robert T.",
-    role: "Parent",
-    rating: 5,
-  },
 ];
 
 export default function Consulting() {
@@ -166,37 +150,6 @@ export default function Consulting() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-20 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-4">
-              What Parents <span className="text-accent">Say</span>
-            </h2>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {testimonials.map((testimonial, index) => (
-              <div
-                key={index}
-                className="bg-card rounded-2xl p-8 shadow-lg border border-border animate-fade-in-up"
-                style={{ animationDelay: `${index * 0.15}s` }}
-              >
-                <div className="flex gap-1 mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="h-5 w-5 fill-accent text-accent" />
-                  ))}
-                </div>
-                <p className="text-foreground italic mb-6">"{testimonial.quote}"</p>
-                <div>
-                  <div className="font-bold text-secondary">{testimonial.author}</div>
-                  <div className="text-muted-foreground text-sm">{testimonial.role}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* CTA */}
       <section className="py-20 bg-secondary">
