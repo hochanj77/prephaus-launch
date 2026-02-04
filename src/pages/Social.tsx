@@ -87,20 +87,6 @@ const successStories = [
 export default function Social() {
   return (
     <div className="pt-24">
-      {/* Hero Section */}
-      <section className="py-20 bg-muted">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center animate-fade-in-up">
-            <h1 className="text-4xl md:text-5xl font-bold text-secondary mb-6">
-              Connect With <span className="text-accent">Us</span>
-            </h1>
-            <p className="text-xl text-muted-foreground leading-relaxed">
-              Follow us on social media for daily study tips, student success stories, 
-              free resources, and more!
-            </p>
-          </div>
-        </div>
-      </section>
 
       {/* Social Platforms */}
       <section className="py-20 bg-background">
