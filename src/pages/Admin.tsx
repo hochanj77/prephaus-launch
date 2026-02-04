@@ -2,12 +2,11 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Loader2, Users, Calendar, Megaphone, BookOpen, GraduationCap } from 'lucide-react';
+import { Loader2, Users, Calendar, Megaphone, BookOpen } from 'lucide-react';
 import StudentsTab from '@/components/admin/StudentsTab';
 import ScheduleTab from '@/components/admin/ScheduleTab';
 import AnnouncementsTab from '@/components/admin/AnnouncementsTab';
 import CoursesTab from '@/components/admin/CoursesTab';
-import TutorsTab from '@/components/admin/TutorsTab';
 
 const Admin = () => {
   const { user, loading, isAdmin, isAdminLoading } = useAuth();
@@ -47,14 +46,10 @@ const Admin = () => {
       </div>
 
       <Tabs defaultValue="students" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:inline-grid">
+        <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
           <TabsTrigger value="students" className="gap-2">
             <Users className="h-4 w-4" />
             <span className="hidden sm:inline">Students</span>
-          </TabsTrigger>
-          <TabsTrigger value="tutors" className="gap-2">
-            <GraduationCap className="h-4 w-4" />
-            <span className="hidden sm:inline">Tutors</span>
           </TabsTrigger>
           <TabsTrigger value="courses" className="gap-2">
             <BookOpen className="h-4 w-4" />
@@ -72,10 +67,6 @@ const Admin = () => {
 
         <TabsContent value="students">
           <StudentsTab />
-        </TabsContent>
-
-        <TabsContent value="tutors">
-          <TutorsTab />
         </TabsContent>
 
         <TabsContent value="courses">
