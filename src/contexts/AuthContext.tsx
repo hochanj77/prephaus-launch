@@ -7,6 +7,7 @@ interface AuthContextType {
   session: Session | null;
   loading: boolean;
   isAdmin: boolean;
+  isAdminLoading: boolean;
   signUp: (email: string, password: string) => Promise<{ error: Error | null }>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
@@ -27,8 +28,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdminLoading, setIsAdminLoading] = useState(true);
 
   const checkAdminRole = async (userId: string) => {
+    setIsAdminLoading(true);
     try {
       const { data, error } = await supabase
         .from('user_roles')
@@ -40,13 +43,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (error) {
         console.error('Error checking admin role:', error);
         setIsAdmin(false);
-        return;
+      } else {
+        setIsAdmin(!!data);
       }
-      
-      setIsAdmin(!!data);
     } catch (err) {
       console.error('Error checking admin role:', err);
       setIsAdmin(false);
+    } finally {
+      setIsAdminLoading(false);
     }
   };
 
@@ -65,6 +69,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           }, 0);
         } else {
           setIsAdmin(false);
+          setIsAdminLoading(false);
         }
       }
     );
@@ -116,6 +121,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     session,
     loading,
     isAdmin,
+    isAdminLoading,
     signUp,
     signIn,
     signOut,
