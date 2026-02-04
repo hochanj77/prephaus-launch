@@ -27,13 +27,7 @@ interface Student {
   parent_phone: string | null;
   notes: string | null;
   active: boolean;
-  tutor_id: string | null;
   created_at: string;
-}
-
-interface Tutor {
-  id: string;
-  name: string;
 }
 
 const StudentsTab = () => {
@@ -52,18 +46,6 @@ const StudentsTab = () => {
         .order('last_name', { ascending: true });
       if (error) throw error;
       return data as Student[];
-    },
-  });
-
-  const { data: tutors = [] } = useQuery({
-    queryKey: ['tutors'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('tutors')
-        .select('id, name')
-        .eq('active', true);
-      if (error) throw error;
-      return data as Tutor[];
     },
   });
 
@@ -88,12 +70,6 @@ const StudentsTab = () => {
       student.school?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const getTutorName = (tutorId: string | null) => {
-    if (!tutorId) return 'Unassigned';
-    const tutor = tutors.find((t) => t.id === tutorId);
-    return tutor?.name || 'Unknown';
-  };
-
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
@@ -110,7 +86,6 @@ const StudentsTab = () => {
               <DialogTitle>Add New Student</DialogTitle>
             </DialogHeader>
             <StudentForm
-              tutors={tutors}
               onSuccess={() => {
                 setIsAddDialogOpen(false);
                 queryClient.invalidateQueries({ queryKey: ['students'] });
@@ -145,7 +120,6 @@ const StudentsTab = () => {
                   <TableHead>Email</TableHead>
                   <TableHead>Grade</TableHead>
                   <TableHead>School</TableHead>
-                  <TableHead>Tutor</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
@@ -153,7 +127,7 @@ const StudentsTab = () => {
               <TableBody>
                 {filteredStudents.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                    <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
                       No students found
                     </TableCell>
                   </TableRow>
@@ -166,7 +140,6 @@ const StudentsTab = () => {
                       <TableCell>{student.email || '-'}</TableCell>
                       <TableCell>{student.grade_level || '-'}</TableCell>
                       <TableCell>{student.school || '-'}</TableCell>
-                      <TableCell>{getTutorName(student.tutor_id)}</TableCell>
                       <TableCell>
                         <Badge variant={student.active ? 'default' : 'secondary'}>
                           {student.active ? 'Active' : 'Inactive'}
@@ -206,7 +179,6 @@ const StudentsTab = () => {
             {selectedStudent && (
               <StudentDetails
                 student={selectedStudent}
-                tutors={tutors}
                 onClose={() => setIsDetailsOpen(false)}
               />
             )}
@@ -219,11 +191,10 @@ const StudentsTab = () => {
 
 interface StudentFormProps {
   student?: Student;
-  tutors: Tutor[];
   onSuccess: () => void;
 }
 
-const StudentForm = ({ student, tutors, onSuccess }: StudentFormProps) => {
+const StudentForm = ({ student, onSuccess }: StudentFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     first_name: student?.first_name || '',
@@ -236,7 +207,6 @@ const StudentForm = ({ student, tutors, onSuccess }: StudentFormProps) => {
     parent_email: student?.parent_email || '',
     parent_phone: student?.parent_phone || '',
     notes: student?.notes || '',
-    tutor_id: student?.tutor_id || '',
     active: student?.active ?? true,
   });
 
@@ -245,20 +215,15 @@ const StudentForm = ({ student, tutors, onSuccess }: StudentFormProps) => {
     setIsSubmitting(true);
 
     try {
-      const dataToSubmit = {
-        ...formData,
-        tutor_id: formData.tutor_id || null,
-      };
-
       if (student) {
         const { error } = await supabase
           .from('students')
-          .update(dataToSubmit)
+          .update(formData)
           .eq('id', student.id);
         if (error) throw error;
         toast.success('Student updated successfully');
       } else {
-        const { error } = await supabase.from('students').insert(dataToSubmit);
+        const { error } = await supabase.from('students').insert(formData);
         if (error) throw error;
         toast.success('Student added successfully');
       }
@@ -331,26 +296,6 @@ const StudentForm = ({ student, tutors, onSuccess }: StudentFormProps) => {
             onChange={(e) => setFormData({ ...formData, school: e.target.value })}
           />
         </div>
-      </div>
-
-      <div className="space-y-2">
-        <Label htmlFor="tutor_id">Assigned Tutor</Label>
-        <Select
-          value={formData.tutor_id}
-          onValueChange={(value) => setFormData({ ...formData, tutor_id: value })}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Select a tutor" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="">Unassigned</SelectItem>
-            {tutors.map((tutor) => (
-              <SelectItem key={tutor.id} value={tutor.id}>
-                {tutor.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
       </div>
 
       <div className="border-t pt-4">

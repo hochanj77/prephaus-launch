@@ -29,12 +29,6 @@ interface Student {
   parent_phone: string | null;
   notes: string | null;
   active: boolean;
-  tutor_id: string | null;
-}
-
-interface Tutor {
-  id: string;
-  name: string;
 }
 
 interface ProgressNote {
@@ -62,11 +56,10 @@ interface Attendance {
 
 interface StudentDetailsProps {
   student: Student;
-  tutors: Tutor[];
   onClose: () => void;
 }
 
-const StudentDetails = ({ student, tutors, onClose }: StudentDetailsProps) => {
+const StudentDetails = ({ student, onClose }: StudentDetailsProps) => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
@@ -126,7 +119,7 @@ const StudentDetails = ({ student, tutors, onClose }: StudentDetailsProps) => {
         </TabsList>
 
         <TabsContent value="info" className="mt-4">
-          <StudentInfoCard student={student} tutors={tutors} />
+          <StudentInfoCard student={student} />
         </TabsContent>
 
         <TabsContent value="attendance" className="mt-4">
@@ -157,13 +150,7 @@ const StudentDetails = ({ student, tutors, onClose }: StudentDetailsProps) => {
   );
 };
 
-const StudentInfoCard = ({ student, tutors }: { student: Student; tutors: Tutor[] }) => {
-  const getTutorName = (tutorId: string | null) => {
-    if (!tutorId) return 'Unassigned';
-    const tutor = tutors.find((t) => t.id === tutorId);
-    return tutor?.name || 'Unknown';
-  };
-
+const StudentInfoCard = ({ student }: { student: Student }) => {
   return (
     <div className="grid grid-cols-2 gap-6">
       <Card>
@@ -186,10 +173,6 @@ const StudentInfoCard = ({ student, tutors }: { student: Student; tutors: Tutor[
           <div className="flex justify-between">
             <span className="text-muted-foreground">School:</span>
             <span>{student.school || '-'}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="text-muted-foreground">Tutor:</span>
-            <span>{getTutorName(student.tutor_id)}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-muted-foreground">Status:</span>
