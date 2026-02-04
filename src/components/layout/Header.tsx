@@ -10,6 +10,7 @@ const navItems = [
   { label: "Course Descriptions", href: "/courses" },
   { label: "Consulting", href: "/consulting" },
   { label: "Social", href: "/social" },
+  { label: "SAT Test", href: "https://prephaus.ditoed.com", external: true },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -52,20 +53,32 @@ export function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-1">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                to={item.href}
-                className={cn(
-                  "px-4 py-2 text-sm font-medium transition-colors rounded-md",
-                  location.pathname === item.href
-                    ? "text-accent"
-                    : "text-foreground hover:text-accent"
-                )}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {navItems.map((item) => 
+              item.external ? (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2 text-sm font-medium transition-colors rounded-md text-foreground hover:text-accent"
+                >
+                  {item.label}
+                </a>
+              ) : (
+                <Link
+                  key={item.href}
+                  to={item.href}
+                  className={cn(
+                    "px-4 py-2 text-sm font-medium transition-colors rounded-md",
+                    location.pathname === item.href
+                      ? "text-accent"
+                      : "text-foreground hover:text-accent"
+                  )}
+                >
+                  {item.label}
+                </Link>
+              )
+            )}
           </nav>
 
           {/* CTA Button */}
@@ -95,20 +108,32 @@ export function Header() {
         {isMobileMenuOpen && (
           <div className="lg:hidden mt-4 pb-4 animate-fade-in-up">
             <nav className="flex flex-col gap-2">
-              {navItems.map((item) => (
-                <Link
-                  key={item.href}
-                  to={item.href}
-                  className={cn(
-                    "px-4 py-3 text-sm font-medium rounded-lg transition-colors",
-                    location.pathname === item.href
-                      ? "bg-primary/10 text-accent"
-                      : "text-foreground hover:bg-muted"
-                  )}
-                >
-                  {item.label}
-                </Link>
-              ))}
+              {navItems.map((item) => 
+                item.external ? (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-3 text-sm font-medium rounded-lg transition-colors text-foreground hover:bg-muted"
+                  >
+                    {item.label}
+                  </a>
+                ) : (
+                  <Link
+                    key={item.href}
+                    to={item.href}
+                    className={cn(
+                      "px-4 py-3 text-sm font-medium rounded-lg transition-colors",
+                      location.pathname === item.href
+                        ? "bg-primary/10 text-accent"
+                        : "text-foreground hover:bg-muted"
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                )
+              )}
               <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-border">
                 <Link to="/parent-portal">
                   <Button variant="accent" className="w-full">
