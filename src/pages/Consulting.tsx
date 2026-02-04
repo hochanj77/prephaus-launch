@@ -135,8 +135,8 @@ export default function Consulting() {
                     </Button>
                   </Link>
                   <Button variant="hero-outline" size="lg" className="w-full" asChild>
-                    <a href="tel:5551234567">
-                      Call (555) 123-4567
+                    <a href="tel:2015258577">
+                      Call (201) 525-8577
                     </a>
                   </Button>
                 </div>

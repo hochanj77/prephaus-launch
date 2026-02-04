@@ -36,12 +36,12 @@ const contactInfo = [
   {
     icon: MapPin,
     title: "Visit Us",
-    details: ["123 Education Way", "Learning City, CA 90210"],
+    details: ["268 Broad Ave Floor 2B", "Palisades Park, NJ 07650"],
   },
   {
     icon: Phone,
     title: "Call Us",
-    details: ["(555) 123-4567"],
+    details: ["(201) 525-8577"],
   },
   {
     icon: Mail,
@@ -267,8 +267,8 @@ export default function Contact() {
             Schedule a free phone or in-person consultation with one of our academic advisors.
           </p>
           <Button variant="hero" size="lg" asChild>
-            <a href="tel:5551234567">
-              Call (555) 123-4567
+            <a href="tel:2015258577">
+              Call (201) 525-8577
             </a>
           </Button>
         </div>

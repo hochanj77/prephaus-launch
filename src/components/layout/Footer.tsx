@@ -77,11 +77,11 @@ export function Footer() {
             <ul className="space-y-3 text-secondary-foreground/70">
               <li className="flex items-start gap-3">
                 <MapPin className="h-5 w-5 mt-0.5 shrink-0 text-accent" />
-                <span>123 Education Way<br />Learning City, CA 90210</span>
+                <span>268 Broad Ave Floor 2B<br />Palisades Park, NJ 07650</span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="h-5 w-5 shrink-0 text-accent" />
-                <span>(555) 123-4567</span>
+                <span>(201) 525-8577</span>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="h-5 w-5 shrink-0 text-accent" />
