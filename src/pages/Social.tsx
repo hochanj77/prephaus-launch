@@ -86,29 +86,29 @@ const successStories = [
 
 export default function Social() {
   return (
-    <div className="pt-24">
+    <div className="pt-20">
 
       {/* Social Platforms */}
-      <section className="py-20 bg-background">
+      <section className="py-12 md:py-20 bg-background">
         <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {socialPlatforms.map((platform, index) => (
               <a
                 key={platform.name}
                 href={platform.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block bg-card rounded-2xl p-8 shadow-lg border border-border hover-lift animate-fade-in-up group"
+                className="block bg-card rounded-xl md:rounded-2xl p-4 md:p-8 shadow-lg border border-border hover-lift animate-fade-in-up group"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className={`w-16 h-16 rounded-xl ${platform.color} flex items-center justify-center mb-6`}>
-                  <platform.icon className="h-8 w-8 text-secondary-foreground" />
+                <div className={`w-10 h-10 md:w-16 md:h-16 rounded-lg md:rounded-xl ${platform.color} flex items-center justify-center mb-3 md:mb-6`}>
+                  <platform.icon className="h-5 w-5 md:h-8 md:w-8 text-secondary-foreground" />
                 </div>
-                <h3 className="text-xl font-bold text-secondary mb-1">{platform.name}</h3>
-                <p className="text-accent font-medium mb-3">{platform.handle}</p>
-                <p className="text-muted-foreground text-sm mb-4">{platform.description}</p>
+                <h3 className="text-base md:text-xl font-bold text-secondary mb-1">{platform.name}</h3>
+                <p className="text-accent font-medium text-xs md:text-base mb-2 md:mb-3">{platform.handle}</p>
+                <p className="text-muted-foreground text-xs md:text-sm mb-3 md:mb-4 hidden md:block">{platform.description}</p>
                 <div className="flex items-center gap-2 text-sm font-semibold text-secondary group-hover:text-accent transition-colors">
-                  Follow Us <ExternalLink className="h-4 w-4" />
+                  <span className="hidden md:inline">Follow Us</span> <ExternalLink className="h-4 w-4" />
                 </div>
               </a>
             ))}
@@ -117,19 +117,19 @@ export default function Social() {
       </section>
 
       {/* Recent Posts */}
-      <section className="py-20 bg-warm">
+      <section className="py-12 md:py-20 bg-warm">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-4">
+          <div className="text-center mb-8 md:mb-12">
+            <h2 className="text-2xl md:text-4xl font-bold text-secondary mb-4">
               Recent <span className="text-accent">Posts</span>
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-4 md:gap-8">
             {recentPosts.map((post, index) => (
               <div
                 key={index}
-                className="bg-card rounded-xl p-6 shadow-md animate-fade-in-up"
+                className="bg-card rounded-xl p-4 md:p-6 shadow-md animate-fade-in-up"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div className="flex items-center justify-between mb-4">
@@ -145,20 +145,20 @@ export default function Social() {
       </section>
 
       {/* Success Stories */}
-      <section className="py-20 bg-secondary">
+      <section className="py-12 md:py-20 bg-secondary">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-secondary-foreground mb-4">
+          <div className="text-center mb-8 md:mb-12">
+            <h2 className="text-2xl md:text-4xl font-bold text-secondary-foreground mb-4">
               Student <span className="text-accent">Success Stories</span>
             </h2>
             <p className="text-secondary-foreground/70">Real students. Real results.</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-3 gap-4 md:gap-8">
             {successStories.map((story, index) => (
               <div
                 key={index}
-                className="bg-secondary-foreground/5 rounded-2xl p-8 animate-fade-in-up"
+                className="bg-secondary-foreground/5 rounded-xl md:rounded-2xl p-5 md:p-8 animate-fade-in-up"
                 style={{ animationDelay: `${index * 0.15}s` }}
               >
                 <div className="text-accent font-bold text-lg mb-2">{story.improvement}</div>
@@ -171,12 +171,12 @@ export default function Social() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-background">
+      <section className="py-12 md:py-20 bg-background">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-6">
+          <h2 className="text-2xl md:text-4xl font-bold text-secondary mb-4 md:mb-6">
             Want to Be Our Next Success Story?
           </h2>
-          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8 max-w-2xl mx-auto">
             Join hundreds of students who have achieved their target scores with PrepHaus.
           </p>
           <Link to="/contact">

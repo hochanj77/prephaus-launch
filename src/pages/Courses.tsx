@@ -152,13 +152,13 @@ export default function Courses() {
   return (
     <div className="pt-24">
       {/* Hero Section */}
-      <section className="py-20 bg-muted">
+      <section className="py-12 md:py-20 bg-muted">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center animate-fade-in-up">
-            <h1 className="text-4xl md:text-5xl font-bold text-secondary mb-6">
+            <h1 className="text-3xl md:text-5xl font-bold text-secondary mb-4 md:mb-6">
               Course <span className="text-accent">Descriptions</span>
             </h1>
-            <p className="text-xl text-muted-foreground leading-relaxed">
+            <p className="text-base md:text-xl text-muted-foreground leading-relaxed">
               Explore our comprehensive range of test preparation programs and academic tutoring services 
               designed to help every student succeed.
             </p>
@@ -167,17 +167,17 @@ export default function Courses() {
       </section>
 
       {/* Courses Section */}
-      <section className="py-20 bg-background">
+      <section className="py-12 md:py-20 bg-background">
         <div className="container mx-auto px-4">
           {/* Filter Tabs */}
           <Tabs defaultValue="all" className="w-full">
-            <TabsList className="flex flex-wrap justify-center gap-2 mb-12 bg-transparent">
+            <TabsList className="flex flex-wrap justify-center gap-2 mb-8 md:mb-12 bg-transparent">
               {categories.map((category) => (
                 <TabsTrigger
                   key={category.id}
                   value={category.id}
                   onClick={() => setActiveCategory(category.id)}
-                  className="px-6 py-3 rounded-full data-[state=active]:bg-secondary data-[state=active]:text-secondary-foreground"
+                  className="px-4 md:px-6 py-2 md:py-3 text-sm md:text-base rounded-full data-[state=active]:bg-secondary data-[state=active]:text-secondary-foreground"
                 >
                   {category.label}
                 </TabsTrigger>
@@ -185,23 +185,23 @@ export default function Courses() {
             </TabsList>
 
             <TabsContent value={activeCategory} className="mt-0">
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
                 {filteredCourses.map((course, index) => (
                   <div
                     key={course.id}
-                    className="bg-card rounded-2xl p-8 shadow-lg border border-border hover-lift animate-fade-in-up"
+                    className="bg-card rounded-xl md:rounded-2xl p-5 md:p-8 shadow-lg border border-border hover-lift animate-fade-in-up"
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
-                    <div className="mb-6">
+                    <div className="mb-4 md:mb-6">
                       <span className="inline-block px-3 py-1 bg-primary/20 text-secondary text-xs font-semibold rounded-full uppercase">
                         {categories.find(c => c.id === course.category)?.label}
                       </span>
                     </div>
                     
-                    <h3 className="text-xl font-bold text-secondary mb-3">{course.title}</h3>
-                    <p className="text-muted-foreground mb-6">{course.description}</p>
+                    <h3 className="text-lg md:text-xl font-bold text-secondary mb-2 md:mb-3">{course.title}</h3>
+                    <p className="text-muted-foreground text-sm md:text-base mb-4 md:mb-6">{course.description}</p>
 
-                    <div className="space-y-3 mb-6">
+                    <div className="space-y-2 md:space-y-3 mb-4 md:mb-6">
                       <div className="flex items-center gap-3 text-sm">
                         <Clock className="h-4 w-4 text-accent" />
                         <span className="text-muted-foreground">{course.duration}</span>
@@ -216,7 +216,7 @@ export default function Courses() {
                       </div>
                     </div>
 
-                    <div className="space-y-2 mb-6">
+                    <div className="space-y-2 mb-4 md:mb-6">
                       {course.features.slice(0, 3).map((feature, i) => (
                         <div key={i} className="flex items-start gap-2 text-sm">
                           <CheckCircle className="h-4 w-4 text-accent shrink-0 mt-0.5" />
@@ -242,12 +242,12 @@ export default function Courses() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-warm">
+      <section className="py-12 md:py-20 bg-warm">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-6">
+          <h2 className="text-2xl md:text-4xl font-bold text-secondary mb-4 md:mb-6">
             Not Sure Which Course Is Right for You?
           </h2>
-          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8 max-w-2xl mx-auto">
             Schedule a free consultation and we'll help you find the perfect program for your needs.
           </p>
           <Link to="/consulting">
