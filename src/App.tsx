@@ -14,6 +14,7 @@ import Social from "./pages/Social";
 import Consulting from "./pages/Consulting";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
+import Portal from "./pages/Portal";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -42,6 +43,7 @@ const App = () => (
               <Route path="/social" element={<Social />} />
               <Route path="/consulting" element={<Consulting />} />
               <Route path="/auth" element={<Auth />} />
+              <Route path="/portal" element={<Portal />} />
               <Route path="/admin" element={<Admin />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
