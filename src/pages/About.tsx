@@ -4,10 +4,10 @@ import classroomImage from "@/assets/classroom.jpg";
 
 export default function About() {
   return (
-    <div className="pt-16">
+    <div className="pt-14">
 
       {/* Story Section */}
-      <section className="py-8 md:py-20 bg-background">
+      <section className="pt-4 pb-8 md:py-20 bg-background">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
             <div className="animate-fade-in-up">
