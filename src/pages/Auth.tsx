@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, AlertCircle } from 'lucide-react';
 import { z } from 'zod';
+import { useToast } from '@/hooks/use-toast';
 
 
 const emailSchema = z.string().email('Please enter a valid email address');
@@ -17,12 +18,13 @@ const passwordSchema = z.string().min(6, 'Password must be at least 6 characters
 const Auth = () => {
   const navigate = useNavigate();
   const { user, loading, signIn, signUp } = useAuth();
-  
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (user && !loading) {
@@ -37,7 +39,13 @@ const Auth = () => {
       return true;
     } catch (err) {
       if (err instanceof z.ZodError) {
-        setError(err.errors[0].message);
+        const errorMessage = err.errors[0].message;
+        setError(errorMessage);
+        toast({
+          variant: "destructive",
+          title: "Validation Error",
+          description: errorMessage,
+        });
       }
       return false;
     }
@@ -54,14 +62,27 @@ const Auth = () => {
       const { error } = await signIn(email, password);
 
       if (error) {
+        let errorMessage: string;
         if (error.message.includes('Email not confirmed')) {
-          setError('Please verify your email address before signing in.');
+          errorMessage = 'Please verify your email address before signing in.';
         } else {
-          setError('Invalid credentials.');
+          errorMessage = 'Invalid credentials.';
         }
+        setError(errorMessage);
+        toast({
+          variant: "destructive",
+          title: "Sign In Failed",
+          description: errorMessage,
+        });
       }
     } catch (err) {
-      setError('Sign in failed. Please check your connection and try again.');
+      const errorMessage = 'Sign in failed. Please check your connection and try again.';
+      setError(errorMessage);
+      toast({
+        variant: "destructive",
+        title: "Sign In Failed",
+        description: errorMessage,
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -79,18 +100,36 @@ const Auth = () => {
       const { error } = await signUp(email, password);
 
       if (error) {
+        let errorMessage: string;
         if (error.message.includes('User already registered')) {
-          setError('An account with this email already exists. Please sign in instead.');
+          errorMessage = 'An account with this email already exists. Please sign in instead.';
         } else {
-          setError(error.message || 'Sign up failed. Please try again.');
+          errorMessage = error.message || 'Sign up failed. Please try again.';
         }
+        setError(errorMessage);
+        toast({
+          variant: "destructive",
+          title: "Sign Up Failed",
+          description: errorMessage,
+        });
       } else {
-        setSuccess('Account created! Please check your email to verify your account before signing in.');
+        const successMessage = 'Account created! Please check your email to verify your account before signing in.';
+        setSuccess(successMessage);
+        toast({
+          title: "Account Created",
+          description: successMessage,
+        });
         setEmail('');
         setPassword('');
       }
     } catch (err) {
-      setError('Sign up failed. Please check your connection and try again.');
+      const errorMessage = 'Sign up failed. Please check your connection and try again.';
+      setError(errorMessage);
+      toast({
+        variant: "destructive",
+        title: "Sign Up Failed",
+        description: errorMessage,
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -117,7 +156,7 @@ const Auth = () => {
               <TabsTrigger value="signin">Sign In</TabsTrigger>
               <TabsTrigger value="signup">Sign Up</TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="signin">
               <form onSubmit={handleSignIn} className="space-y-4 mt-4">
                 {error && (
@@ -126,7 +165,7 @@ const Auth = () => {
                     <AlertDescription>{error}</AlertDescription>
                   </Alert>
                 )}
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="signin-email">Email</Label>
                   <Input
@@ -138,7 +177,7 @@ const Auth = () => {
                     required
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="signin-password">Password</Label>
                   <Input
@@ -150,7 +189,7 @@ const Auth = () => {
                     required
                   />
                 </div>
-                
+
                 <Button type="submit" className="w-full" disabled={isSubmitting}>
                   {isSubmitting ? (
                     <>
@@ -163,7 +202,7 @@ const Auth = () => {
                 </Button>
               </form>
             </TabsContent>
-            
+
             <TabsContent value="signup">
               <form onSubmit={handleSignUp} className="space-y-4 mt-4">
                 {error && (
@@ -172,13 +211,13 @@ const Auth = () => {
                     <AlertDescription>{error}</AlertDescription>
                   </Alert>
                 )}
-                
+
                 {success && (
                   <Alert className="border-accent bg-accent/10">
                     <AlertDescription className="text-foreground">{success}</AlertDescription>
                   </Alert>
                 )}
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="signup-email">Email</Label>
                   <Input
@@ -190,7 +229,7 @@ const Auth = () => {
                     required
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="signup-password">Password</Label>
                   <Input
@@ -202,7 +241,7 @@ const Auth = () => {
                     required
                   />
                 </div>
-                
+
                 <Button type="submit" className="w-full" disabled={isSubmitting}>
                   {isSubmitting ? (
                     <>
