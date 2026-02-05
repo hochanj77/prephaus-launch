@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Settings } from "lucide-react";
+import { Menu, X, Settings, LogOut } from "lucide-react";
 import prephausLogo from "@/assets/prephaus-logo.jpg";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -19,7 +19,11 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, signOut } = useAuth();
+
+  const handleLogout = async () => {
+    await signOut();
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -85,6 +89,12 @@ export function Header() {
 
           {/* CTA Button */}
           <div className="hidden lg:flex items-center gap-3">
+            {user && (
+              <Button variant="ghost" size="default" onClick={handleLogout} className="gap-2">
+                <LogOut className="h-4 w-4" />
+                Logout
+              </Button>
+            )}
             {user && isAdmin && (
               <Link to="/admin">
                 <Button variant="outline" size="default" className="gap-2">
@@ -145,6 +155,12 @@ export function Header() {
                 )
               )}
               <div className="flex flex-col gap-2 mt-4 pt-4 border-t border-border">
+                {user && (
+                  <Button variant="ghost" className="w-full gap-2 justify-start" onClick={handleLogout}>
+                    <LogOut className="h-4 w-4" />
+                    Logout
+                  </Button>
+                )}
                 {user && isAdmin && (
                   <Link to="/admin">
                     <Button variant="outline" className="w-full gap-2">
