@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, AlertCircle } from 'lucide-react';
 import { z } from 'zod';
+import { useToast } from '@/hooks/use-toast';
 
 
 const emailSchema = z.string().email('Please enter a valid email address');
@@ -23,6 +24,7 @@ const Auth = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     if (user && !loading) {
@@ -37,7 +39,13 @@ const Auth = () => {
       return true;
     } catch (err) {
       if (err instanceof z.ZodError) {
-        setError(err.errors[0].message);
+        const errorMessage = err.errors[0].message;
+        setError(errorMessage);
+        toast({
+          variant: "destructive",
+          title: "Validation Error",
+          description: errorMessage,
+        });
       }
       return false;
     }
@@ -54,13 +62,20 @@ const Auth = () => {
     setIsSubmitting(false);
     
     if (error) {
+      let errorMessage: string;
       if (error.message.includes('Invalid login credentials')) {
-        setError('Invalid email or password. Please try again.');
+        errorMessage = 'Invalid email or password. Please try again.';
       } else if (error.message.includes('Email not confirmed')) {
-        setError('Please verify your email address before signing in.');
+        errorMessage = 'Please verify your email address before signing in.';
       } else {
-        setError(error.message);
+        errorMessage = error.message;
       }
+      setError(errorMessage);
+      toast({
+        variant: "destructive",
+        title: "Sign In Failed",
+        description: errorMessage,
+      });
     }
   };
 
@@ -76,13 +91,25 @@ const Auth = () => {
     setIsSubmitting(false);
     
     if (error) {
+      let errorMessage: string;
       if (error.message.includes('User already registered')) {
-        setError('An account with this email already exists. Please sign in instead.');
+        errorMessage = 'An account with this email already exists. Please sign in instead.';
       } else {
-        setError(error.message);
+        errorMessage = error.message;
       }
+      setError(errorMessage);
+      toast({
+        variant: "destructive",
+        title: "Sign Up Failed",
+        description: errorMessage,
+      });
     } else {
-      setSuccess('Account created! Please check your email to verify your account before signing in.');
+      const successMessage = 'Account created successfully! You can now sign in.';
+      setSuccess(successMessage);
+      toast({
+        title: "Account Created",
+        description: successMessage,
+      });
       setEmail('');
       setPassword('');
     }
