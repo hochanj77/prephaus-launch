@@ -11,7 +11,6 @@ import Courses from "./pages/Courses";
 import ParentPortal from "./pages/ParentPortal";
 import Contact from "./pages/Contact";
 import Social from "./pages/Social";
-import Consulting from "./pages/Consulting";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
@@ -40,7 +39,6 @@ const App = () => (
               <Route path="/parent-portal" element={<ParentPortal />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/social" element={<Social />} />
-              <Route path="/consulting" element={<Consulting />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/admin" element={<Admin />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
