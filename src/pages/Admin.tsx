@@ -2,11 +2,13 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Loader2, Users, Calendar, Megaphone, BookOpen } from 'lucide-react';
+import { Loader2, Users, Calendar, Megaphone, BookOpen, FileText, BarChart3 } from 'lucide-react';
 import StudentsTab from '@/components/admin/StudentsTab';
 import ScheduleTab from '@/components/admin/ScheduleTab';
 import AnnouncementsTab from '@/components/admin/AnnouncementsTab';
 import CoursesTab from '@/components/admin/CoursesTab';
+import ReportCardsTab from '@/components/admin/ReportCardsTab';
+import ReportsTab from '@/components/admin/ReportsTab';
 
 const Admin = () => {
   const { user, loading, isAdmin, isAdminLoading } = useAuth();
@@ -46,7 +48,7 @@ const Admin = () => {
       </div>
 
       <Tabs defaultValue="students" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
+        <TabsList className="grid w-full grid-cols-6 lg:w-auto lg:inline-grid">
           <TabsTrigger value="students" className="gap-2">
             <Users className="h-4 w-4" />
             <span className="hidden sm:inline">Students</span>
@@ -62,6 +64,14 @@ const Admin = () => {
           <TabsTrigger value="announcements" className="gap-2">
             <Megaphone className="h-4 w-4" />
             <span className="hidden sm:inline">Announcements</span>
+          </TabsTrigger>
+          <TabsTrigger value="report-cards" className="gap-2">
+            <FileText className="h-4 w-4" />
+            <span className="hidden sm:inline">Report Cards</span>
+          </TabsTrigger>
+          <TabsTrigger value="reports" className="gap-2">
+            <BarChart3 className="h-4 w-4" />
+            <span className="hidden sm:inline">Reports</span>
           </TabsTrigger>
         </TabsList>
 
@@ -79,6 +89,14 @@ const Admin = () => {
 
         <TabsContent value="announcements">
           <AnnouncementsTab />
+        </TabsContent>
+
+        <TabsContent value="report-cards">
+          <ReportCardsTab />
+        </TabsContent>
+
+        <TabsContent value="reports">
+          <ReportsTab />
         </TabsContent>
       </Tabs>
     </div>

@@ -4,14 +4,14 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { 
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { MapPin, Phone, Mail, Clock, CheckCircle } from "lucide-react";
+import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 const gradeOptions = [
@@ -71,15 +71,15 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
+
     // Simulate form submission
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
+
     toast({
       title: "Message Sent!",
       description: "We'll get back to you within 24 hours.",
     });
-    
+
     setFormData({
       name: "",
       email: "",
@@ -95,7 +95,7 @@ export default function Contact() {
   return (
     <div className="pt-20">
       {/* Hero Section */}
-      <section className="py-10 bg-muted">
+      <section className="py-4 bg-muted">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center animate-fade-in-up">
             <h1 className="text-3xl md:text-4xl font-bold text-secondary mb-3">
@@ -108,18 +108,41 @@ export default function Contact() {
         </div>
       </section>
 
-      {/* Contact Form & Info */}
-      <section className="py-12 bg-background">
+      {/* Contact Info Cards - Horizontal Grid */}
+      <section className="py-4 bg-background">
         <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 animate-fade-in-up">
+            {contactInfo.map((item) => (
+              <div key={item.title} className="bg-card rounded-xl p-4 shadow-md border border-border">
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center shrink-0">
+                    <item.icon className="h-5 w-5 text-secondary" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-secondary text-sm mb-1">{item.title}</h3>
+                    {item.details.map((detail, i) => (
+                      <p key={i} className="text-muted-foreground text-xs">{detail}</p>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Form & Map/CTA */}
+      <section className="py-6 bg-background">
+        <div className="container mx-auto px-4">
+          <div className="grid lg:grid-cols-3 gap-6">
             {/* Contact Form */}
             <div className="lg:col-span-2">
-              <div className="bg-card rounded-2xl p-6 shadow-lg border border-border animate-fade-in-up">
-                <h2 className="text-xl font-bold text-secondary mb-4">Send Us a Message</h2>
-                
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
+              <div className="bg-card rounded-2xl p-5 shadow-lg border border-border animate-fade-in-up">
+                <h2 className="text-xl font-bold text-secondary mb-3">Send Us a Message</h2>
+
+                <form onSubmit={handleSubmit} className="space-y-3">
+                  <div className="grid md:grid-cols-2 gap-3">
+                    <div className="space-y-1">
                       <Label htmlFor="name">Full Name *</Label>
                       <Input
                         id="name"
@@ -129,7 +152,7 @@ export default function Contact() {
                         required
                       />
                     </div>
-                    <div className="space-y-2">
+                    <div className="space-y-1">
                       <Label htmlFor="email">Email Address *</Label>
                       <Input
                         id="email"
@@ -142,8 +165,8 @@ export default function Contact() {
                     </div>
                   </div>
 
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
+                  <div className="grid md:grid-cols-2 gap-3">
+                    <div className="space-y-1">
                       <Label htmlFor="phone">Phone Number</Label>
                       <Input
                         id="phone"
@@ -153,7 +176,7 @@ export default function Contact() {
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       />
                     </div>
-                    <div className="space-y-2">
+                    <div className="space-y-1">
                       <Label htmlFor="grade">Student Grade Level</Label>
                       <Select
                         value={formData.grade}
@@ -173,9 +196,9 @@ export default function Contact() {
                     </div>
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-1">
                     <Label>Subject(s) of Interest</Label>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
                       {subjectOptions.map((option) => (
                         <div key={option.value} className="flex items-center space-x-2">
                           <Checkbox
@@ -197,12 +220,12 @@ export default function Contact() {
                     </div>
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-1">
                     <Label htmlFor="message">Message *</Label>
                     <Textarea
                       id="message"
                       placeholder="Tell us about your goals and how we can help..."
-                      rows={5}
+                      rows={3}
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                       required
@@ -227,50 +250,32 @@ export default function Contact() {
               </div>
             </div>
 
-            {/* Contact Info */}
-            <div className="space-y-6 animate-fade-in-up animate-fade-in-delay">
-              {contactInfo.map((item) => (
-                <div key={item.title} className="bg-card rounded-xl p-6 shadow-md border border-border">
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center shrink-0">
-                      <item.icon className="h-6 w-6 text-secondary" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-secondary mb-1">{item.title}</h3>
-                      {item.details.map((detail, i) => (
-                        <p key={i} className="text-muted-foreground text-sm">{detail}</p>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              ))}
-
+            {/* Map & CTA Sidebar */}
+            <div className="space-y-4 animate-fade-in-up animate-fade-in-delay">
               {/* Map Placeholder */}
-              <div className="bg-muted rounded-xl h-64 flex items-center justify-center">
+              <div className="bg-muted rounded-xl h-48 flex items-center justify-center">
                 <div className="text-center text-muted-foreground">
-                  <MapPin className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                  <MapPin className="h-10 w-10 mx-auto mb-2 opacity-50" />
                   <p className="text-sm">Google Maps Integration</p>
                 </div>
               </div>
+
+              {/* CTA Section */}
+              <div className="bg-warm rounded-xl p-5">
+                <h3 className="text-lg font-bold text-secondary mb-2">
+                  Prefer to Talk?
+                </h3>
+                <p className="text-muted-foreground text-sm mb-4">
+                  Schedule a free phone or in-person consultation with one of our academic advisors.
+                </p>
+                <Button variant="hero" size="default" asChild className="w-full">
+                  <a href="tel:2015258577">
+                    Call (201) 525-8577
+                  </a>
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* CTA */}
-      <section className="py-12 bg-warm">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-secondary mb-4">
-            Prefer to Talk to Someone?
-          </h2>
-          <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-            Schedule a free phone or in-person consultation with one of our academic advisors.
-          </p>
-          <Button variant="hero" size="lg" asChild>
-            <a href="tel:2015258577">
-              Call (201) 525-8577
-            </a>
-          </Button>
         </div>
       </section>
     </div>
