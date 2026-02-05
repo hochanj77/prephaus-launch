@@ -150,15 +150,15 @@ export default function Courses() {
     : courses.filter(course => course.category === activeCategory);
 
   return (
-    <div className="pt-14">
+    <div className="pt-16 md:pt-20">
       {/* Hero Section */}
-      <section className="pt-4 pb-8 md:py-20 bg-muted">
+      <section className="py-4 md:py-12 bg-muted">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center animate-fade-in-up">
-            <h1 className="text-3xl md:text-5xl font-bold text-secondary mb-4 md:mb-6">
+            <h1 className="text-2xl md:text-5xl font-bold text-secondary mb-2 md:mb-6">
               Course <span className="text-accent">Descriptions</span>
             </h1>
-            <p className="text-base md:text-xl text-muted-foreground leading-relaxed">
+            <p className="text-sm md:text-xl text-muted-foreground leading-relaxed">
               Explore our comprehensive range of test preparation programs and academic tutoring services 
               designed to help every student succeed.
             </p>
@@ -167,17 +167,17 @@ export default function Courses() {
       </section>
 
       {/* Courses Section */}
-      <section className="py-12 md:py-20 bg-background">
+      <section className="py-6 md:py-16 bg-background">
         <div className="container mx-auto px-4">
           {/* Filter Tabs */}
           <Tabs defaultValue="all" className="w-full">
-            <TabsList className="flex flex-wrap justify-center gap-2 mb-8 md:mb-12 bg-transparent">
+            <TabsList className="flex flex-wrap justify-center gap-1.5 md:gap-2 mb-6 md:mb-12 bg-transparent">
               {categories.map((category) => (
                 <TabsTrigger
                   key={category.id}
                   value={category.id}
                   onClick={() => setActiveCategory(category.id)}
-                  className="px-4 md:px-6 py-2 md:py-3 text-sm md:text-base rounded-full data-[state=active]:bg-secondary data-[state=active]:text-secondary-foreground"
+                  className="px-3 md:px-6 py-1.5 md:py-3 text-xs md:text-base rounded-full data-[state=active]:bg-secondary data-[state=active]:text-secondary-foreground"
                 >
                   {category.label}
                 </TabsTrigger>
