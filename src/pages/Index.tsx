@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Star, TrendingUp, CheckCircle, ArrowRight, BookOpen } from "lucide-react";
-import heroImage from "@/assets/hero-study-desk.jpg";
+import heroImage from "@/assets/ivy-league-campus.jpg";
 
 const stats = [
   { value: "1500+", label: "Avg. Elite Score", icon: TrendingUp },
