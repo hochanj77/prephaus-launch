@@ -18,7 +18,7 @@ const passwordSchema = z.string().min(6, 'Password must be at least 6 characters
 const Auth = () => {
   const navigate = useNavigate();
   const { user, loading, signIn, signUp } = useAuth();
-  
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -54,28 +54,37 @@ const Auth = () => {
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    
+
     if (!validateForm()) return;
-    
+
     setIsSubmitting(true);
-    const { error } = await signIn(email, password);
-    setIsSubmitting(false);
-    
-    if (error) {
-      let errorMessage: string;
-      if (error.message.includes('Invalid login credentials')) {
-        errorMessage = 'Invalid email or password. Please try again.';
-      } else if (error.message.includes('Email not confirmed')) {
-        errorMessage = 'Please verify your email address before signing in.';
-      } else {
-        errorMessage = error.message;
+    try {
+      const { error } = await signIn(email, password);
+
+      if (error) {
+        let errorMessage: string;
+        if (error.message.includes('Email not confirmed')) {
+          errorMessage = 'Please verify your email address before signing in.';
+        } else {
+          errorMessage = 'Invalid credentials.';
+        }
+        setError(errorMessage);
+        toast({
+          variant: "destructive",
+          title: "Sign In Failed",
+          description: errorMessage,
+        });
       }
+    } catch (err) {
+      const errorMessage = 'Sign in failed. Please check your connection and try again.';
       setError(errorMessage);
       toast({
         variant: "destructive",
         title: "Sign In Failed",
         description: errorMessage,
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -83,35 +92,46 @@ const Auth = () => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
-    
+
     if (!validateForm()) return;
-    
+
     setIsSubmitting(true);
-    const { error } = await signUp(email, password);
-    setIsSubmitting(false);
-    
-    if (error) {
-      let errorMessage: string;
-      if (error.message.includes('User already registered')) {
-        errorMessage = 'An account with this email already exists. Please sign in instead.';
+    try {
+      const { error } = await signUp(email, password);
+
+      if (error) {
+        let errorMessage: string;
+        if (error.message.includes('User already registered')) {
+          errorMessage = 'An account with this email already exists. Please sign in instead.';
+        } else {
+          errorMessage = error.message || 'Sign up failed. Please try again.';
+        }
+        setError(errorMessage);
+        toast({
+          variant: "destructive",
+          title: "Sign Up Failed",
+          description: errorMessage,
+        });
       } else {
-        errorMessage = error.message;
+        const successMessage = 'Account created! Please check your email to verify your account before signing in.';
+        setSuccess(successMessage);
+        toast({
+          title: "Account Created",
+          description: successMessage,
+        });
+        setEmail('');
+        setPassword('');
       }
+    } catch (err) {
+      const errorMessage = 'Sign up failed. Please check your connection and try again.';
       setError(errorMessage);
       toast({
         variant: "destructive",
         title: "Sign Up Failed",
         description: errorMessage,
       });
-    } else {
-      const successMessage = 'Account created successfully! You can now sign in.';
-      setSuccess(successMessage);
-      toast({
-        title: "Account Created",
-        description: successMessage,
-      });
-      setEmail('');
-      setPassword('');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -136,7 +156,7 @@ const Auth = () => {
               <TabsTrigger value="signin">Sign In</TabsTrigger>
               <TabsTrigger value="signup">Sign Up</TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="signin">
               <form onSubmit={handleSignIn} className="space-y-4 mt-4">
                 {error && (
@@ -145,7 +165,7 @@ const Auth = () => {
                     <AlertDescription>{error}</AlertDescription>
                   </Alert>
                 )}
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="signin-email">Email</Label>
                   <Input
@@ -157,7 +177,7 @@ const Auth = () => {
                     required
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="signin-password">Password</Label>
                   <Input
@@ -169,7 +189,7 @@ const Auth = () => {
                     required
                   />
                 </div>
-                
+
                 <Button type="submit" className="w-full" disabled={isSubmitting}>
                   {isSubmitting ? (
                     <>
@@ -182,7 +202,7 @@ const Auth = () => {
                 </Button>
               </form>
             </TabsContent>
-            
+
             <TabsContent value="signup">
               <form onSubmit={handleSignUp} className="space-y-4 mt-4">
                 {error && (
@@ -191,13 +211,13 @@ const Auth = () => {
                     <AlertDescription>{error}</AlertDescription>
                   </Alert>
                 )}
-                
+
                 {success && (
                   <Alert className="border-accent bg-accent/10">
                     <AlertDescription className="text-foreground">{success}</AlertDescription>
                   </Alert>
                 )}
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="signup-email">Email</Label>
                   <Input
@@ -209,7 +229,7 @@ const Auth = () => {
                     required
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="signup-password">Password</Label>
                   <Input
@@ -221,7 +241,7 @@ const Auth = () => {
                     required
                   />
                 </div>
-                
+
                 <Button type="submit" className="w-full" disabled={isSubmitting}>
                   {isSubmitting ? (
                     <>
