@@ -54,12 +54,10 @@ const Auth = () => {
     setIsSubmitting(false);
     
     if (error) {
-      if (error.message.includes('Invalid login credentials')) {
-        setError('Invalid email or password. Please try again.');
-      } else if (error.message.includes('Email not confirmed')) {
+      if (error.message.includes('Email not confirmed')) {
         setError('Please verify your email address before signing in.');
       } else {
-        setError(error.message);
+        setError('Invalid credentials.');
       }
     }
   };
