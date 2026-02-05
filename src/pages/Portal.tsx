@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Loader2, AlertCircle, ShieldCheck } from 'lucide-react';
 import { z } from 'zod';
+import { useToast } from '@/hooks/use-toast';
 
 const emailSchema = z.string().email('Please enter a valid email address');
 const passwordSchema = z.string().min(6, 'Password must be at least 6 characters');
@@ -15,6 +16,7 @@ const passwordSchema = z.string().min(6, 'Password must be at least 6 characters
 const Portal = () => {
   const navigate = useNavigate();
   const { user, loading, isAdmin, isAdminLoading, signIn } = useAuth();
+  const { toast } = useToast();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -51,10 +53,27 @@ const Portal = () => {
       const { error } = await signIn(email, password);
 
       if (error) {
-        setError('Invalid credentials.');
+        const errorMessage = 'Invalid credentials.';
+        setError(errorMessage);
+        toast({
+          variant: "destructive",
+          title: "Sign In Failed",
+          description: errorMessage,
+        });
+      } else {
+        toast({
+          title: "Signed In",
+          description: "Redirecting to admin dashboard...",
+        });
       }
     } catch (err) {
-      setError('Sign in failed. Please check your connection and try again.');
+      const errorMessage = 'Sign in failed. Please check your connection and try again.';
+      setError(errorMessage);
+      toast({
+        variant: "destructive",
+        title: "Connection Error",
+        description: errorMessage,
+      });
     } finally {
       setIsSubmitting(false);
     }

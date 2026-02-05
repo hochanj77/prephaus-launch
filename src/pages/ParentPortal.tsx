@@ -1,9 +1,81 @@
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Lock, User } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Lock, User, Loader2, AlertCircle } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function ParentPortal() {
+  const navigate = useNavigate();
+  const { user, loading, isAdmin, isAdminLoading, signIn } = useAuth();
+  const { toast } = useToast();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (!loading && !isAdminLoading && user) {
+      if (isAdmin) {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
+    }
+  }, [user, loading, isAdmin, isAdminLoading, navigate]);
+
+  const handleSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+
+    if (!email || !password) {
+      setError("Please enter both email and password.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const { error } = await signIn(email, password);
+
+      if (error) {
+        const errorMessage = "Invalid credentials.";
+        setError(errorMessage);
+        toast({
+          variant: "destructive",
+          title: "Sign In Failed",
+          description: errorMessage,
+        });
+      } else {
+        toast({
+          title: "Signed In",
+          description: "Redirecting...",
+        });
+      }
+    } catch (err) {
+      const errorMessage = "Sign in failed. Please check your connection and try again.";
+      setError(errorMessage);
+      toast({
+        variant: "destructive",
+        title: "Connection Error",
+        description: errorMessage,
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  if (loading || isAdminLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-muted">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-muted px-4">
       <div className="w-full max-w-md animate-fade-in-up">
@@ -17,7 +89,14 @@ export default function ParentPortal() {
             </p>
           </div>
 
-          <form className="space-y-6">
+          <form onSubmit={handleSignIn} className="space-y-6">
+            {error && (
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+
             <div className="space-y-2">
               <Label htmlFor="email" className="text-foreground">Email</Label>
               <div className="relative">
@@ -27,6 +106,9 @@ export default function ParentPortal() {
                   type="email"
                   placeholder="Enter your email"
                   className="pl-10"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
                 />
               </div>
             </div>
@@ -40,6 +122,9 @@ export default function ParentPortal() {
                   type="password"
                   placeholder="Enter your password"
                   className="pl-10"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
                 />
               </div>
             </div>
@@ -54,14 +139,27 @@ export default function ParentPortal() {
               </a>
             </div>
 
-            <Button variant="accent" size="lg" className="w-full">
-              Sign In
+            <Button
+              variant="accent"
+              size="lg"
+              className="w-full"
+              type="submit"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Signing in...
+                </>
+              ) : (
+                "Sign In"
+              )}
             </Button>
           </form>
 
           <p className="text-center text-sm text-muted-foreground mt-6">
             Don't have an account?{" "}
-            <a href="#" className="text-accent hover:underline">
+            <a href="/auth" className="text-accent hover:underline">
               Sign up
             </a>
           </p>
