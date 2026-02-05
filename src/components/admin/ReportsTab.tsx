@@ -6,7 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Users, UserPlus, FileText, Calendar, Loader2 } from 'lucide-react';
+import { Users, UserPlus, FileText, Loader2 } from 'lucide-react';
 import { format, subDays, isAfter } from 'date-fns';
 
 interface Student {
@@ -23,27 +23,11 @@ interface Student {
 interface ReportCard {
   id: string;
   student_id: string;
-  term: string;
-  report_date: string;
-  grade_overall: string | null;
-  grade_math: string | null;
-  grade_reading: string | null;
-  grade_writing: string | null;
-  created_at: string;
-  students?: {
-    first_name: string;
-    last_name: string;
-  };
-}
-
-interface ScheduleEntry {
-  id: string;
-  student_id: string;
-  date: string;
-  start_time: string;
-  end_time: string;
-  subject: string | null;
-  created_at: string;
+  title: string;
+  file_path: string;
+  term: string | null;
+  year: number | null;
+  created_at: string | null;
   students?: {
     first_name: string;
     last_name: string;
@@ -82,25 +66,13 @@ const ReportsTab = () => {
       const { data, error } = await supabase
         .from('report_cards')
         .select('*, students(first_name, last_name)')
-        .order('report_date', { ascending: false });
+        .order('created_at', { ascending: false });
       if (error) throw error;
       return data as ReportCard[];
     },
   });
 
-  const { data: schedules = [], isLoading: schedulesLoading } = useQuery({
-    queryKey: ['schedules'],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('schedules')
-        .select('*, students(first_name, last_name)')
-        .order('date', { ascending: false });
-      if (error) throw error;
-      return data as ScheduleEntry[];
-    },
-  });
-
-  const isLoading = studentsLoading || reportCardsLoading || schedulesLoading;
+  const isLoading = studentsLoading || reportCardsLoading;
 
   // Compute statistics
   const stats = useMemo(() => {
@@ -109,36 +81,16 @@ const ReportsTab = () => {
       isAfter(new Date(s.created_at), cutoffDate)
     ).length;
     const reportCardsIssued = reportCards.filter((rc) =>
-      isAfter(new Date(rc.created_at), cutoffDate)
-    ).length;
-    const sessionsScheduled = schedules.filter((s) =>
-      isAfter(new Date(s.created_at), cutoffDate)
+      rc.created_at && isAfter(new Date(rc.created_at), cutoffDate)
     ).length;
 
-    return { activeStudents, newSignups, reportCardsIssued, sessionsScheduled };
-  }, [students, reportCards, schedules, cutoffDate]);
-
-  // Grade distribution
-  const gradeDistribution = useMemo(() => {
-    const grades: Record<string, number> = {};
-    reportCards.forEach((rc) => {
-      if (rc.grade_overall) {
-        grades[rc.grade_overall] = (grades[rc.grade_overall] || 0) + 1;
-      }
-    });
-    return Object.entries(grades)
-      .sort(([a], [b]) => a.localeCompare(b))
-      .map(([grade, count]) => ({ grade, count }));
-  }, [reportCards]);
+    return { activeStudents, newSignups, reportCardsIssued };
+  }, [students, reportCards, cutoffDate]);
 
   // Filtered data by date range
   const filteredReportCards = useMemo(() => {
-    return reportCards.filter((rc) => isAfter(new Date(rc.report_date), cutoffDate));
+    return reportCards.filter((rc) => rc.created_at && isAfter(new Date(rc.created_at), cutoffDate));
   }, [reportCards, cutoffDate]);
-
-  const filteredSchedules = useMemo(() => {
-    return schedules.filter((s) => isAfter(new Date(s.date), cutoffDate));
-  }, [schedules, cutoffDate]);
 
   if (isLoading) {
     return (
@@ -208,19 +160,6 @@ const ReportsTab = () => {
             </div>
           </CardContent>
         </Card>
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-4">
-              <div className="p-3 rounded-lg bg-orange-100 text-orange-600">
-                <Calendar className="h-6 w-6" />
-              </div>
-              <div>
-                <p className="text-2xl font-bold">{stats.sessionsScheduled}</p>
-                <p className="text-sm text-muted-foreground">Sessions Scheduled</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
       </div>
 
       {/* Sub-tabs */}
@@ -228,7 +167,6 @@ const ReportsTab = () => {
         <TabsList>
           <TabsTrigger value="enrollment">Enrollment</TabsTrigger>
           <TabsTrigger value="performance">Performance</TabsTrigger>
-          <TabsTrigger value="attendance">Attendance</TabsTrigger>
         </TabsList>
 
         {/* Enrollment Tab */}
@@ -287,30 +225,6 @@ const ReportsTab = () => {
         {/* Performance Tab */}
         <TabsContent value="performance">
           <div className="space-y-6">
-            {/* Grade Distribution */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Grade Distribution (Overall)</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {gradeDistribution.length === 0 ? (
-                  <p className="text-muted-foreground text-center py-4">No grade data available</p>
-                ) : (
-                  <div className="flex flex-wrap gap-4">
-                    {gradeDistribution.map(({ grade, count }) => (
-                      <div
-                        key={grade}
-                        className="flex items-center gap-2 px-4 py-2 bg-muted rounded-lg"
-                      >
-                        <span className="font-semibold text-lg">{grade}</span>
-                        <span className="text-muted-foreground">({count})</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-
             {/* Report Cards Table */}
             <Card>
               <CardHeader>
@@ -322,18 +236,16 @@ const ReportsTab = () => {
                     <TableHeader>
                       <TableRow>
                         <TableHead>Student</TableHead>
+                        <TableHead>Title</TableHead>
                         <TableHead>Term</TableHead>
-                        <TableHead>Date</TableHead>
-                        <TableHead>Overall</TableHead>
-                        <TableHead>Math</TableHead>
-                        <TableHead>Reading</TableHead>
-                        <TableHead>Writing</TableHead>
+                        <TableHead>Year</TableHead>
+                        <TableHead>Uploaded</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {filteredReportCards.length === 0 ? (
                         <TableRow>
-                          <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
+                          <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
                             No report cards in selected period
                           </TableCell>
                         </TableRow>
@@ -345,12 +257,12 @@ const ReportsTab = () => {
                                 ? `${rc.students.first_name} ${rc.students.last_name}`
                                 : 'Unknown'}
                             </TableCell>
-                            <TableCell>{rc.term}</TableCell>
-                            <TableCell>{format(new Date(rc.report_date), 'MMM d, yyyy')}</TableCell>
-                            <TableCell>{rc.grade_overall || '-'}</TableCell>
-                            <TableCell>{rc.grade_math || '-'}</TableCell>
-                            <TableCell>{rc.grade_reading || '-'}</TableCell>
-                            <TableCell>{rc.grade_writing || '-'}</TableCell>
+                            <TableCell>{rc.title}</TableCell>
+                            <TableCell>{rc.term || '-'}</TableCell>
+                            <TableCell>{rc.year || '-'}</TableCell>
+                            <TableCell>
+                              {rc.created_at ? format(new Date(rc.created_at), 'MMM d, yyyy') : '-'}
+                            </TableCell>
                           </TableRow>
                         ))
                       )}
@@ -360,53 +272,6 @@ const ReportsTab = () => {
               </CardContent>
             </Card>
           </div>
-        </TabsContent>
-
-        {/* Attendance Tab */}
-        <TabsContent value="attendance">
-          <Card>
-            <CardHeader>
-              <CardTitle>Scheduled Sessions</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="rounded-md border">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Student</TableHead>
-                      <TableHead>Date</TableHead>
-                      <TableHead>Time</TableHead>
-                      <TableHead>Subject</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredSchedules.length === 0 ? (
-                      <TableRow>
-                        <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">
-                          No sessions in selected period
-                        </TableCell>
-                      </TableRow>
-                    ) : (
-                      filteredSchedules.map((schedule) => (
-                        <TableRow key={schedule.id}>
-                          <TableCell className="font-medium">
-                            {schedule.students
-                              ? `${schedule.students.first_name} ${schedule.students.last_name}`
-                              : 'Unknown'}
-                          </TableCell>
-                          <TableCell>{format(new Date(schedule.date), 'MMM d, yyyy')}</TableCell>
-                          <TableCell>
-                            {schedule.start_time} - {schedule.end_time}
-                          </TableCell>
-                          <TableCell>{schedule.subject || '-'}</TableCell>
-                        </TableRow>
-                      ))
-                    )}
-                  </TableBody>
-                </Table>
-              </div>
-            </CardContent>
-          </Card>
         </TabsContent>
       </Tabs>
     </div>

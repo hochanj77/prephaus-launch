@@ -22,32 +22,14 @@ interface Student {
 interface ReportCard {
   id: string;
   student_id: string;
-  term: string;
-  report_date: string;
-  grade_overall: string | null;
-  grade_math: string | null;
-  grade_reading: string | null;
-  grade_writing: string | null;
-  notes: string | null;
-  created_at: string;
+  title: string;
+  file_path: string;
+  term: string | null;
+  year: number | null;
+  uploaded_by: string | null;
+  created_at: string | null;
   students?: Student;
 }
-
-const gradeOptions = [
-  { value: 'A+', label: 'A+' },
-  { value: 'A', label: 'A' },
-  { value: 'A-', label: 'A-' },
-  { value: 'B+', label: 'B+' },
-  { value: 'B', label: 'B' },
-  { value: 'B-', label: 'B-' },
-  { value: 'C+', label: 'C+' },
-  { value: 'C', label: 'C' },
-  { value: 'C-', label: 'C-' },
-  { value: 'D+', label: 'D+' },
-  { value: 'D', label: 'D' },
-  { value: 'D-', label: 'D-' },
-  { value: 'F', label: 'F' },
-];
 
 const termOptions = [
   { value: 'Fall 2024', label: 'Fall 2024' },
@@ -83,7 +65,7 @@ const ReportCardsTab = () => {
       const { data, error } = await supabase
         .from('report_cards')
         .select('*, students(id, first_name, last_name)')
-        .order('report_date', { ascending: false });
+        .order('created_at', { ascending: false });
       if (error) throw error;
       return data as ReportCard[];
     },
@@ -109,7 +91,8 @@ const ReportCardsTab = () => {
       : '';
     return (
       studentName.includes(searchTerm.toLowerCase()) ||
-      rc.term.toLowerCase().includes(searchTerm.toLowerCase())
+      (rc.term?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+      rc.title.toLowerCase().includes(searchTerm.toLowerCase())
     );
   });
 
@@ -161,19 +144,17 @@ const ReportCardsTab = () => {
               <TableHeader>
                 <TableRow>
                   <TableHead>Student</TableHead>
+                  <TableHead>Title</TableHead>
                   <TableHead>Term</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Overall</TableHead>
-                  <TableHead>Math</TableHead>
-                  <TableHead>Reading</TableHead>
-                  <TableHead>Writing</TableHead>
+                  <TableHead>Year</TableHead>
+                  <TableHead>Uploaded</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredReportCards.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={8} className="text-center py-8 text-muted-foreground">
+                    <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
                       No report cards found
                     </TableCell>
                   </TableRow>
@@ -185,12 +166,12 @@ const ReportCardsTab = () => {
                           ? `${rc.students.first_name} ${rc.students.last_name}`
                           : 'Unknown'}
                       </TableCell>
-                      <TableCell>{rc.term}</TableCell>
-                      <TableCell>{format(new Date(rc.report_date), 'MMM d, yyyy')}</TableCell>
-                      <TableCell>{rc.grade_overall || '-'}</TableCell>
-                      <TableCell>{rc.grade_math || '-'}</TableCell>
-                      <TableCell>{rc.grade_reading || '-'}</TableCell>
-                      <TableCell>{rc.grade_writing || '-'}</TableCell>
+                      <TableCell>{rc.title}</TableCell>
+                      <TableCell>{rc.term || '-'}</TableCell>
+                      <TableCell>{rc.year || '-'}</TableCell>
+                      <TableCell>
+                        {rc.created_at ? format(new Date(rc.created_at), 'MMM d, yyyy') : '-'}
+                      </TableCell>
                       <TableCell className="text-right">
                         <Button
                           variant="ghost"
@@ -222,12 +203,9 @@ const ReportCardForm = ({ students, onSuccess }: ReportCardFormProps) => {
   const [formData, setFormData] = useState({
     student_id: '',
     term: '',
-    report_date: format(new Date(), 'yyyy-MM-dd'),
-    grade_overall: '',
-    grade_math: '',
-    grade_reading: '',
-    grade_writing: '',
-    notes: '',
+    title: '',
+    file_path: '',
+    year: new Date().getFullYear(),
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -237,13 +215,10 @@ const ReportCardForm = ({ students, onSuccess }: ReportCardFormProps) => {
     try {
       const { error } = await supabase.from('report_cards').insert({
         student_id: formData.student_id,
-        term: formData.term,
-        report_date: formData.report_date,
-        grade_overall: formData.grade_overall || null,
-        grade_math: formData.grade_math || null,
-        grade_reading: formData.grade_reading || null,
-        grade_writing: formData.grade_writing || null,
-        notes: formData.notes || null,
+        title: formData.title,
+        file_path: formData.file_path,
+        term: formData.term || null,
+        year: formData.year,
       });
       if (error) throw error;
       toast.success('Report card added successfully');
@@ -297,107 +272,39 @@ const ReportCardForm = ({ students, onSuccess }: ReportCardFormProps) => {
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="report_date">Report Date *</Label>
+        <Label htmlFor="title">Title *</Label>
         <Input
-          id="report_date"
-          type="date"
-          value={formData.report_date}
-          onChange={(e) => setFormData({ ...formData, report_date: e.target.value })}
+          id="title"
+          value={formData.title}
+          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+          placeholder="e.g., Mid-Term Report Card"
           required
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="grade_overall">Overall Grade</Label>
-          <Select
-            value={formData.grade_overall}
-            onValueChange={(value) => setFormData({ ...formData, grade_overall: value })}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select grade" />
-            </SelectTrigger>
-            <SelectContent>
-              {gradeOptions.map((grade) => (
-                <SelectItem key={grade.value} value={grade.value}>
-                  {grade.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="grade_math">Math Grade</Label>
-          <Select
-            value={formData.grade_math}
-            onValueChange={(value) => setFormData({ ...formData, grade_math: value })}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select grade" />
-            </SelectTrigger>
-            <SelectContent>
-              {gradeOptions.map((grade) => (
-                <SelectItem key={grade.value} value={grade.value}>
-                  {grade.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="grade_reading">Reading Grade</Label>
-          <Select
-            value={formData.grade_reading}
-            onValueChange={(value) => setFormData({ ...formData, grade_reading: value })}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select grade" />
-            </SelectTrigger>
-            <SelectContent>
-              {gradeOptions.map((grade) => (
-                <SelectItem key={grade.value} value={grade.value}>
-                  {grade.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="grade_writing">Writing Grade</Label>
-          <Select
-            value={formData.grade_writing}
-            onValueChange={(value) => setFormData({ ...formData, grade_writing: value })}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select grade" />
-            </SelectTrigger>
-            <SelectContent>
-              {gradeOptions.map((grade) => (
-                <SelectItem key={grade.value} value={grade.value}>
-                  {grade.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+      <div className="space-y-2">
+        <Label htmlFor="file_path">File Path / URL *</Label>
+        <Input
+          id="file_path"
+          value={formData.file_path}
+          onChange={(e) => setFormData({ ...formData, file_path: e.target.value })}
+          placeholder="e.g., /reports/student-report.pdf"
+          required
+        />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="notes">Notes</Label>
-        <Textarea
-          id="notes"
-          value={formData.notes}
-          onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-          rows={3}
-          placeholder="Additional comments or observations..."
+        <Label htmlFor="year">Year</Label>
+        <Input
+          id="year"
+          type="number"
+          value={formData.year}
+          onChange={(e) => setFormData({ ...formData, year: parseInt(e.target.value) })}
         />
       </div>
 
       <div className="flex justify-end gap-2">
-        <Button type="submit" disabled={isSubmitting || !formData.student_id || !formData.term}>
+        <Button type="submit" disabled={isSubmitting || !formData.student_id || !formData.title || !formData.file_path}>
           {isSubmitting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
           Add Report Card
         </Button>
