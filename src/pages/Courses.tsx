@@ -150,9 +150,9 @@ export default function Courses() {
     : courses.filter(course => course.category === activeCategory);
 
   return (
-    <div className="pt-16">
+    <div className="pt-14">
       {/* Hero Section */}
-      <section className="py-8 md:py-20 bg-muted">
+      <section className="pt-4 pb-8 md:py-20 bg-muted">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center animate-fade-in-up">
             <h1 className="text-3xl md:text-5xl font-bold text-secondary mb-4 md:mb-6">
