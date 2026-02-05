@@ -45,15 +45,15 @@
  
  export default function Consulting() {
    return (
-     <div className="pt-24">
+    <div className="pt-16">
        {/* Hero Section */}
-       <section className="py-20 bg-muted">
+      <section className="py-8 md:py-20 bg-muted">
          <div className="container mx-auto px-4">
            <div className="max-w-3xl mx-auto text-center animate-fade-in-up">
-             <h1 className="text-4xl md:text-5xl font-bold text-secondary mb-6">
+            <h1 className="text-3xl md:text-5xl font-bold text-secondary mb-4 md:mb-6">
                Free <span className="text-accent">Consultation</span>
              </h1>
-             <p className="text-xl text-muted-foreground leading-relaxed mb-8">
+            <p className="text-base md:text-xl text-muted-foreground leading-relaxed mb-6 md:mb-8">
                Not sure where to start? Schedule a free consultation with our academic advisors 
                to create a personalized plan for SAT success.
              </p>
@@ -68,29 +68,29 @@
        </section>
  
        {/* Benefits Section */}
-       <section className="py-20 bg-background">
+      <section className="py-12 md:py-20 bg-background">
          <div className="container mx-auto px-4">
-           <div className="text-center mb-12">
-             <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-4">
+          <div className="text-center mb-8 md:mb-12">
+            <h2 className="text-2xl md:text-4xl font-bold text-secondary mb-4">
                What We'll <span className="text-accent">Cover</span>
              </h2>
-             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
                Our consultations are designed to give you complete clarity on the path forward.
              </p>
            </div>
  
-           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
              {consultationBenefits.map((benefit, index) => (
                <div
                  key={benefit.title}
-                 className="bg-card rounded-2xl p-8 text-center shadow-lg border border-border hover-lift animate-fade-in-up"
+                className="bg-card rounded-xl md:rounded-2xl p-4 md:p-8 text-center shadow-lg border border-border hover-lift animate-fade-in-up"
                  style={{ animationDelay: `${index * 0.1}s` }}
                >
-                 <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/20 mb-6">
-                   <benefit.icon className="h-8 w-8 text-secondary" />
+                <div className="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 rounded-full bg-primary/20 mb-4 md:mb-6">
+                  <benefit.icon className="h-6 w-6 md:h-8 md:w-8 text-secondary" />
                  </div>
-                 <h3 className="text-xl font-bold text-secondary mb-3">{benefit.title}</h3>
-                 <p className="text-muted-foreground">{benefit.description}</p>
+                <h3 className="text-base md:text-xl font-bold text-secondary mb-2 md:mb-3">{benefit.title}</h3>
+                <p className="text-muted-foreground text-sm md:text-base">{benefit.description}</p>
                </div>
              ))}
            </div>
@@ -98,34 +98,34 @@
        </section>
  
        {/* What to Expect */}
-       <section className="py-20 bg-warm">
+      <section className="py-12 md:py-20 bg-warm">
          <div className="container mx-auto px-4">
-           <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
              <div className="animate-fade-in-up">
-               <h2 className="text-3xl md:text-4xl font-bold text-secondary mb-6">
+              <h2 className="text-2xl md:text-4xl font-bold text-secondary mb-4 md:mb-6">
                  What to <span className="text-accent">Expect</span>
                </h2>
-               <p className="text-lg text-muted-foreground mb-8">
+              <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8">
                  Our free consultations are informative, helpful, and completely pressure-free. 
                  Here's what you can expect:
                </p>
-               <ul className="space-y-4">
+              <ul className="space-y-3 md:space-y-4">
                  {whatToExpect.map((item, index) => (
                    <li key={index} className="flex items-start gap-3">
-                     <CheckCircle className="h-6 w-6 text-accent shrink-0 mt-0.5" />
-                     <span className="text-foreground">{item}</span>
+                    <CheckCircle className="h-5 w-5 md:h-6 md:w-6 text-accent shrink-0 mt-0.5" />
+                    <span className="text-foreground text-sm md:text-base">{item}</span>
                    </li>
                  ))}
                </ul>
              </div>
  
-             <div className="bg-card rounded-2xl p-8 shadow-2xl animate-fade-in-up animate-fade-in-delay">
+            <div className="bg-card rounded-xl md:rounded-2xl p-6 md:p-8 shadow-2xl animate-fade-in-up animate-fade-in-delay">
                <div className="text-center">
-                 <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-accent/20 mb-6">
-                   <MessageSquare className="h-10 w-10 text-accent" />
+                <div className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 rounded-full bg-accent/20 mb-4 md:mb-6">
+                  <MessageSquare className="h-8 w-8 md:h-10 md:w-10 text-accent" />
                  </div>
-                 <h3 className="text-2xl font-bold text-secondary mb-4">Ready to Talk?</h3>
-                 <p className="text-muted-foreground mb-6">
+                <h3 className="text-xl md:text-2xl font-bold text-secondary mb-3 md:mb-4">Ready to Talk?</h3>
+                <p className="text-muted-foreground text-sm md:text-base mb-4 md:mb-6">
                    Choose the consultation format that works best for you.
                  </p>
                  <div className="space-y-3">
@@ -152,12 +152,12 @@
  
  
        {/* CTA */}
-       <section className="py-20 bg-secondary">
-         <div className="container mx-auto px-4 text-center">
-           <h2 className="text-3xl md:text-4xl font-bold text-secondary-foreground mb-6">
+      <section className="py-12 md:py-20 bg-secondary">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-2xl md:text-4xl font-bold text-secondary-foreground mb-4 md:mb-6">
              Your SAT Success Story Starts Here
            </h2>
-           <p className="text-lg text-secondary-foreground/70 mb-8 max-w-2xl mx-auto">
+          <p className="text-base md:text-lg text-secondary-foreground/70 mb-6 md:mb-8 max-w-2xl mx-auto">
              Take the first step today. Schedule your free consultation and let's create a plan together.
            </p>
            <Link to="/contact">

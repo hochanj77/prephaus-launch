@@ -93,7 +93,7 @@ export default function Contact() {
   };
 
   return (
-    <div className="pt-20">
+    <div className="pt-16">
       {/* Hero Section */}
       <section className="py-4 bg-muted">
         <div className="container mx-auto px-4">
