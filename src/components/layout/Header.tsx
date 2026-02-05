@@ -9,6 +9,7 @@ import { useAuth } from "@/contexts/AuthContext";
 const navItems = [
   { label: "About Us", href: "/about" },
   { label: "Math", href: "/courses" },
+  { label: "Consulting", href: "/consulting" },
   { label: "Social", href: "/social" },
   { label: "SAT Test Platform", href: "https://prephaus.ditoed.com", external: true },
   { label: "Contact", href: "/contact" },
