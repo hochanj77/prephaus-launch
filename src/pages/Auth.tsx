@@ -46,19 +46,24 @@ const Auth = () => {
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    
+
     if (!validateForm()) return;
-    
+
     setIsSubmitting(true);
-    const { error } = await signIn(email, password);
-    setIsSubmitting(false);
-    
-    if (error) {
-      if (error.message.includes('Email not confirmed')) {
-        setError('Please verify your email address before signing in.');
-      } else {
-        setError('Invalid credentials.');
+    try {
+      const { error } = await signIn(email, password);
+
+      if (error) {
+        if (error.message.includes('Email not confirmed')) {
+          setError('Please verify your email address before signing in.');
+        } else {
+          setError('Invalid credentials.');
+        }
       }
+    } catch (err) {
+      setError('Sign in failed. Please check your connection and try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -66,23 +71,28 @@ const Auth = () => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
-    
+
     if (!validateForm()) return;
-    
+
     setIsSubmitting(true);
-    const { error } = await signUp(email, password);
-    setIsSubmitting(false);
-    
-    if (error) {
-      if (error.message.includes('User already registered')) {
-        setError('An account with this email already exists. Please sign in instead.');
+    try {
+      const { error } = await signUp(email, password);
+
+      if (error) {
+        if (error.message.includes('User already registered')) {
+          setError('An account with this email already exists. Please sign in instead.');
+        } else {
+          setError(error.message || 'Sign up failed. Please try again.');
+        }
       } else {
-        setError(error.message);
+        setSuccess('Account created! Please check your email to verify your account before signing in.');
+        setEmail('');
+        setPassword('');
       }
-    } else {
-      setSuccess('Account created! Please check your email to verify your account before signing in.');
-      setEmail('');
-      setPassword('');
+    } catch (err) {
+      setError('Sign up failed. Please check your connection and try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
