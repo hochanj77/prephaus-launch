@@ -39,7 +39,7 @@ export default function Index() {
     <div className="overflow-hidden">
       {/* Hero Section - Full Width Background */}
       <section
-        className="relative min-h-[85vh] flex items-center bg-cover bg-center bg-no-repeat"
+        className="relative min-h-[85vh] flex items-center bg-cover bg-center bg-no-repeat pt-24 md:pt-0"
         style={{ backgroundImage: `url(${heroImage})` }}
       >
         {/* Dark Gradient Overlay */}
@@ -68,16 +68,10 @@ export default function Index() {
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 mb-12">
+            <div className="mb-12">
               <Link to="/courses">
                 <Button variant="hero" size="lg" className="w-full sm:w-auto">
                   View Programs
-                  <ArrowRight className="h-5 w-5" />
-                </Button>
-              </Link>
-              <Link to="/contact">
-                <Button variant="hero-outline" size="lg" className="w-full sm:w-auto bg-white/10 border-white text-white hover:bg-white hover:text-secondary">
-                  Free Consultation
                   <ArrowRight className="h-5 w-5" />
                 </Button>
               </Link>
