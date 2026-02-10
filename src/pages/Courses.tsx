@@ -186,12 +186,7 @@ export default function Courses() {
                     <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 mx-auto">
                       <BookOpen className="h-6 w-6 text-primary" />
                     </div>
-                    <h3 className="text-lg md:text-xl font-bold text-secondary mb-4">{course.title}</h3>
-                    <Link to="/contact">
-                      <Button variant="hero" size="default">
-                        Inquire
-                      </Button>
-                    </Link>
+                    <h3 className="text-lg md:text-xl font-bold text-secondary">{course.title}</h3>
                   </div>
                 ))}
               </div>
