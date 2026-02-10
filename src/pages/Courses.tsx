@@ -1,28 +1,20 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Clock, Users, BookOpen, CheckCircle, ArrowRight } from "lucide-react";
-
-const categories = [
-  { id: "all", label: "All Programs" },
-  { id: "test-prep", label: "Test Prep" },
-  { id: "academic", label: "Academic Tutoring" },
-];
+import { BookOpen } from "lucide-react";
 
 const courses = [
   {
     id: 1,
     title: "SAT Prep",
     category: "test-prep",
-    description: "Comprehensive SAT preparation covering all sections with intensive practice, strategy sessions, and personalized feedback.",
+    description: "Comprehensive SAT preparation focusing on critical reading, math, and writing skills.",
     duration: "12 weeks",
-    classSize: "Max 8 students",
+    classSize: "Max 10 students",
     format: "In-person & Online",
     features: [
-      "Full-length practice tests",
-      "Personalized study plan",
-      "Score improvement guarantee",
+      "Practice tests",
+      "Strategy sessions",
+      "Personalized feedback",
     ],
     price: "Contact for pricing",
   },
@@ -134,12 +126,6 @@ const courses = [
 ];
 
 export default function Courses() {
-  const [activeCategory, setActiveCategory] = useState("all");
-
-  const filteredCourses = activeCategory === "all" 
-    ? courses 
-    : courses.filter(course => course.category === activeCategory);
-
   return (
     <div className="pt-16 md:pt-24">
       {/* Hero Section */}
@@ -160,38 +146,20 @@ export default function Courses() {
       {/* Courses Section */}
       <section className="py-12 md:py-20 bg-background">
         <div className="container mx-auto px-4">
-          {/* Filter Tabs */}
-          <Tabs defaultValue="all" className="w-full">
-            <TabsList className="flex flex-wrap justify-center gap-2 mb-8 md:mb-12 bg-transparent">
-              {categories.map((category) => (
-                <TabsTrigger
-                  key={category.id}
-                  value={category.id}
-                  onClick={() => setActiveCategory(category.id)}
-                  className="px-4 md:px-6 py-2 md:py-3 text-sm md:text-base rounded-full data-[state=active]:bg-secondary data-[state=active]:text-secondary-foreground"
-                >
-                  {category.label}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-
-            <TabsContent value={activeCategory} className="mt-0">
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
-                {filteredCourses.map((course, index) => (
-                  <div
-                    key={course.id}
-                    className="bg-card rounded-xl md:rounded-2xl p-5 md:p-8 shadow-lg border border-border hover-lift animate-fade-in-up text-center"
-                    style={{ animationDelay: `${index * 0.1}s` }}
-                  >
-                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 mx-auto">
-                      <BookOpen className="h-6 w-6 text-primary" />
-                    </div>
-                    <h3 className="text-lg md:text-xl font-bold text-secondary">{course.title}</h3>
-                  </div>
-                ))}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
+            {courses.map((course, index) => (
+              <div
+                key={course.id}
+                className="bg-card rounded-xl md:rounded-2xl p-5 md:p-8 shadow-lg border border-border hover-lift animate-fade-in-up text-center"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 mx-auto">
+                  <BookOpen className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="text-lg md:text-xl font-bold text-secondary">{course.title}</h3>
               </div>
-            </TabsContent>
-          </Tabs>
+            ))}
+          </div>
         </div>
       </section>
 
