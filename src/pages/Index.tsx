@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Star, TrendingUp, CheckCircle, ArrowRight, BookOpen } from "lucide-react";
+import { Star, TrendingUp, CheckCircle, ArrowRight } from "lucide-react";
 import heroImage from "@/assets/ivy-league-campus.jpg";
 
 const stats = [
@@ -14,24 +14,6 @@ const features = [
   "Expert tutors with proven track records",
   "Comprehensive practice tests and materials",
   "Flexible scheduling to fit busy lives",
-];
-
-const courses = [
-  {
-    title: "SAT Comprehensive",
-    description: "Complete preparation covering all sections with intensive practice.",
-    duration: "12 weeks",
-  },
-  {
-    title: "ACT Prep Program",
-    description: "Focused ACT preparation with strategy and content mastery.",
-    duration: "10 weeks",
-  },
-  {
-    title: "Subject Tutoring",
-    description: "One-on-one help in Math, Reading, Writing, and more.",
-    duration: "Flexible",
-  },
 ];
 
 export default function Index() {
@@ -123,50 +105,6 @@ export default function Index() {
                 <p className="text-foreground font-medium text-sm md:text-base">{feature}</p>
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Courses Preview */}
-      <section className="py-12 md:py-20 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-8 md:mb-12">
-            <h2 className="text-2xl md:text-4xl font-bold text-secondary mb-4">
-              Our <span className="text-primary">Programs</span>
-            </h2>
-            <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto">
-              Comprehensive test preparation programs designed to help students reach their full potential.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-4 md:gap-8">
-            {courses.map((course, index) => (
-              <div
-                key={course.title}
-                className="bg-card rounded-xl md:rounded-2xl p-5 md:p-8 shadow-lg hover-lift border border-border animate-fade-in-up"
-                style={{ animationDelay: `${index * 0.15}s` }}
-              >
-                <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-primary/10 flex items-center justify-center mb-4 md:mb-6">
-                  <BookOpen className="h-5 w-5 md:h-6 md:w-6 text-primary" />
-                </div>
-                <h3 className="text-lg md:text-xl font-bold text-secondary mb-2 md:mb-3">{course.title}</h3>
-                <p className="text-muted-foreground mb-4">{course.description}</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium text-primary">{course.duration}</span>
-                  <Link to="/courses" className="text-sm font-semibold text-secondary hover:text-primary transition-colors">
-                    Learn More →
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center mt-8 md:mt-12">
-            <Link to="/courses">
-              <Button variant="hero" size="lg">
-                View All Courses
-              </Button>
-            </Link>
           </div>
         </div>
       </section>
