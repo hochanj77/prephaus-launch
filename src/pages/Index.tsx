@@ -48,7 +48,6 @@ export default function Index() {
               <Link to="/courses">
                 <Button variant="hero" size="lg" className="w-full sm:w-auto">
                   View Programs
-                  <ArrowRight className="h-5 w-5" />
                 </Button>
               </Link>
               <Link to="/catalog">
