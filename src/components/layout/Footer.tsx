@@ -1,8 +1,6 @@
 import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin, Instagram, Facebook, Youtube, Twitter } from "lucide-react";
 import prephausLogo from "@/assets/prephaus-horizontal-logo.png";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 
 const quickLinks = [
   { label: "About Us", href: "/about" },
@@ -89,23 +87,6 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Newsletter */}
-          <div>
-            <h4 className="font-bold text-lg mb-4">Get Course Catalog</h4>
-            <p className="text-secondary-foreground/70 text-sm mb-4">
-              Subscribe to receive our complete course catalog and updates.
-            </p>
-            <form className="space-y-3" onSubmit={(e) => e.preventDefault()}>
-              <Input
-                type="email"
-                placeholder="Enter your email"
-                className="bg-secondary-foreground/10 border-secondary-foreground/20 text-secondary-foreground placeholder:text-secondary-foreground/50"
-              />
-              <Button variant="accent" className="w-full">
-                Send Catalog
-              </Button>
-            </form>
-          </div>
         </div>
 
         {/* Bottom Bar */}
