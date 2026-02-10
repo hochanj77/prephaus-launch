@@ -11,7 +11,7 @@ const navItems = [
   { label: "Programs", href: "/courses" },
   
   { label: "Social", href: "/social" },
-  { label: "SAT Test Platform", href: "https://prephaus.ditoed.com", external: true },
+  { label: "SAT Platform", href: "https://prephaus.ditoed.com", external: true },
   { label: "Contact", href: "/contact" },
 ];
 
