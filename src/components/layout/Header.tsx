@@ -43,8 +43,8 @@ export function Header() {
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-background",
         isScrolled
-          ? "shadow-md py-4"
-          : "py-6"
+          ? "shadow-md py-2 md:py-4"
+          : "py-3 md:py-6"
       )}
     >
       <div className="container mx-auto px-4">
@@ -54,7 +54,7 @@ export function Header() {
             <img 
               src={prephausLogo} 
               alt="PrepHaus" 
-              className="h-16 w-auto transition-transform group-hover:scale-105"
+              className="h-10 md:h-16 w-auto transition-transform group-hover:scale-105"
             />
           </Link>
 

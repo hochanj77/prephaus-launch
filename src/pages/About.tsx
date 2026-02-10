@@ -77,7 +77,7 @@ export default function About() {
   const statsSection = useInView();
 
   return (
-    <div className="pt-24">
+    <div className="pt-16 md:pt-24">
 
       {/* Welcome Section */}
       <section className="pt-4 pb-8 md:py-16 bg-background overflow-hidden">
