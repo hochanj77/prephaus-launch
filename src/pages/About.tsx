@@ -4,7 +4,7 @@ import classroomImage from "@/assets/classroom.jpg";
 
 export default function About() {
   return (
-    <div>
+    <div className="pt-24">
 
       {/* Story Section */}
       <section className="pt-4 pb-8 md:py-20 bg-background">
