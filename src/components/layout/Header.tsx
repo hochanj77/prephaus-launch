@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menu, X, Settings, LogOut } from "lucide-react";
-import prephausLogo from "@/assets/prephaus-logo.jpg";
+import prephausLogo from "@/assets/prephaus-horizontal-logo.png";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
