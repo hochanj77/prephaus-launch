@@ -11,7 +11,7 @@ const navItems = [
   { label: "Programs", href: "/courses" },
   
   { label: "Social", href: "/social" },
-  { label: "SAT Platform", href: "https://prephaus.ditoed.com", external: true },
+  { label: "SAT Platform", href: "https://prephaus.ditoed.com", external: true, authRequired: true },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -59,7 +59,7 @@ export function Header() {
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-2">
-            {navItems.map((item) => 
+            {navItems.filter(item => !item.authRequired || user).map((item) => 
               item.external ? (
                 <a
                   key={item.href}
@@ -128,7 +128,7 @@ export function Header() {
         {isMobileMenuOpen && (
           <div className="lg:hidden mt-4 pb-4 animate-fade-in-up">
             <nav className="flex flex-col gap-2">
-              {navItems.map((item) => 
+              {navItems.filter(item => !item.authRequired || user).map((item) => 
                 item.external ? (
                   <a
                     key={item.href}
