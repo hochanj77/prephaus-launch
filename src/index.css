@@ -8,21 +8,21 @@
 
 @layer base {
   :root {
-    /* Core Brand Colors - Sky Blue Theme (matching logo) */
+    /* Core Brand Colors - Dark Blue Theme (matching logo) */
     --background: 0 0% 100%;
-    --foreground: 222 47% 11%;
+    --foreground: 215 58% 26%;
 
-    /* Sky Blue - Primary (from logo #5CBCE9) */
-    --primary: 197 76% 64%;
-    --primary-foreground: 222 47% 11%;
+    /* Dark Blue - Primary (from logo) */
+    --primary: 215 58% 26%;
+    --primary-foreground: 0 0% 100%;
 
     /* Dark Navy - Secondary/Headers */
-    --secondary: 222 47% 11%;
+    --secondary: 215 58% 20%;
     --secondary-foreground: 0 0% 100%;
 
-    /* Sky Blue - Accent (matching logo) */
-    --accent: 197 76% 64%;
-    --accent-foreground: 222 47% 11%;
+    /* Light Sky Blue - Accent (from logo) */
+    --accent: 205 75% 75%;
+    --accent-foreground: 215 58% 20%;
 
     /* Card & Popover */
     --card: 0 0% 100%;
@@ -45,18 +45,18 @@
     /* Utilities */
     --border: 214 32% 91%;
     --input: 214 32% 91%;
-    --ring: 197 76% 64%;
+    --ring: 215 58% 26%;
     --radius: 0.75rem;
 
     /* Sidebar */
     --sidebar-background: 210 40% 98%;
     --sidebar-foreground: 222 47% 11%;
-    --sidebar-primary: 222 47% 11%;
+    --sidebar-primary: 215 58% 26%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 197 76% 93%;
-    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-accent: 205 75% 93%;
+    --sidebar-accent-foreground: 215 58% 20%;
     --sidebar-border: 214 32% 91%;
-    --sidebar-ring: 197 76% 64%;
+    --sidebar-ring: 215 58% 26%;
 
     /* Typography */
     --font-display: 'Montserrat', sans-serif;
@@ -66,14 +66,14 @@
     --background: 222 47% 6%;
     --foreground: 210 40% 98%;
 
-    --primary: 197 76% 64%;
-    --primary-foreground: 222 47% 11%;
+    --primary: 215 58% 40%;
+    --primary-foreground: 0 0% 100%;
 
     --secondary: 210 40% 96%;
     --secondary-foreground: 222 47% 11%;
 
-    --accent: 197 76% 64%;
-    --accent-foreground: 222 47% 11%;
+    --accent: 205 75% 65%;
+    --accent-foreground: 215 58% 20%;
 
     --card: 222 47% 9%;
     --card-foreground: 210 40% 98%;
@@ -92,16 +92,16 @@
 
     --border: 217 33% 17%;
     --input: 217 33% 17%;
-    --ring: 197 76% 64%;
+    --ring: 215 58% 40%;
 
     --sidebar-background: 222 47% 6%;
     --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 197 76% 64%;
-    --sidebar-primary-foreground: 222 47% 11%;
+    --sidebar-primary: 215 58% 40%;
+    --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 217 33% 17%;
     --sidebar-accent-foreground: 210 40% 98%;
     --sidebar-border: 217 33% 17%;
-    --sidebar-ring: 197 76% 64%;
+    --sidebar-ring: 215 58% 40%;
   }
 }
 
