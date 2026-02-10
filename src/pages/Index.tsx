@@ -75,11 +75,11 @@ export default function Index() {
                   <ArrowRight className="h-5 w-5" />
                 </Button>
               </Link>
-              <a href="/course-catalog.pdf" target="_blank" rel="noopener noreferrer">
+              <Link to="/catalog">
                 <Button variant="hero-outline" size="lg" className="w-full sm:w-auto border-secondary-foreground text-secondary-foreground hover:bg-secondary-foreground/10">
                   Download Course Catalog
                 </Button>
-              </a>
+              </Link>
             </div>
 
             {/* Stats Row */}

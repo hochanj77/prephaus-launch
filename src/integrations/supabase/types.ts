@@ -95,6 +95,39 @@ export type Database = {
           },
         ]
       }
+      catalog_requests: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          message: string | null
+          phone: string | null
+          preferred_language: string | null
+          preferred_location: string | null
+          student_name: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          message?: string | null
+          phone?: string | null
+          preferred_language?: string | null
+          preferred_location?: string | null
+          student_name: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string | null
+          phone?: string | null
+          preferred_language?: string | null
+          preferred_location?: string | null
+          student_name?: string
+        }
+        Relationships: []
+      }
       class_schedules: {
         Row: {
           course_id: string | null
