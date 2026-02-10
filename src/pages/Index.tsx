@@ -40,7 +40,7 @@ export default function Index() {
             {/* Subheading */}
             <p className="text-lg text-white/90 mb-8 max-w-lg">
               Expert-led prep programs designed to boost your scores and confidence.
-              Join over 5,000 students who achieved their dream scores with PrepHaus.
+              With 40+ years of expertise, we know that the best results come when a student feels seen and supported.
             </p>
 
             {/* CTA Buttons */}
