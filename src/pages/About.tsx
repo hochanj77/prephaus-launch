@@ -250,23 +250,6 @@ export default function About() {
           </div>
         </div>
       </section>
-
-      {/* CTA */}
-      <section className="py-12 md:py-20 bg-warm">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-2xl md:text-4xl font-bold text-secondary mb-4 md:mb-6">
-            Ready to Join the PrepHaus Family?
-          </h2>
-          <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8 max-w-2xl mx-auto">
-            Take the first step toward achieving your academic goals.
-          </p>
-          <Link to="/contact">
-            <Button variant="hero" size="xl">
-              Get Started Today
-            </Button>
-          </Link>
-        </div>
-      </section>
     </div>
   );
 }
