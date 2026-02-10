@@ -95,7 +95,7 @@ export default function Contact() {
   return (
     <div className="pt-24">
       {/* Hero Section */}
-      <section className="py-4 bg-muted">
+      <section className="pt-6 pb-4 bg-muted">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center animate-fade-in-up">
             <h1 className="text-3xl md:text-4xl font-bold text-secondary mb-3">
