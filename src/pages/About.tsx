@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Lightbulb, Shield, Heart, Users, BookOpen, Award } from "lucide-react";
 import classroomImage from "@/assets/classroom.jpg";
+import studyDeskImage from "@/assets/hero-study-desk.jpg";
 import { cn } from "@/lib/utils";
 
 function useInView(threshold = 0.15) {
@@ -149,21 +150,31 @@ export default function About() {
           <div
             ref={belonging.ref}
             className={cn(
-              "max-w-3xl mx-auto transition-all duration-700",
+              "grid lg:grid-cols-2 gap-8 md:gap-12 items-center max-w-5xl mx-auto transition-all duration-700",
               belonging.inView ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"
             )}
           >
-            <h2 className="text-2xl md:text-3xl font-bold text-secondary mb-4 md:mb-6">
-              The Power of{" "}
-              <span className="text-accent relative inline-block">
-                Belonging
-                <span className="absolute -bottom-1 left-0 w-full h-1 bg-accent/30 rounded-full" />
-              </span>
-            </h2>
-            <div className="text-muted-foreground leading-relaxed text-sm md:text-base">
-              <p>
-                What sets PrepHaus apart is our focus on community. We believe that curiosity thrives when students feel secure. In our Haus, you aren't just a number on a diagnostic test, but an individual with a story. We've cultivated a space where students are encouraged to ask questions, take risks, support one another, and grow together. With <span className="font-bold text-primary">40+ years</span> of combined expertise, we know that the best results come when a student feels seen and supported.
-              </p>
+            <div>
+              <h2 className="text-2xl md:text-3xl font-bold text-secondary mb-4 md:mb-6">
+                The Power of{" "}
+                <span className="text-accent relative inline-block">
+                  Belonging
+                  <span className="absolute -bottom-1 left-0 w-full h-1 bg-accent/30 rounded-full" />
+                </span>
+              </h2>
+              <div className="text-muted-foreground leading-relaxed text-sm md:text-base">
+                <p>
+                  What sets PrepHaus apart is our focus on community. We believe that curiosity thrives when students feel secure. In our Haus, you aren't just a number on a diagnostic test, but an individual with a story. We've cultivated a space where students are encouraged to ask questions, take risks, support one another, and grow together. With <span className="font-bold text-primary">40+ years</span> of combined expertise, we know that the best results come when a student feels seen and supported.
+                </p>
+              </div>
+            </div>
+            <div className="relative group">
+              <div className="absolute -inset-4 bg-gradient-to-br from-accent/20 via-primary/10 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <img
+                src={studyDeskImage}
+                alt="Students studying together at PrepHaus"
+                className="rounded-2xl shadow-2xl relative z-10 transition-transform duration-500 group-hover:scale-[1.02]"
+              />
             </div>
           </div>
         </div>
