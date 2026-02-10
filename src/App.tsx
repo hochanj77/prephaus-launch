@@ -16,6 +16,7 @@ import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import Portal from "./pages/Portal";
 import NotFound from "./pages/NotFound";
+import CatalogRequest from "./pages/CatalogRequest";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +46,7 @@ const App = () => (
               <Route path="/auth" element={<Auth />} />
               <Route path="/portal" element={<Portal />} />
               <Route path="/admin" element={<Admin />} />
+              <Route path="/catalog" element={<CatalogRequest />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
