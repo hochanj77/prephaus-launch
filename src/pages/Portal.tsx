@@ -131,6 +131,9 @@ const Portal = () => {
                 placeholder="admin@prephaus.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                autoCapitalize="off"
+                autoCorrect="off"
+                autoComplete="email"
                 required
               />
             </div>
@@ -143,6 +146,9 @@ const Portal = () => {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                autoCapitalize="off"
+                autoCorrect="off"
+                autoComplete="current-password"
                 required
               />
             </div>
