@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Star, TrendingUp, CheckCircle, ArrowRight } from "lucide-react";
+import { Star, TrendingUp, CheckCircle } from "lucide-react";
 import heroImage from "@/assets/ivy-league-campus.jpg";
 
 const stats = [
@@ -23,7 +23,7 @@ export default function Index() {
 
         {/* Content */}
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-2xl animate-fade-in-up">
+          <div className="max-w-2xl mx-auto text-center animate-fade-in-up">
             {/* Badge */}
             <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white px-4 py-2 rounded-full mb-6">
               <Star className="h-4 w-4 fill-accent text-accent" />
@@ -44,11 +44,10 @@ export default function Index() {
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 mb-12">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
               <Link to="/courses">
                 <Button variant="hero" size="lg" className="w-full sm:w-auto">
                   View Programs
-                  <ArrowRight className="h-5 w-5" />
                 </Button>
               </Link>
               <Link to="/catalog">
@@ -59,7 +58,7 @@ export default function Index() {
             </div>
 
             {/* Stats Row */}
-            <div className="flex flex-wrap gap-8 pt-8 border-t border-white/20">
+            <div className="flex flex-wrap gap-8 pt-8 border-t border-white/20 justify-center">
               {stats.map((stat) => (
                 <div key={stat.label} className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
