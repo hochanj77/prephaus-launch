@@ -66,7 +66,7 @@ export function Header() {
                   href={item.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-5 py-2 text-base font-medium transition-colors rounded-md text-foreground hover:text-accent"
+                  className="px-5 py-2 text-base font-bold transition-colors rounded-md text-foreground hover:text-accent"
                 >
                   {item.label}
                 </a>
@@ -75,7 +75,7 @@ export function Header() {
                   key={item.href}
                   to={item.href}
                   className={cn(
-                    "px-5 py-2 text-base font-medium transition-colors rounded-md",
+                    "px-5 py-2 text-base font-bold transition-colors rounded-md",
                     location.pathname === item.href
                       ? "text-accent"
                       : "text-foreground hover:text-accent"
