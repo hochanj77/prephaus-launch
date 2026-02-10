@@ -180,50 +180,18 @@ export default function Courses() {
                 {filteredCourses.map((course, index) => (
                   <div
                     key={course.id}
-                    className="bg-card rounded-xl md:rounded-2xl p-5 md:p-8 shadow-lg border border-border hover-lift animate-fade-in-up"
+                    className="bg-card rounded-xl md:rounded-2xl p-5 md:p-8 shadow-lg border border-border hover-lift animate-fade-in-up text-center"
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
-                    <div className="mb-4 md:mb-6">
-                      <span className="inline-block px-3 py-1 bg-primary/20 text-secondary text-xs font-semibold rounded-full uppercase">
-                        {categories.find(c => c.id === course.category)?.label}
-                      </span>
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 mx-auto">
+                      <BookOpen className="h-6 w-6 text-primary" />
                     </div>
-                    
-                    <h3 className="text-lg md:text-xl font-bold text-secondary mb-2 md:mb-3">{course.title}</h3>
-                    <p className="text-muted-foreground text-sm md:text-base mb-4 md:mb-6">{course.description}</p>
-
-                    <div className="space-y-2 md:space-y-3 mb-4 md:mb-6">
-                      <div className="flex items-center gap-3 text-sm">
-                        <Clock className="h-4 w-4 text-accent" />
-                        <span className="text-muted-foreground">{course.duration}</span>
-                      </div>
-                      <div className="flex items-center gap-3 text-sm">
-                        <Users className="h-4 w-4 text-accent" />
-                        <span className="text-muted-foreground">{course.classSize}</span>
-                      </div>
-                      <div className="flex items-center gap-3 text-sm">
-                        <BookOpen className="h-4 w-4 text-accent" />
-                        <span className="text-muted-foreground">{course.format}</span>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2 mb-4 md:mb-6">
-                      {course.features.slice(0, 3).map((feature, i) => (
-                        <div key={i} className="flex items-start gap-2 text-sm">
-                          <CheckCircle className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                          <span className="text-muted-foreground">{feature}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    <div className="pt-6 border-t border-border flex items-center justify-between">
-                      <span className="font-bold text-accent">{course.price}</span>
-                      <Link to="/contact">
-                        <Button variant="ghost" size="sm" className="text-secondary hover:text-accent">
-                          Inquire <ArrowRight className="h-4 w-4 ml-1" />
-                        </Button>
-                      </Link>
-                    </div>
+                    <h3 className="text-lg md:text-xl font-bold text-secondary mb-4">{course.title}</h3>
+                    <Link to="/contact">
+                      <Button variant="hero" size="default">
+                        Inquire
+                      </Button>
+                    </Link>
                   </div>
                 ))}
               </div>
