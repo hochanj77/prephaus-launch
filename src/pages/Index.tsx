@@ -50,14 +50,14 @@ export default function Index() {
           <div className="max-w-2xl animate-fade-in-up">
             {/* Badge */}
             <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white px-4 py-2 rounded-full mb-6">
-              <Star className="h-4 w-4 fill-primary text-primary" />
+              <Star className="h-4 w-4 fill-accent text-accent" />
               <span className="text-sm font-semibold">TOP RATED SAT PREPARATION</span>
             </div>
 
             {/* Headline */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
               Unlock Your{" "}
-              <span className="text-primary">Ivy League</span>{" "}
+              <span className="text-accent">Ivy League</span>{" "}
               Potential.
             </h1>
 
@@ -82,7 +82,7 @@ export default function Index() {
               {stats.map((stat) => (
                 <div key={stat.label} className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
-                    <stat.icon className="h-5 w-5 text-primary" />
+                    <stat.icon className="h-5 w-5 text-accent" />
                   </div>
                   <div>
                     <div className="font-bold text-white">{stat.value}</div>
