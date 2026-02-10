@@ -172,18 +172,13 @@ export default function Index() {
           <h2 className="text-2xl md:text-4xl font-bold text-secondary mb-4 md:mb-6">
             Ready to Start Your Journey?
           </h2>
-          <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8 max-w-2xl mx-auto">
-            Contact us today for a free consultation and learn how PrepHaus can help you achieve your academic goals.
+           <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8 max-w-2xl mx-auto">
+            Contact us today and learn how PrepHaus can help you achieve your academic goals.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/contact">
               <Button variant="hero" size="xl">
-                Schedule Free Consultation
-              </Button>
-            </Link>
-            <Link to="/consulting">
-              <Button variant="hero-outline" size="xl">
-                Learn About Consulting
+                Contact Us
               </Button>
             </Link>
           </div>

@@ -199,14 +199,14 @@ export default function Courses() {
       <section className="py-12 md:py-20 bg-warm">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-2xl md:text-4xl font-bold text-secondary mb-4 md:mb-6">
-            Not Sure Which Course Is Right for You?
+            Not Sure Which Program Is Right for You?
           </h2>
           <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8 max-w-2xl mx-auto">
-            Schedule a free consultation and we'll help you find the perfect program for your needs.
+            Reach out and we'll help you find the perfect program for your needs.
           </p>
-          <Link to="/consulting">
+          <Link to="/contact">
             <Button variant="hero" size="xl">
-              Book Free Consultation
+              Contact Us
             </Button>
           </Link>
         </div>

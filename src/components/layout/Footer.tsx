@@ -6,8 +6,7 @@ import { Button } from "@/components/ui/button";
 
 const quickLinks = [
   { label: "About Us", href: "/about" },
-  { label: "Courses", href: "/courses" },
-  { label: "Consulting", href: "/consulting" },
+  { label: "Programs", href: "/courses" },
   { label: "Contact", href: "/contact" },
 ];
 
