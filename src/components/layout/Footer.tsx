@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import { GraduationCap, Mail, Phone, MapPin, Instagram, Facebook, Youtube, Twitter } from "lucide-react";
+import { Mail, Phone, MapPin, Instagram, Facebook, Youtube, Twitter } from "lucide-react";
+import prephausLogo from "@/assets/prephaus-horizontal-logo.png";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -29,13 +30,12 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand Column */}
           <div className="space-y-4">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="bg-accent rounded-lg p-2">
-                <GraduationCap className="h-6 w-6 text-accent-foreground" />
-              </div>
-              <span className="text-2xl font-bold text-secondary-foreground">
-                Prep<span className="text-accent">Haus</span>
-              </span>
+            <Link to="/" className="inline-block">
+              <img 
+                src={prephausLogo} 
+                alt="PrepHaus" 
+                className="h-12 w-auto brightness-0 invert"
+              />
             </Link>
             <p className="text-secondary-foreground/70 text-sm leading-relaxed">
               Building confident, capable test-takers ready for their future through personalized SAT prep and academic support.
