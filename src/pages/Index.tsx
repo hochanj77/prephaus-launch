@@ -9,12 +9,6 @@ const stats = [
   { value: "+180", label: "Average student gain", icon: TrendingUp },
 ];
 
-const features = [
-  "Personalized learning plans tailored to each student",
-  "Expert tutors with proven track records",
-  "Comprehensive practice tests and materials",
-  "Flexible scheduling to fit busy lives",
-];
 
 export default function Index() {
   return (
@@ -82,32 +76,7 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Mission Section */}
-      <section className="py-12 md:py-20 bg-muted">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center mb-8 md:mb-12">
-            <h2 className="text-2xl md:text-4xl font-bold text-secondary mb-4 md:mb-6">
-              Your Path to <span className="text-primary">SAT Success</span> Starts Here
-            </h2>
-            <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
-              At PrepHaus, we believe every student has the potential to excel. Our proven methodology combines
-              personalized instruction, comprehensive materials, and unwavering support.
-            </p>
-          </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6">
-            {features.map((feature, index) => (
-              <div
-                key={index}
-                className="bg-card rounded-xl p-4 md:p-6 shadow-sm border border-border animate-fade-in-up"
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <CheckCircle className="h-6 w-6 md:h-8 md:w-8 text-primary mb-3 md:mb-4" />
-                <p className="text-foreground font-medium text-sm md:text-base">{feature}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+
 
       {/* CTA Section */}
       <section className="py-12 md:py-20 bg-muted">
