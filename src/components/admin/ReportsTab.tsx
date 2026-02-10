@@ -7,7 +7,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { Users, UserPlus, FileText, Loader2 } from 'lucide-react';
-import { format, subDays, isAfter } from 'date-fns';
+import { format, subDays, isAfter, isValid } from 'date-fns';
+
+const safeFormatDate = (dateStr: string | null | undefined, fmt: string = 'MMM d, yyyy'): string => {
+  if (!dateStr) return '-';
+  const date = new Date(dateStr);
+  return isValid(date) ? format(date, fmt) : '-';
+};
 
 interface Student {
   id: string;
@@ -77,19 +83,26 @@ const ReportsTab = () => {
   // Compute statistics
   const stats = useMemo(() => {
     const activeStudents = students.filter((s) => s.active).length;
-    const newSignups = students.filter((s) =>
-      isAfter(new Date(s.created_at), cutoffDate)
-    ).length;
-    const reportCardsIssued = reportCards.filter((rc) =>
-      rc.created_at && isAfter(new Date(rc.created_at), cutoffDate)
-    ).length;
+    const newSignups = students.filter((s) => {
+      const d = new Date(s.created_at);
+      return isValid(d) && isAfter(d, cutoffDate);
+    }).length;
+    const reportCardsIssued = reportCards.filter((rc) => {
+      if (!rc.created_at) return false;
+      const d = new Date(rc.created_at);
+      return isValid(d) && isAfter(d, cutoffDate);
+    }).length;
 
     return { activeStudents, newSignups, reportCardsIssued };
   }, [students, reportCards, cutoffDate]);
 
   // Filtered data by date range
   const filteredReportCards = useMemo(() => {
-    return reportCards.filter((rc) => rc.created_at && isAfter(new Date(rc.created_at), cutoffDate));
+    return reportCards.filter((rc) => {
+      if (!rc.created_at) return false;
+      const d = new Date(rc.created_at);
+      return isValid(d) && isAfter(d, cutoffDate);
+    });
   }, [reportCards, cutoffDate]);
 
   if (isLoading) {
@@ -210,7 +223,7 @@ const ReportsTab = () => {
                             </Badge>
                           </TableCell>
                           <TableCell>
-                            {format(new Date(student.created_at), 'MMM d, yyyy')}
+                            {safeFormatDate(student.created_at)}
                           </TableCell>
                         </TableRow>
                       ))
@@ -261,7 +274,7 @@ const ReportsTab = () => {
                             <TableCell>{rc.term || '-'}</TableCell>
                             <TableCell>{rc.year || '-'}</TableCell>
                             <TableCell>
-                              {rc.created_at ? format(new Date(rc.created_at), 'MMM d, yyyy') : '-'}
+                              {safeFormatDate(rc.created_at)}
                             </TableCell>
                           </TableRow>
                         ))
