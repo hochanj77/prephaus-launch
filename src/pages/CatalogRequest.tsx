@@ -175,24 +175,6 @@ export default function CatalogRequest() {
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="location">Preferred Location *</Label>
-                <Select
-                  value={formData.preferredLocation}
-                  onValueChange={(value) => handleChange("preferredLocation", value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Palisades Park / Closter / Both" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {locationOptions.map((opt) => (
-                      <SelectItem key={opt.value} value={opt.value}>
-                        {opt.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
 
               <div className="space-y-2">
                 <Label htmlFor="message">Leave us a message...</Label>
