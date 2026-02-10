@@ -7,8 +7,7 @@ import { Clock, Users, BookOpen, CheckCircle, ArrowRight } from "lucide-react";
 const categories = [
   { id: "all", label: "All Programs" },
   { id: "test-prep", label: "Test Prep" },
-  { id: "math", label: "Math" },
-  { id: "literacy", label: "Literacy" },
+  { id: "academic", label: "Academic Tutoring" },
 ];
 
 const courses = [
@@ -45,7 +44,7 @@ const courses = [
   {
     id: 3,
     title: "Algebra I",
-    category: "math",
+    category: "academic",
     description: "Build a strong foundation in algebraic concepts including equations, inequalities, and functions.",
     duration: "Ongoing",
     classSize: "1-on-1 or small group",
@@ -60,7 +59,7 @@ const courses = [
   {
     id: 4,
     title: "Algebra II",
-    category: "math",
+    category: "academic",
     description: "Advanced algebra covering polynomials, rational expressions, logarithms, and more.",
     duration: "Ongoing",
     classSize: "1-on-1 or small group",
@@ -75,7 +74,7 @@ const courses = [
   {
     id: 5,
     title: "Geometry",
-    category: "math",
+    category: "academic",
     description: "Comprehensive geometry covering proofs, theorems, area, volume, and coordinate geometry.",
     duration: "Ongoing",
     classSize: "1-on-1 or small group",
@@ -90,7 +89,7 @@ const courses = [
   {
     id: 6,
     title: "Precalculus (IB / AP)",
-    category: "math",
+    category: "academic",
     description: "Preparation for advanced mathematics covering trigonometry, limits, and analytical geometry for IB and AP curricula.",
     duration: "Ongoing",
     classSize: "1-on-1 or small group",
@@ -105,7 +104,7 @@ const courses = [
   {
     id: 7,
     title: "Calculus (IB / AP)",
-    category: "math",
+    category: "academic",
     description: "In-depth calculus instruction covering derivatives, integrals, and applications for IB and AP exams.",
     duration: "Ongoing",
     classSize: "1-on-1 or small group",
@@ -120,7 +119,7 @@ const courses = [
   {
     id: 8,
     title: "Literacy",
-    category: "literacy",
+    category: "academic",
     description: "Reading comprehension, grammar, writing skills, and vocabulary building for all levels.",
     duration: "Ongoing",
     classSize: "1-on-1 or small group",
