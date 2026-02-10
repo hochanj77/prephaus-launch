@@ -86,7 +86,7 @@ const successStories = [
 
 export default function Social() {
   return (
-    <div>
+    <div className="pt-24">
 
       {/* Social Platforms */}
       <section className="pt-4 pb-8 md:py-20 bg-background">
