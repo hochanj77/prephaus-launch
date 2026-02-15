@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Mail, Phone, MapPin, Instagram, Facebook, Youtube, Twitter } from "lucide-react";
+import { Mail, Phone, MapPin, Instagram, ExternalLink } from "lucide-react";
 import prephausLogo from "@/assets/prephaus-horizontal-logo.png";
 
 const quickLinks = [
@@ -15,9 +15,7 @@ const legalLinks = [
 
 const socialLinks = [
   { icon: Instagram, href: "#", label: "Instagram" },
-  { icon: Facebook, href: "#", label: "Facebook" },
-  { icon: Youtube, href: "#", label: "YouTube" },
-  { icon: Twitter, href: "#", label: "Twitter" },
+  { icon: ExternalLink, href: "https://share.google/sB0wrIS3IhJoOfnOJ", label: "Google Business" },
 ];
 
 export function Footer() {

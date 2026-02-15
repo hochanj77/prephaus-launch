@@ -1,4 +1,4 @@
-import { Instagram, Facebook, Youtube, Twitter, Linkedin, ExternalLink } from "lucide-react";
+import { Instagram, ExternalLink } from "lucide-react";
 
 const socialPlatforms = [
   {
@@ -10,36 +10,12 @@ const socialPlatforms = [
     description: "Daily study tips, student success stories, and behind-the-scenes content.",
   },
   {
-    name: "Facebook",
+    name: "Google Business",
     handle: "PrepHaus Academy",
-    icon: Facebook,
-    color: "bg-blue-600",
-    url: "#",
-    description: "Community updates, parent resources, and event announcements.",
-  },
-  {
-    name: "YouTube",
-    handle: "PrepHaus",
-    icon: Youtube,
-    color: "bg-red-600",
-    url: "#",
-    description: "Free SAT prep videos, study strategies, and student testimonials.",
-  },
-  {
-    name: "Twitter",
-    handle: "@prephaus",
-    icon: Twitter,
-    color: "bg-sky-500",
-    url: "#",
-    description: "Quick tips, test date reminders, and education news.",
-  },
-  {
-    name: "LinkedIn",
-    handle: "PrepHaus Academy",
-    icon: Linkedin,
-    color: "bg-blue-700",
-    url: "#",
-    description: "Professional updates and career resources for students.",
+    icon: ExternalLink,
+    color: "bg-gradient-to-br from-blue-500 via-green-500 to-yellow-400",
+    url: "https://share.google/sB0wrIS3IhJoOfnOJ",
+    description: "Find us on Google — reviews, directions, and business info.",
   },
 ];
 
