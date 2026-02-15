@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Star, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import heroImage from "@/assets/ivy-league-campus.jpg";
 
 
@@ -18,11 +18,6 @@ export default function Index() {
         {/* Content */}
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-2xl animate-fade-in-up">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm text-white px-3 py-1.5 md:px-4 md:py-2 rounded-full mb-4 md:mb-6">
-              <Star className="h-3.5 w-3.5 md:h-4 md:w-4 fill-accent text-accent" />
-              <span className="text-xs md:text-sm font-semibold">TOP RATED SAT PREPARATION</span>
-            </div>
 
             {/* Headline */}
             <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4 md:mb-6">
