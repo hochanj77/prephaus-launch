@@ -129,7 +129,7 @@ export default function Courses() {
   return (
     <div className="pt-16 md:pt-24">
       {/* Hero Section */}
-      <section className="pt-4 pb-8 md:py-20 bg-muted">
+      <section className="py-10 md:py-16 bg-muted">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center animate-fade-in-up">
              <h1 className="text-3xl md:text-5xl font-bold text-secondary mb-4 md:mb-6">
@@ -144,7 +144,7 @@ export default function Courses() {
       </section>
 
       {/* Courses Section */}
-      <section className="py-12 md:py-20 bg-background">
+      <section className="py-10 md:py-16 bg-background">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
             {courses.map((course, index) => (
@@ -164,7 +164,7 @@ export default function Courses() {
       </section>
 
       {/* CTA */}
-      <section className="py-12 md:py-20 bg-warm">
+      <section className="py-10 md:py-16 bg-warm">
         <div className="container mx-auto px-4 text-center">
           <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8 max-w-2xl mx-auto">
             Reach out and we'll help you find the perfect program for your needs.

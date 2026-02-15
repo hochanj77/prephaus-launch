@@ -47,7 +47,7 @@
    return (
     <div className="pt-16 md:pt-24">
        {/* Hero Section */}
-      <section className="pt-4 pb-8 md:py-20 bg-muted">
+      <section className="py-10 md:py-16 bg-muted">
          <div className="container mx-auto px-4">
            <div className="max-w-3xl mx-auto text-center animate-fade-in-up">
             <h1 className="text-3xl md:text-5xl font-bold text-secondary mb-4 md:mb-6">
@@ -68,7 +68,7 @@
        </section>
  
        {/* Benefits Section */}
-      <section className="py-12 md:py-20 bg-background">
+      <section className="py-10 md:py-16 bg-background">
          <div className="container mx-auto px-4">
           <div className="text-center mb-8 md:mb-12">
             <h2 className="text-2xl md:text-4xl font-bold text-secondary mb-4">
@@ -98,7 +98,7 @@
        </section>
  
        {/* What to Expect */}
-      <section className="py-12 md:py-20 bg-warm">
+      <section className="py-10 md:py-16 bg-warm">
          <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
              <div className="animate-fade-in-up">
@@ -152,7 +152,7 @@
  
  
        {/* CTA */}
-      <section className="py-12 md:py-20 bg-secondary">
+      <section className="py-10 md:py-16 bg-secondary">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-2xl md:text-4xl font-bold text-secondary-foreground mb-4 md:mb-6">
              Your SAT Success Story Starts Here

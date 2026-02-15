@@ -95,7 +95,7 @@ export default function Contact() {
   return (
     <div className="pt-16 md:pt-24">
       {/* Hero Section */}
-      <section className="pt-6 pb-4 bg-muted">
+      <section className="py-10 md:py-16 bg-muted">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center animate-fade-in-up">
             <h1 className="text-3xl md:text-4xl font-bold text-secondary mb-3">
@@ -109,7 +109,7 @@ export default function Contact() {
       </section>
 
       {/* Contact Info Cards - Horizontal Grid */}
-      <section className="py-4 bg-background">
+      <section className="py-6 md:py-10 bg-background">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 animate-fade-in-up">
             {contactInfo.map((item) => (
@@ -132,7 +132,7 @@ export default function Contact() {
       </section>
 
       {/* Contact Form & Map/CTA */}
-      <section className="py-6 bg-background">
+      <section className="py-6 md:py-10 bg-background">
         <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-3 gap-6">
             {/* Contact Form */}
