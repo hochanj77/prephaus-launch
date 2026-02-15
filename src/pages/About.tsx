@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Lightbulb, Shield, Heart, Users, BookOpen, Award } from "lucide-react";
 import classroomImage from "@/assets/classroom.jpg";
-
 import { cn } from "@/lib/utils";
+import { usePageContent } from "@/hooks/useSiteContent";
 
 function useInView(threshold = 0.15) {
   const ref = useRef<HTMLDivElement>(null);
@@ -69,12 +69,40 @@ const stats = [
   { icon: Award, value: 99, suffix: "%", label: "Student Satisfaction" },
 ];
 
+const defaults = {
+  welcome: {
+    headline: "Welcome to PrepHaus: Where Potential Finds a Home",
+    intro: "PrepHaus was built on a simple belief: students learn best in community.",
+    body: "What sets PrepHaus apart is our focus on community. We believe that curiosity thrives when students feel secure. In our Haus, you aren't just a number on a diagnostic test, but an individual with a story. We've cultivated a space where students are encouraged to ask questions, take risks, support one another, and grow together. With 50+ years of combined expertise, we know that the best results come when a student feels seen and supported.",
+  },
+  belonging: {
+    headline: "The Power of Belonging",
+    body: "Our name is our philosophy. Derived from the German Haus, it implies far more than just a building or a classroom. It signifies home, belonging, and a shared life. We've traded the cold, assembly-line feel of traditional test prep for a warm, welcoming environment—a place where students feel at home with teachers who genuinely know them, believe in them, and challenge them to grow.",
+  },
+  heart: {
+    headline: "The Heart Behind the Knowledge",
+    body: "While many see education as a transactional transfer of facts, we strive to be more than mere vessels for knowledge. We believe education is not the end goal, but the vital process that helps students reach their dreams. Our teachers are mentors who care deeply, not just for your score growth, but for your personal potential.",
+    values_intro: "At PrepHaus, we work intentionally, every step of the way, to help students develop:",
+  },
+  excellence: {
+    headline: "Built for Excellence. Anchored in Community.",
+    body: "In this Haus, we never mistake warmth for weakness. We are uncompromising when it comes to academic rigor. Our standards are elite, and we never sacrifice performance for comfort. Instead, we use our community as the fuel for high achievement, believing that students reach their peak when they are challenged within a place they truly belong.",
+    quote: "We are a community growing together, leaving no regrets as we build the academic prowess and inner grit needed for a secure future. At PrepHaus, we don't just help you reach a goal; we give you the momentum to surpass it.",
+  },
+};
+
 export default function About() {
   const hero = useInView();
-  const belonging = useInView();
-  const heart = useInView();
-  const excellence = useInView();
+  const belongingView = useInView();
+  const heartView = useInView();
+  const excellenceView = useInView();
   const statsSection = useInView();
+
+  const { data: pageContent } = usePageContent("about");
+  const welcome = { ...defaults.welcome, ...pageContent?.welcome };
+  const belonging = { ...defaults.belonging, ...pageContent?.belonging };
+  const heart = { ...defaults.heart, ...pageContent?.heart };
+  const excellence = { ...defaults.excellence, ...pageContent?.excellence };
 
   return (
     <div className="pt-16 md:pt-24">
@@ -91,19 +119,13 @@ export default function About() {
           >
             <div>
               <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold text-secondary mb-4 md:mb-6 leading-tight">
-                Welcome to PrepHaus: Where Potential Finds a{" "}
-                <span className="text-accent relative">
-                  Home
-                  <span className="absolute -bottom-1 left-0 w-full h-1 bg-accent/30 rounded-full" />
-                </span>
+                {welcome.headline}
               </h1>
               <div className="space-y-4 text-muted-foreground leading-relaxed text-sm md:text-base">
                 <p className="text-base md:text-lg font-semibold text-foreground">
-                  PrepHaus was built on a simple belief: students learn best in community.
+                  {welcome.intro}
                 </p>
-                <p>
-                  What sets PrepHaus apart is our focus on community. We believe that curiosity thrives when students feel secure. In our Haus, you aren't just a number on a diagnostic test, but an individual with a story. We've cultivated a space where students are encouraged to ask questions, take risks, support one another, and grow together. With <span className="font-bold text-primary">50+ years</span> of combined expertise, we know that the best results come when a student feels seen and supported.
-                </p>
+                <p>{welcome.body}</p>
               </div>
             </div>
             <div className="relative group">
@@ -127,9 +149,7 @@ export default function About() {
                 key={stat.label}
                 className={cn(
                   "text-center transition-all duration-700",
-                  statsSection.inView
-                    ? "opacity-100 translate-y-0"
-                    : "opacity-0 translate-y-6"
+                  statsSection.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
                 )}
                 style={{ transitionDelay: `${i * 150}ms` }}
               >
@@ -148,23 +168,17 @@ export default function About() {
       <section className="py-8 md:py-16 bg-muted overflow-hidden">
         <div className="container mx-auto px-4">
           <div
-            ref={belonging.ref}
+            ref={belongingView.ref}
             className={cn(
               "max-w-3xl mx-auto transition-all duration-700",
-              belonging.inView ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"
+              belongingView.inView ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-8"
             )}
           >
             <h2 className="text-2xl md:text-3xl font-bold text-secondary mb-4 md:mb-6">
-              The Power of{" "}
-              <span className="text-accent relative inline-block">
-                Belonging
-                <span className="absolute -bottom-1 left-0 w-full h-1 bg-accent/30 rounded-full" />
-              </span>
+              {belonging.headline}
             </h2>
             <div className="text-muted-foreground leading-relaxed text-sm md:text-base">
-              <p>
-                Our name is our philosophy. Derived from the German <em className="text-primary font-medium">Haus</em>, it implies far more than just a building or a classroom. It signifies home, belonging, and a shared life. We've traded the cold, assembly-line feel of traditional test prep for a warm, welcoming environment—a place where students feel at home with teachers who genuinely know them, believe in them, and challenge them to grow.
-              </p>
+              <p>{belonging.body}</p>
             </div>
           </div>
         </div>
@@ -174,37 +188,29 @@ export default function About() {
       <section className="py-8 md:py-16 bg-background overflow-hidden">
         <div className="container mx-auto px-4">
           <div
-            ref={heart.ref}
+            ref={heartView.ref}
             className={cn(
               "max-w-3xl mx-auto transition-all duration-700",
-              heart.inView ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"
+              heartView.inView ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"
             )}
           >
             <h2 className="text-2xl md:text-3xl font-bold text-secondary mb-4 md:mb-6">
-              The Heart Behind the{" "}
-              <span className="text-accent relative inline-block">
-                Knowledge
-                <span className="absolute -bottom-1 left-0 w-full h-1 bg-accent/30 rounded-full" />
-              </span>
+              {heart.headline}
             </h2>
             <div className="space-y-4 text-muted-foreground leading-relaxed text-sm md:text-base">
-              <p>
-                While many see education as a transactional transfer of facts, we strive to be more than mere vessels for knowledge. We believe education is not the end goal, but the vital process that helps students reach their dreams. Our teachers are mentors who care deeply, not just for your score growth, but for your personal potential.
-              </p>
-              <p className="font-medium text-foreground">
-                At PrepHaus, we work intentionally, every step of the way, to help students develop:
-              </p>
+              <p>{heart.body}</p>
+              <p className="font-medium text-foreground">{heart.values_intro}</p>
             </div>
           </div>
 
-          {/* Interactive Value Cards */}
+          {/* Value Cards */}
           <div className="max-w-3xl mx-auto mt-8 grid md:grid-cols-3 gap-4 md:gap-6">
             {values.map((val, i) => (
               <div
                 key={val.title}
                 className={cn(
                   "group relative bg-card rounded-xl p-5 md:p-6 border border-border shadow-sm cursor-default transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:border-accent/50",
-                  heart.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                  heartView.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
                 )}
                 style={{ transitionDelay: `${(i + 1) * 200}ms` }}
               >
@@ -226,26 +232,19 @@ export default function About() {
       <section className="py-8 md:py-16 bg-muted overflow-hidden">
         <div className="container mx-auto px-4">
           <div
-            ref={excellence.ref}
+            ref={excellenceView.ref}
             className={cn(
               "max-w-3xl mx-auto transition-all duration-700",
-              excellence.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+              excellenceView.inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
             )}
           >
             <h2 className="text-2xl md:text-3xl font-bold text-secondary mb-4 md:mb-6">
-              Built for Excellence. Anchored in{" "}
-              <span className="text-accent relative inline-block">
-                Community
-                <span className="absolute -bottom-1 left-0 w-full h-1 bg-accent/30 rounded-full" />
-              </span>
-              .
+              {excellence.headline}
             </h2>
             <div className="space-y-4 text-muted-foreground leading-relaxed text-sm md:text-base">
-              <p>
-                In this Haus, we never mistake warmth for weakness. We are uncompromising when it comes to academic rigor. Our standards are elite, and we never sacrifice performance for comfort. Instead, we use our community as the fuel for high achievement, believing that students reach their peak when they are challenged within a place they truly belong.
-              </p>
+              <p>{excellence.body}</p>
               <p className="text-foreground font-medium border-l-4 border-accent pl-4 py-2 bg-accent/5 rounded-r-lg">
-                We are a community growing together, leaving no regrets as we build the academic prowess and inner grit needed for a secure future. At PrepHaus, we don't just help you reach a goal; we give you the momentum to surpass it.
+                {excellence.quote}
               </p>
             </div>
           </div>
@@ -254,3 +253,4 @@ export default function About() {
     </div>
   );
 }
+

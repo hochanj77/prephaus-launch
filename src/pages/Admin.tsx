@@ -2,13 +2,15 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Loader2, Users, Calendar, Megaphone, BookOpen, FileText, BarChart3 } from 'lucide-react';
+import { Loader2, Users, Calendar, Megaphone, BookOpen, FileText, BarChart3, GraduationCap, Globe } from 'lucide-react';
 import StudentsTab from '@/components/admin/StudentsTab';
 import ScheduleTab from '@/components/admin/ScheduleTab';
 import AnnouncementsTab from '@/components/admin/AnnouncementsTab';
 import CoursesTab from '@/components/admin/CoursesTab';
 import ReportCardsTab from '@/components/admin/ReportCardsTab';
 import ReportsTab from '@/components/admin/ReportsTab';
+import GradesTab from '@/components/admin/GradesTab';
+import SiteContentTab from '@/components/admin/SiteContentTab';
 
 const Admin = () => {
   const { user, loading, isAdmin, isAdminLoading } = useAuth();
@@ -21,13 +23,11 @@ const Admin = () => {
   }, [user, loading, navigate]);
 
   useEffect(() => {
-    // Only redirect if we're done loading and done checking admin status
     if (!loading && !isAdminLoading && user && !isAdmin) {
       navigate('/');
     }
   }, [user, loading, isAdmin, isAdminLoading, navigate]);
 
-  // Show loading while auth or admin check is in progress
   if (loading || isAdminLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -44,14 +44,18 @@ const Admin = () => {
     <div className="container py-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-foreground">Admin Dashboard</h1>
-        <p className="text-muted-foreground mt-1">Manage students, schedules, and communications</p>
+        <p className="text-muted-foreground mt-1">Manage students, grades, content, and communications</p>
       </div>
 
       <Tabs defaultValue="students" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-6 lg:w-auto lg:inline-grid">
+        <TabsList className="grid w-full grid-cols-4 sm:grid-cols-8 lg:w-auto lg:inline-grid lg:grid-cols-8">
           <TabsTrigger value="students" className="gap-2">
             <Users className="h-4 w-4" />
             <span className="hidden sm:inline">Students</span>
+          </TabsTrigger>
+          <TabsTrigger value="grades" className="gap-2">
+            <GraduationCap className="h-4 w-4" />
+            <span className="hidden sm:inline">Grades</span>
           </TabsTrigger>
           <TabsTrigger value="courses" className="gap-2">
             <BookOpen className="h-4 w-4" />
@@ -63,20 +67,28 @@ const Admin = () => {
           </TabsTrigger>
           <TabsTrigger value="announcements" className="gap-2">
             <Megaphone className="h-4 w-4" />
-            <span className="hidden sm:inline">Announcements</span>
+            <span className="hidden sm:inline">Announce</span>
           </TabsTrigger>
           <TabsTrigger value="report-cards" className="gap-2">
             <FileText className="h-4 w-4" />
-            <span className="hidden sm:inline">Report Cards</span>
+            <span className="hidden sm:inline">Reports</span>
           </TabsTrigger>
           <TabsTrigger value="reports" className="gap-2">
             <BarChart3 className="h-4 w-4" />
-            <span className="hidden sm:inline">Reports</span>
+            <span className="hidden sm:inline">Analytics</span>
+          </TabsTrigger>
+          <TabsTrigger value="website" className="gap-2">
+            <Globe className="h-4 w-4" />
+            <span className="hidden sm:inline">Website</span>
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="students">
           <StudentsTab />
+        </TabsContent>
+
+        <TabsContent value="grades">
+          <GradesTab />
         </TabsContent>
 
         <TabsContent value="courses">
@@ -98,9 +110,14 @@ const Admin = () => {
         <TabsContent value="reports">
           <ReportsTab />
         </TabsContent>
+
+        <TabsContent value="website">
+          <SiteContentTab />
+        </TabsContent>
       </Tabs>
     </div>
   );
 };
 
 export default Admin;
+
