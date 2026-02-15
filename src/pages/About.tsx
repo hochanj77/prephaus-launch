@@ -65,7 +65,7 @@ const values = [
 
 const stats = [
   { icon: Users, value: 5000, suffix: "+", label: "Students Mentored" },
-  { icon: BookOpen, value: 40, suffix: "+", label: "Years Combined Experience" },
+  { icon: BookOpen, value: 50, suffix: "+", label: "Years Combined Experience" },
   { icon: Award, value: 99, suffix: "%", label: "Student Satisfaction" },
 ];
 
@@ -163,7 +163,7 @@ export default function About() {
             </h2>
             <div className="text-muted-foreground leading-relaxed text-sm md:text-base">
               <p>
-                What sets PrepHaus apart is our focus on community. We believe that curiosity thrives when students feel secure. In our Haus, you aren't just a number on a diagnostic test, but an individual with a story. We've cultivated a space where students are encouraged to ask questions, take risks, support one another, and grow together. With <span className="font-bold text-primary">40+ years</span> of combined expertise, we know that the best results come when a student feels seen and supported.
+                What sets PrepHaus apart is our focus on community. We believe that curiosity thrives when students feel secure. In our Haus, you aren't just a number on a diagnostic test, but an individual with a story. We've cultivated a space where students are encouraged to ask questions, take risks, support one another, and grow together. With <span className="font-bold text-primary">50+ years</span> of combined expertise, we know that the best results come when a student feels seen and supported.
               </p>
             </div>
           </div>
