@@ -172,9 +172,9 @@ export default function Courses() {
           <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8 max-w-2xl mx-auto">
             Reach out and we'll help you find the perfect program for your needs.
           </p>
-          <Link to="/contact">
+          <Link to="/catalog">
             <Button variant="hero" size="xl">
-              Contact Us
+              Download Course Catalog
             </Button>
           </Link>
         </div>
