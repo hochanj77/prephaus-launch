@@ -102,7 +102,7 @@ export default function About() {
                   PrepHaus was built on a simple belief: students learn best in community.
                 </p>
                 <p>
-                  Our name is our philosophy. Derived from the German <em className="text-primary font-medium">Haus</em>, it implies far more than just a building or a classroom. It signifies home, belonging, and a shared life. We've traded the cold, assembly-line feel of traditional test prep for a warm, welcoming environment—a place where students feel at home with teachers who genuinely know them, believe in them, and challenge them to grow.
+                  What sets PrepHaus apart is our focus on community. We believe that curiosity thrives when students feel secure. In our Haus, you aren't just a number on a diagnostic test, but an individual with a story. We've cultivated a space where students are encouraged to ask questions, take risks, support one another, and grow together. With <span className="font-bold text-primary">50+ years</span> of combined expertise, we know that the best results come when a student feels seen and supported.
                 </p>
               </div>
             </div>
@@ -163,7 +163,7 @@ export default function About() {
             </h2>
             <div className="text-muted-foreground leading-relaxed text-sm md:text-base">
               <p>
-                What sets PrepHaus apart is our focus on community. We believe that curiosity thrives when students feel secure. In our Haus, you aren't just a number on a diagnostic test, but an individual with a story. We've cultivated a space where students are encouraged to ask questions, take risks, support one another, and grow together. With <span className="font-bold text-primary">50+ years</span> of combined expertise, we know that the best results come when a student feels seen and supported.
+                Our name is our philosophy. Derived from the German <em className="text-primary font-medium">Haus</em>, it implies far more than just a building or a classroom. It signifies home, belonging, and a shared life. We've traded the cold, assembly-line feel of traditional test prep for a warm, welcoming environment—a place where students feel at home with teachers who genuinely know them, believe in them, and challenge them to grow.
               </p>
             </div>
           </div>
