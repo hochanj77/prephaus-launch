@@ -163,6 +163,19 @@ export default function Courses() {
         </div>
       </section>
 
+      {/* CTA */}
+      <section className="py-12 md:py-20 bg-warm">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8 max-w-2xl mx-auto">
+            Reach out and we'll help you find the perfect program for your needs.
+          </p>
+          <Link to="/catalog">
+            <Button variant="hero" size="xl">
+              Download Course Catalog
+            </Button>
+          </Link>
+        </div>
+      </section>
     </div>
   );
 }
