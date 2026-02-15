@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { BookOpen } from "lucide-react";
+import { usePageContent } from "@/hooks/useSiteContent";
 
 const courses = [
   { id: 1, title: "SAT Prep" },
@@ -13,19 +14,33 @@ const courses = [
   { id: 8, title: "Private Lessons" },
 ];
 
+const heroDefaults = {
+  headline: "Our Programs",
+  subheading: "Explore our comprehensive range of test preparation programs and academic tutoring services designed to help every student succeed.",
+};
+
+const ctaDefaults = {
+  text: "Reach out and we'll help you find the perfect program for your needs.",
+  button_text: "Download Course Catalog",
+  button_link: "/catalog",
+};
+
 export default function Courses() {
+  const { data: pageContent } = usePageContent("courses");
+  const hero = { ...heroDefaults, ...pageContent?.hero };
+  const cta = { ...ctaDefaults, ...pageContent?.cta };
+
   return (
     <div className="pt-16 md:pt-24">
       {/* Hero Section */}
       <section className="py-10 md:py-16 bg-muted">
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center animate-fade-in-up">
-             <h1 className="text-3xl md:text-5xl font-bold text-secondary mb-4 md:mb-6">
-               Our <span className="text-accent">Programs</span>
+            <h1 className="text-3xl md:text-5xl font-bold text-secondary mb-4 md:mb-6">
+              {hero.headline}
             </h1>
             <p className="text-base md:text-xl text-muted-foreground leading-relaxed">
-              Explore our comprehensive range of test preparation programs and academic tutoring services 
-              designed to help every student succeed.
+              {hero.subheading}
             </p>
           </div>
         </div>
@@ -55,11 +70,11 @@ export default function Courses() {
       <section className="py-10 md:py-16 bg-warm">
         <div className="container mx-auto px-4 text-center">
           <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8 max-w-2xl mx-auto">
-            Reach out and we'll help you find the perfect program for your needs.
+            {cta.text}
           </p>
-          <Link to="/catalog">
+          <Link to={cta.button_link}>
             <Button variant="hero" size="xl">
-              Download Course Catalog
+              {cta.button_text}
             </Button>
           </Link>
         </div>
@@ -67,3 +82,4 @@ export default function Courses() {
     </div>
   );
 }
+

@@ -1,73 +1,63 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, AlertCircle, ShieldCheck } from 'lucide-react';
-import { z } from 'zod';
-import { useToast } from '@/hooks/use-toast';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Lock, User, Loader2, AlertCircle } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
-const emailSchema = z.string().email('Please enter a valid email address');
-const passwordSchema = z.string().min(6, 'Password must be at least 6 characters');
-
-const Portal = () => {
+export default function Portal() {
   const navigate = useNavigate();
-  const { user, loading, isAdmin, isAdminLoading, signIn } = useAuth();
+  const { user, loading, isAdmin, isStudent, isAdminLoading, signIn } = useAuth();
   const { toast } = useToast();
 
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Route logged-in users to the right place
   useEffect(() => {
-    if (!loading && !isAdminLoading && user && isAdmin) {
-      navigate('/admin');
-    }
-  }, [user, loading, isAdmin, isAdminLoading, navigate]);
-
-  const validateForm = () => {
-    try {
-      emailSchema.parse(email);
-      passwordSchema.parse(password);
-      return true;
-    } catch (err) {
-      if (err instanceof z.ZodError) {
-        setError(err.errors[0].message);
+    if (!loading && !isAdminLoading && user) {
+      if (isAdmin) {
+        navigate("/admin");
+      } else if (isStudent) {
+        navigate("/dashboard");
       }
-      return false;
+      // If user exists but is neither admin nor student, stay on portal with a message
     }
-  };
+  }, [user, loading, isAdmin, isStudent, isAdminLoading, navigate]);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
-    if (!validateForm()) return;
+    if (!email || !password) {
+      setError("Please enter both email and password.");
+      return;
+    }
 
     setIsSubmitting(true);
     try {
       const { error } = await signIn(email, password);
 
       if (error) {
-        const errorMessage = 'Invalid credentials.';
-        setError(errorMessage);
+        setError("Invalid credentials.");
         toast({
           variant: "destructive",
           title: "Sign In Failed",
-          description: errorMessage,
+          description: "Invalid credentials.",
         });
       } else {
         toast({
           title: "Signed In",
-          description: "Redirecting to admin dashboard...",
+          description: "Redirecting...",
         });
       }
     } catch (err) {
-      const errorMessage = 'Sign in failed. Please check your connection and try again.';
+      const errorMessage = "Sign in failed. Please check your connection and try again.";
       setError(errorMessage);
       toast({
         variant: "destructive",
@@ -81,41 +71,46 @@ const Portal = () => {
 
   if (loading || isAdminLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
+      <div className="min-h-screen flex items-center justify-center bg-muted">
         <Loader2 className="h-8 w-8 animate-spin text-primary" />
       </div>
     );
   }
 
-  if (user && !isAdmin) {
+  // User is logged in but has no role
+  if (user && !isAdmin && !isStudent) {
     return (
-      <div className="container max-w-md py-16">
-        <Card>
-          <CardContent className="pt-6">
-            <Alert variant="destructive">
-              <AlertCircle className="h-4 w-4" />
-              <AlertDescription>
-                Access denied. This portal is for administrators only.
-              </AlertDescription>
-            </Alert>
-          </CardContent>
-        </Card>
+      <div className="min-h-screen flex items-center justify-center bg-muted px-4">
+        <div className="w-full max-w-md">
+          <div className="bg-card rounded-2xl p-8 shadow-2xl border border-border text-center">
+            <AlertCircle className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+            <h2 className="text-xl font-bold text-secondary mb-2">Account Not Linked</h2>
+            <p className="text-muted-foreground mb-4">
+              Your account hasn't been linked to a student profile yet. Please contact PrepHaus administration to set up your access.
+            </p>
+            <Button variant="outline" onClick={() => navigate("/contact")}>
+              Contact Us
+            </Button>
+          </div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="container max-w-md py-16">
-      <Card>
-        <CardHeader className="text-center">
-          <div className="mx-auto w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-            <ShieldCheck className="h-6 w-6 text-primary" />
+    <div className="min-h-screen flex items-center justify-center bg-muted px-4">
+      <div className="w-full max-w-md animate-fade-in-up">
+        <div className="bg-card rounded-2xl p-8 shadow-2xl border border-border">
+          <div className="text-center mb-8">
+            <h1 className="text-3xl font-bold text-secondary mb-2">
+              Portal <span className="text-accent">Login</span>
+            </h1>
+            <p className="text-muted-foreground">
+              Access your grades, resources, and reports
+            </p>
           </div>
-          <CardTitle className="text-2xl">Admin Portal</CardTitle>
-          <CardDescription>Sign in to access the admin dashboard</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSignIn} className="space-y-4">
+
+          <form onSubmit={handleSignIn} className="space-y-6">
             {error && (
               <Alert variant="destructive">
                 <AlertCircle className="h-4 w-4" />
@@ -124,50 +119,57 @@ const Portal = () => {
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="admin@prephaus.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                autoCapitalize="off"
-                autoCorrect="off"
-                autoComplete="email"
-                required
-              />
+              <Label htmlFor="email" className="text-foreground">Email</Label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="Enter your email"
+                  className="pl-10"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
+              </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                autoCapitalize="off"
-                autoCorrect="off"
-                autoComplete="current-password"
-                required
-              />
+              <Label htmlFor="password" className="text-foreground">Password</Label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Enter your password"
+                  className="pl-10"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+              </div>
             </div>
 
-            <Button type="submit" className="w-full" disabled={isSubmitting}>
+            <Button
+              variant="accent"
+              size="lg"
+              className="w-full"
+              type="submit"
+              disabled={isSubmitting}
+            >
               {isSubmitting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Signing in...
                 </>
               ) : (
-                'Sign In'
+                "Sign In"
               )}
             </Button>
           </form>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   );
-};
+}
 
-export default Portal;

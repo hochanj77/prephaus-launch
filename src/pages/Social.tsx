@@ -1,30 +1,38 @@
 import { Instagram, ExternalLink } from "lucide-react";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
-const socialPlatforms = [
-  {
-    name: "Instagram",
-    handle: "@prephaus",
-    icon: Instagram,
-    color: "bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400",
-    url: "#",
-    description: "Daily study tips, student success stories, and behind-the-scenes content.",
-  },
-  {
-    name: "Google Business",
-    handle: "PrepHaus Academy",
-    icon: ExternalLink,
-    color: "bg-gradient-to-br from-blue-500 via-green-500 to-yellow-400",
-    url: "https://share.google/sB0wrIS3IhJoOfnOJ",
-    description: "Find us on Google — reviews, directions, and business info.",
-  },
-];
-
+const socialDefaults = {
+  instagram_url: "#",
+  instagram_handle: "@prephaus",
+  google_business_url: "https://share.google/sB0wrIS3IhJoOfnOJ",
+  google_business_name: "PrepHaus Academy",
+};
 
 export default function Social() {
+  const { data: socialData } = useSiteContent("global", "social_links");
+  const s = { ...socialDefaults, ...socialData?.content };
+
+  const socialPlatforms = [
+    {
+      name: "Instagram",
+      handle: s.instagram_handle,
+      icon: Instagram,
+      color: "bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400",
+      url: s.instagram_url,
+      description: "Daily study tips, student success stories, and behind-the-scenes content.",
+    },
+    {
+      name: "Google Business",
+      handle: s.google_business_name,
+      icon: ExternalLink,
+      color: "bg-gradient-to-br from-blue-500 via-green-500 to-yellow-400",
+      url: s.google_business_url,
+      description: "Find us on Google — reviews, directions, and business info.",
+    },
+  ];
+
   return (
     <div className="pt-16 md:pt-24">
-
-      {/* Social Platforms */}
       <section className="py-10 md:py-16 bg-background">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
@@ -51,7 +59,7 @@ export default function Social() {
           </div>
         </div>
       </section>
-
     </div>
   );
 }
+

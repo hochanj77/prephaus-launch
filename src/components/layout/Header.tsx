@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, Settings, LogOut } from "lucide-react";
+import { Menu, X, Settings, LogOut, LayoutDashboard } from "lucide-react";
 import prephausLogo from "@/assets/prephaus-horizontal-logo.png";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -10,7 +10,6 @@ const navItems = [
   { label: "Home", href: "/" },
   { label: "About Us", href: "/about" },
   { label: "Programs", href: "/courses" },
-  
   { label: "Social", href: "/social" },
   { label: "SAT Platform", href: "https://prephaus.ditoed.com", external: true, authRequired: true },
   { label: "Contact", href: "/contact" },
@@ -20,7 +19,7 @@ export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
-  const { user, isAdmin, signOut } = useAuth();
+  const { user, isAdmin, isStudent, signOut } = useAuth();
 
   const handleLogout = async () => {
     await signOut();
@@ -51,16 +50,16 @@ export function Header() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="group">
-            <img 
-              src={prephausLogo} 
-              alt="PrepHaus" 
+            <img
+              src={prephausLogo}
+              alt="PrepHaus"
               className="h-10 md:h-16 w-auto transition-transform group-hover:scale-105"
             />
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-2">
-            {navItems.filter(item => !item.authRequired || user).map((item) => 
+            {navItems.filter(item => !item.authRequired || user).map((item) =>
               item.external ? (
                 <a
                   key={item.href}
@@ -88,7 +87,7 @@ export function Header() {
             )}
           </nav>
 
-          {/* CTA Button */}
+          {/* CTA Buttons */}
           <div className="hidden lg:flex items-center gap-3">
             {user && (
               <Button variant="ghost" size="default" onClick={handleLogout} className="gap-2">
@@ -104,11 +103,21 @@ export function Header() {
                 </Button>
               </Link>
             )}
-            <Link to="/parent-portal">
-              <Button variant="accent" size="default">
-                Portal Login
-              </Button>
-            </Link>
+            {user && isStudent && !isAdmin && (
+              <Link to="/dashboard">
+                <Button variant="outline" size="default" className="gap-2">
+                  <LayoutDashboard className="h-4 w-4" />
+                  My Dashboard
+                </Button>
+              </Link>
+            )}
+            {!user && (
+              <Link to="/portal">
+                <Button variant="accent" size="default">
+                  Portal Login
+                </Button>
+              </Link>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -129,7 +138,7 @@ export function Header() {
         {isMobileMenuOpen && (
           <div className="lg:hidden mt-4 pb-4 animate-fade-in-up">
             <nav className="flex flex-col gap-2">
-              {navItems.filter(item => !item.authRequired || user).map((item) => 
+              {navItems.filter(item => !item.authRequired || user).map((item) =>
                 item.external ? (
                   <a
                     key={item.href}
@@ -170,11 +179,21 @@ export function Header() {
                     </Button>
                   </Link>
                 )}
-                <Link to="/parent-portal">
-                  <Button variant="accent" className="w-full">
-                    Portal Login
-                  </Button>
-                </Link>
+                {user && isStudent && !isAdmin && (
+                  <Link to="/dashboard">
+                    <Button variant="outline" className="w-full gap-2">
+                      <LayoutDashboard className="h-4 w-4" />
+                      My Dashboard
+                    </Button>
+                  </Link>
+                )}
+                {!user && (
+                  <Link to="/portal">
+                    <Button variant="accent" className="w-full">
+                      Portal Login
+                    </Button>
+                  </Link>
+                )}
               </div>
             </nav>
           </div>
@@ -183,3 +202,4 @@ export function Header() {
     </header>
   );
 }
+

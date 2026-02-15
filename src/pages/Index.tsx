@@ -1,72 +1,90 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
 import heroImage from "@/assets/ivy-league-campus.jpg";
+import { usePageContent } from "@/hooks/useSiteContent";
 
+const heroDefaults = {
+  headline: "Where Academic Potential Finds a Home.",
+  subheading: "We are a community growing together, leaving no regrets as we build the academic prowess and inner grit needed for a secure future. At PrepHaus, we don't just help you reach a goal; we give you the momentum to surpass it.",
+  cta_primary_text: "View Programs",
+  cta_primary_link: "/courses",
+  cta_secondary_text: "Download Course Catalog",
+  cta_secondary_link: "/catalog",
+};
+
+const ctaDefaults = {
+  headline: "Ready to Start Your Journey?",
+  subheading: "Contact us today and learn how PrepHaus can help you achieve your academic goals.",
+  button_text: "Contact Us",
+  button_link: "/contact",
+};
+
+function SmartLink({ to, children, ...props }: { to: string; children: React.ReactNode; [key: string]: any }) {
+  if (to.startsWith('http')) {
+    return <a href={to} target="_blank" rel="noopener noreferrer" {...props}>{children}</a>;
+  }
+  return <Link to={to} {...props}>{children}</Link>;
+}
 
 export default function Index() {
+  const { data: pageContent } = usePageContent("home");
+  const hero = { ...heroDefaults, ...pageContent?.hero };
+  const cta = { ...ctaDefaults, ...pageContent?.cta_section };
+
   return (
     <div className="overflow-hidden">
-      {/* Hero Section - Full Width Background */}
+      {/* Hero Section */}
       <section
         className="relative min-h-[85vh] flex items-center justify-center bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${heroImage})` }}
       >
-        {/* Dark Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-secondary/90 via-secondary/75 to-secondary/50" />
 
-        {/* Content */}
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-2xl animate-fade-in-up">
-
-            {/* Headline */}
             <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4 md:mb-6">
-              Where Academic Potential Finds a Home.
+              {hero.headline}
             </h1>
 
-            {/* Subheading */}
             <p className="text-base md:text-lg text-white/90 mb-6 md:mb-8 max-w-lg">
-              We are a community growing together, leaving no regrets as we build the academic prowess and inner grit needed for a secure future. At PrepHaus, we don't just help you reach a goal; we give you the momentum to surpass it.
+              {hero.subheading}
             </p>
 
-            {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-3 md:gap-4 mb-8 md:mb-12">
-              <Link to="/courses">
+              <SmartLink to={hero.cta_primary_link}>
                 <Button variant="hero" size="lg" className="w-full sm:w-auto">
-                  View Programs
+                  {hero.cta_primary_text}
                 </Button>
-              </Link>
-              <Link to="/catalog">
+              </SmartLink>
+              <SmartLink to={hero.cta_secondary_link}>
                 <Button variant="hero-outline" size="lg" className="w-full sm:w-auto border-secondary-foreground text-secondary-foreground hover:bg-secondary-foreground/10">
-                  Download Course Catalog
+                  {hero.cta_secondary_text}
                 </Button>
-              </Link>
+              </SmartLink>
             </div>
-
           </div>
         </div>
       </section>
-
-
 
       {/* CTA Section */}
       <section className="py-10 md:py-16 bg-muted">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-2xl md:text-4xl font-bold text-secondary mb-4 md:mb-6">
-            Ready to Start Your Journey?
+            {cta.headline}
           </h2>
-           <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8 max-w-2xl mx-auto">
-            Contact us today and learn how PrepHaus can help you achieve your academic goals.
+          <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8 max-w-2xl mx-auto">
+            {cta.subheading}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link to="/contact">
+            <SmartLink to={cta.button_link}>
               <Button variant="hero" size="xl">
-                Contact Us
+                {cta.button_text}
               </Button>
-            </Link>
+            </SmartLink>
           </div>
         </div>
       </section>
     </div>
   );
 }
+

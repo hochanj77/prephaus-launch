@@ -2,12 +2,21 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 
+interface StudentProfile {
+  id: string;
+  first_name: string;
+  last_name: string;
+  student_number: string | null;
+}
+
 interface AuthContextType {
   user: User | null;
   session: Session | null;
   loading: boolean;
   isAdmin: boolean;
   isAdminLoading: boolean;
+  isStudent: boolean;
+  studentProfile: StudentProfile | null;
   signUp: (email: string, password: string) => Promise<{ error: Error | null }>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
@@ -29,59 +38,80 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isAdminLoading, setIsAdminLoading] = useState(true);
+  const [isStudent, setIsStudent] = useState(false);
+  const [studentProfile, setStudentProfile] = useState<StudentProfile | null>(null);
 
-  const checkAdminRole = async (userId: string) => {
+  const checkRoles = async (userId: string) => {
     setIsAdminLoading(true);
     try {
-      const { data, error } = await supabase
+      // Check admin role
+      const { data: adminData, error: adminError } = await supabase
         .from('user_roles')
         .select('role')
         .eq('user_id', userId)
         .eq('role', 'admin')
         .maybeSingle();
-      
-      if (error) {
-        console.error('Error checking admin role:', error);
+
+      if (adminError) {
+        console.error('Error checking admin role:', adminError);
         setIsAdmin(false);
       } else {
-        setIsAdmin(!!data);
+        setIsAdmin(!!adminData);
+      }
+
+      // Check if this user is linked to a student record
+      const { data: studentData, error: studentError } = await supabase
+        .from('students')
+        .select('id, first_name, last_name, student_number')
+        .eq('user_id', userId)
+        .eq('active', true)
+        .maybeSingle();
+
+      if (studentError) {
+        console.error('Error checking student profile:', studentError);
+        setIsStudent(false);
+        setStudentProfile(null);
+      } else {
+        setIsStudent(!!studentData);
+        setStudentProfile(studentData || null);
       }
     } catch (err) {
-      console.error('Error checking admin role:', err);
+      console.error('Error checking roles:', err);
       setIsAdmin(false);
+      setIsStudent(false);
+      setStudentProfile(null);
     } finally {
       setIsAdminLoading(false);
     }
   };
 
   useEffect(() => {
-    // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
-        
-        // Defer admin check with setTimeout to prevent deadlock
+
         if (session?.user) {
           setTimeout(() => {
-            checkAdminRole(session.user.id);
+            checkRoles(session.user.id);
           }, 0);
         } else {
           setIsAdmin(false);
+          setIsStudent(false);
+          setStudentProfile(null);
           setIsAdminLoading(false);
         }
       }
     );
 
-    // THEN check for existing session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
-      
+
       if (session?.user) {
-        checkAdminRole(session.user.id);
+        checkRoles(session.user.id);
       }
     });
 
@@ -90,30 +120,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signUp = async (email: string, password: string) => {
     const redirectUrl = `${window.location.origin}/`;
-    
     const { error } = await supabase.auth.signUp({
       email,
       password,
-      options: {
-        emailRedirectTo: redirectUrl
-      }
+      options: { emailRedirectTo: redirectUrl },
     });
-    
     return { error: error as Error | null };
   };
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
     return { error: error as Error | null };
   };
 
   const signOut = async () => {
     await supabase.auth.signOut();
     setIsAdmin(false);
+    setIsStudent(false);
+    setStudentProfile(null);
   };
 
   const value = {
@@ -122,6 +146,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     loading,
     isAdmin,
     isAdminLoading,
+    isStudent,
+    studentProfile,
     signUp,
     signIn,
     signOut,
@@ -129,3 +155,4 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
+

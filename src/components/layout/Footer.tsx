@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin, Instagram, ExternalLink } from "lucide-react";
 import prephausLogo from "@/assets/prephaus-horizontal-logo.png";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 const quickLinks = [
   { label: "About Us", href: "/about" },
@@ -13,12 +14,30 @@ const legalLinks = [
   { label: "Terms of Service", href: "/terms" },
 ];
 
-const socialLinks = [
-  { icon: Instagram, href: "#", label: "Instagram" },
-  { icon: ExternalLink, href: "https://share.google/sB0wrIS3IhJoOfnOJ", label: "Google Business" },
-];
+const contactDefaults = {
+  address_line1: "268 Broad Ave Floor 2B",
+  address_line2: "Palisades Park, NJ 07650",
+  phone: "(201) 525-8577",
+  email: "info@prephaus.com",
+};
+
+const socialDefaults = {
+  instagram_url: "#",
+  google_business_url: "https://share.google/sB0wrIS3IhJoOfnOJ",
+};
 
 export function Footer() {
+  const { data: contactData } = useSiteContent("global", "contact_info");
+  const { data: socialData } = useSiteContent("global", "social_links");
+
+  const contact = { ...contactDefaults, ...contactData?.content };
+  const social = { ...socialDefaults, ...socialData?.content };
+
+  const socialLinks = [
+    { icon: Instagram, href: social.instagram_url, label: "Instagram" },
+    { icon: ExternalLink, href: social.google_business_url, label: "Google Business" },
+  ];
+
   return (
     <footer className="bg-secondary text-secondary-foreground">
       <div className="container mx-auto px-4 py-10 md:py-16">
@@ -26,9 +45,9 @@ export function Footer() {
           {/* Brand Column */}
           <div className="space-y-4">
             <Link to="/" className="inline-block">
-              <img 
-                src={prephausLogo} 
-                alt="PrepHaus" 
+              <img
+                src={prephausLogo}
+                alt="PrepHaus"
                 className="h-12 w-auto brightness-0 invert"
               />
             </Link>
@@ -36,14 +55,16 @@ export function Footer() {
               Building confident, capable test-takers ready for their future through personalized SAT prep and academic support.
             </p>
             <div className="flex gap-3">
-              {socialLinks.map((social) => (
+              {socialLinks.map((s) => (
                 <a
-                  key={social.label}
-                  href={social.href}
-                  aria-label={social.label}
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={s.label}
                   className="p-2 rounded-full bg-secondary-foreground/10 hover:bg-accent hover:text-accent-foreground transition-colors"
                 >
-                  <social.icon className="h-5 w-5" />
+                  <s.icon className="h-5 w-5" />
                 </a>
               ))}
             </div>
@@ -72,19 +93,18 @@ export function Footer() {
             <ul className="space-y-3 text-secondary-foreground/70">
               <li className="flex items-start gap-3">
                 <MapPin className="h-5 w-5 mt-0.5 shrink-0 text-accent" />
-                <span>268 Broad Ave Floor 2B<br />Palisades Park, NJ 07650</span>
+                <span>{contact.address_line1}<br />{contact.address_line2}</span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="h-5 w-5 shrink-0 text-accent" />
-                <span>(201) 525-8577</span>
+                <span>{contact.phone}</span>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="h-5 w-5 shrink-0 text-accent" />
-                <span>info@prephaus.com</span>
+                <span>{contact.email}</span>
               </li>
             </ul>
           </div>
-
         </div>
 
         {/* Bottom Bar */}
@@ -108,3 +128,4 @@ export function Footer() {
     </footer>
   );
 }
+

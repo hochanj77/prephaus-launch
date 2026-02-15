@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/select";
 import { MapPin, Phone, Mail, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useSiteContent } from "@/hooks/useSiteContent";
 
 const gradeOptions = [
   { value: "8", label: "8th Grade" },
@@ -32,28 +33,14 @@ const subjectOptions = [
   { value: "other", label: "Other" },
 ];
 
-const contactInfo = [
-  {
-    icon: MapPin,
-    title: "Visit Us",
-    details: ["268 Broad Ave Floor 2B", "Palisades Park, NJ 07650"],
-  },
-  {
-    icon: Phone,
-    title: "Call Us",
-    details: ["(201) 525-8577"],
-  },
-  {
-    icon: Mail,
-    title: "Email Us",
-    details: ["info@prephaus.com"],
-  },
-  {
-    icon: Clock,
-    title: "Office Hours",
-    details: ["Mon-Fri: 9am - 8pm", "Sat-Sun: 10am - 5pm"],
-  },
-];
+const contactDefaults = {
+  address_line1: "268 Broad Ave Floor 2B",
+  address_line2: "Palisades Park, NJ 07650",
+  phone: "(201) 525-8577",
+  email: "info@prephaus.com",
+  hours_weekday: "Mon-Fri: 9am - 8pm",
+  hours_weekend: "Sat-Sun: 10am - 5pm",
+};
 
 export default function Contact() {
   const { toast } = useToast();
@@ -68,11 +55,36 @@ export default function Contact() {
     wantsCatalog: false,
   });
 
+  const { data: contactData } = useSiteContent("global", "contact_info");
+  const c = { ...contactDefaults, ...contactData?.content };
+
+  const contactInfo = [
+    {
+      icon: MapPin,
+      title: "Visit Us",
+      details: [c.address_line1, c.address_line2],
+    },
+    {
+      icon: Phone,
+      title: "Call Us",
+      details: [c.phone],
+    },
+    {
+      icon: Mail,
+      title: "Email Us",
+      details: [c.email],
+    },
+    {
+      icon: Clock,
+      title: "Office Hours",
+      details: [c.hours_weekday, c.hours_weekend],
+    },
+  ];
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     toast({
@@ -108,7 +120,7 @@ export default function Contact() {
         </div>
       </section>
 
-      {/* Contact Info Cards - Horizontal Grid */}
+      {/* Contact Info Cards */}
       <section className="py-6 md:py-10 bg-background">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 animate-fade-in-up">
@@ -252,7 +264,6 @@ export default function Contact() {
 
             {/* Map & CTA Sidebar */}
             <div className="space-y-4 animate-fade-in-up animate-fade-in-delay">
-              {/* Map Placeholder */}
               <div className="bg-muted rounded-xl h-48 flex items-center justify-center">
                 <div className="text-center text-muted-foreground">
                   <MapPin className="h-10 w-10 mx-auto mb-2 opacity-50" />
@@ -260,7 +271,6 @@ export default function Contact() {
                 </div>
               </div>
 
-              {/* CTA Section */}
               <div className="bg-warm rounded-xl p-5">
                 <h3 className="text-lg font-bold text-secondary mb-2">
                   Prefer to Talk?
@@ -269,8 +279,8 @@ export default function Contact() {
                   Schedule a free phone or in-person consultation with one of our academic advisors.
                 </p>
                 <Button variant="hero" size="default" asChild className="w-full">
-                  <a href="tel:2015258577">
-                    Call (201) 525-8577
+                  <a href={`tel:${c.phone.replace(/\D/g, '')}`}>
+                    Call {c.phone}
                   </a>
                 </Button>
               </div>
@@ -281,3 +291,4 @@ export default function Contact() {
     </div>
   );
 }
+
