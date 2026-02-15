@@ -26,8 +26,7 @@ export default function Index() {
 
             {/* Subheading */}
             <p className="text-base md:text-lg text-white/90 mb-6 md:mb-8 max-w-lg">
-              Expert-led prep programs designed to boost your scores and confidence.
-              With 40+ years of expertise, we know that the best results come when a student feels seen and supported.
+              We are a community growing together, leaving no regrets as we build the academic prowess and inner grit needed for a secure future. At PrepHaus, we don't just help you reach a goal; we give you the momentum to surpass it.
             </p>
 
             {/* CTA Buttons */}
