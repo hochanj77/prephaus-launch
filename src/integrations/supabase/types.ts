@@ -304,6 +304,36 @@ export type Database = {
           },
         ]
       }
+      site_content: {
+        Row: {
+          content: Json
+          created_at: string | null
+          id: string
+          page: string
+          section_key: string
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Insert: {
+          content?: Json
+          created_at?: string | null
+          id?: string
+          page: string
+          section_key: string
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Update: {
+          content?: Json
+          created_at?: string | null
+          id?: string
+          page?: string
+          section_key?: string
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       student_enrollments: {
         Row: {
           course_id: string
@@ -343,6 +373,62 @@ export type Database = {
           },
         ]
       }
+      student_grades: {
+        Row: {
+          attitude: string | null
+          class_name: string
+          comments: string | null
+          created_at: string | null
+          homework: string | null
+          id: string
+          import_batch_id: string | null
+          imported_by: string | null
+          participation: string | null
+          semester: string
+          student_id: string
+          test_quiz: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          attitude?: string | null
+          class_name: string
+          comments?: string | null
+          created_at?: string | null
+          homework?: string | null
+          id?: string
+          import_batch_id?: string | null
+          imported_by?: string | null
+          participation?: string | null
+          semester: string
+          student_id: string
+          test_quiz?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          attitude?: string | null
+          class_name?: string
+          comments?: string | null
+          created_at?: string | null
+          homework?: string | null
+          id?: string
+          import_batch_id?: string | null
+          imported_by?: string | null
+          participation?: string | null
+          semester?: string
+          student_id?: string
+          test_quiz?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "student_grades_student_id_fkey"
+            columns: ["student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       students: {
         Row: {
           active: boolean | null
@@ -359,8 +445,10 @@ export type Database = {
           parent_phone: string | null
           phone: string | null
           school: string | null
+          student_number: string | null
           tutor_id: string | null
           updated_at: string | null
+          user_id: string | null
         }
         Insert: {
           active?: boolean | null
@@ -377,8 +465,10 @@ export type Database = {
           parent_phone?: string | null
           phone?: string | null
           school?: string | null
+          student_number?: string | null
           tutor_id?: string | null
           updated_at?: string | null
+          user_id?: string | null
         }
         Update: {
           active?: boolean | null
@@ -395,8 +485,10 @@ export type Database = {
           parent_phone?: string | null
           phone?: string | null
           school?: string | null
+          student_number?: string | null
           tutor_id?: string | null
           updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: [
           {
