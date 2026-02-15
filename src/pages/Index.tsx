@@ -21,9 +21,7 @@ export default function Index() {
 
             {/* Headline */}
             <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4 md:mb-6">
-              Unlock Your{" "}
-              <span className="text-accent">Ivy League</span>{" "}
-              Potential.
+              Where Academic Potential Finds a Home.
             </h1>
 
             {/* Subheading */}
