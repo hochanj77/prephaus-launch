@@ -5,17 +5,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Lock, User, Loader2, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export default function Portal() {
   const navigate = useNavigate();
-  const { user, loading, isAdmin, isStudent, isAdminLoading, signIn } = useAuth();
+  const { user, loading, isAdmin, isStudent, isAdminLoading, signIn, signUp } = useAuth();
   const { toast } = useToast();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Route logged-in users to the right place
@@ -33,6 +35,7 @@ export default function Portal() {
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setSuccess(null);
 
     if (!email || !password) {
       setError("Please enter both email and password.");
@@ -45,25 +48,57 @@ export default function Portal() {
 
       if (error) {
         setError("Invalid credentials.");
-        toast({
-          variant: "destructive",
-          title: "Sign In Failed",
-          description: "Invalid credentials.",
-        });
+        toast({ variant: "destructive", title: "Sign In Failed", description: "Invalid credentials." });
       } else {
-        toast({
-          title: "Signed In",
-          description: "Redirecting...",
-        });
+        toast({ title: "Signed In", description: "Redirecting..." });
       }
     } catch (err) {
       const errorMessage = "Sign in failed. Please check your connection and try again.";
       setError(errorMessage);
-      toast({
-        variant: "destructive",
-        title: "Connection Error",
-        description: errorMessage,
-      });
+      toast({ variant: "destructive", title: "Connection Error", description: errorMessage });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setSuccess(null);
+
+    if (!email || !password) {
+      setError("Please enter both email and password.");
+      return;
+    }
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const { error } = await signUp(email, password);
+
+      if (error) {
+        let errorMessage: string;
+        if (error.message.includes('User already registered')) {
+          errorMessage = 'An account with this email already exists. Please sign in instead.';
+        } else {
+          errorMessage = error.message || 'Sign up failed. Please try again.';
+        }
+        setError(errorMessage);
+        toast({ variant: "destructive", title: "Sign Up Failed", description: errorMessage });
+      } else {
+        const successMessage = 'Account created! Please check your email to verify your account before signing in.';
+        setSuccess(successMessage);
+        toast({ title: "Account Created", description: successMessage });
+        setEmail('');
+        setPassword('');
+      }
+    } catch (err) {
+      const errorMessage = "Sign up failed. Please check your connection and try again.";
+      setError(errorMessage);
+      toast({ variant: "destructive", title: "Sign Up Failed", description: errorMessage });
     } finally {
       setIsSubmitting(false);
     }
@@ -110,63 +145,126 @@ export default function Portal() {
             </p>
           </div>
 
-          <form onSubmit={handleSignIn} className="space-y-6">
-            {error && (
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
+          <Tabs defaultValue="signin" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-6">
+              <TabsTrigger value="signin">Sign In</TabsTrigger>
+              <TabsTrigger value="signup">Sign Up</TabsTrigger>
+            </TabsList>
 
-            <div className="space-y-2">
-              <Label htmlFor="email" className="text-foreground">Email</Label>
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="Enter your email"
-                  className="pl-10"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-            </div>
+            <TabsContent value="signin">
+              <form onSubmit={handleSignIn} className="space-y-6">
+                {error && (
+                  <Alert variant="destructive">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertDescription>{error}</AlertDescription>
+                  </Alert>
+                )}
 
-            <div className="space-y-2">
-              <Label htmlFor="password" className="text-foreground">Password</Label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="Enter your password"
-                  className="pl-10"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </div>
-            </div>
+                <div className="space-y-2">
+                  <Label htmlFor="signin-email" className="text-foreground">Email</Label>
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                    <Input
+                      id="signin-email"
+                      type="email"
+                      placeholder="Enter your email"
+                      className="pl-10"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
 
-            <Button
-              variant="accent"
-              size="lg"
-              className="w-full"
-              type="submit"
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Signing in...
-                </>
-              ) : (
-                "Sign In"
-              )}
-            </Button>
-          </form>
+                <div className="space-y-2">
+                  <Label htmlFor="signin-password" className="text-foreground">Password</Label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                    <Input
+                      id="signin-password"
+                      type="password"
+                      placeholder="Enter your password"
+                      className="pl-10"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <Button variant="accent" size="lg" className="w-full" type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Signing in...
+                    </>
+                  ) : (
+                    "Sign In"
+                  )}
+                </Button>
+              </form>
+            </TabsContent>
+
+            <TabsContent value="signup">
+              <form onSubmit={handleSignUp} className="space-y-6">
+                {error && (
+                  <Alert variant="destructive">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertDescription>{error}</AlertDescription>
+                  </Alert>
+                )}
+
+                {success && (
+                  <Alert className="border-accent bg-accent/10">
+                    <AlertDescription className="text-foreground">{success}</AlertDescription>
+                  </Alert>
+                )}
+
+                <div className="space-y-2">
+                  <Label htmlFor="signup-email" className="text-foreground">Email</Label>
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                    <Input
+                      id="signup-email"
+                      type="email"
+                      placeholder="Enter your email"
+                      className="pl-10"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="signup-password" className="text-foreground">Password</Label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                    <Input
+                      id="signup-password"
+                      type="password"
+                      placeholder="Create a password (min 6 chars)"
+                      className="pl-10"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <Button variant="accent" size="lg" className="w-full" type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Creating account...
+                    </>
+                  ) : (
+                    "Create Account"
+                  )}
+                </Button>
+              </form>
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </div>
