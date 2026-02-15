@@ -1,13 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Star, TrendingUp, CheckCircle, ArrowRight } from "lucide-react";
+import { Star, ArrowRight } from "lucide-react";
 import heroImage from "@/assets/ivy-league-campus.jpg";
-
-const stats = [
-  { value: "1500+", label: "Avg. Elite Score", icon: TrendingUp },
-  { value: "Guaranteed", label: "Score Improvement", icon: CheckCircle },
-  { value: "+180", label: "Average student gain", icon: TrendingUp },
-];
 
 
 export default function Index() {
@@ -57,20 +51,6 @@ export default function Index() {
               </Link>
             </div>
 
-            {/* Stats Row */}
-            <div className="flex flex-wrap gap-4 md:gap-8 pt-6 md:pt-8 border-t border-white/20">
-              {stats.map((stat) => (
-                <div key={stat.label} className="flex items-center gap-2 md:gap-3">
-                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
-                    <stat.icon className="h-4 w-4 md:h-5 md:w-5 text-accent" />
-                  </div>
-                  <div>
-                    <div className="text-sm md:text-base font-bold text-white">{stat.value}</div>
-                    <div className="text-xs md:text-sm text-white/70">{stat.label}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </section>
