@@ -80,7 +80,7 @@ export default function About() {
     <div className="pt-16 md:pt-24">
 
       {/* Welcome Section */}
-      <section className="pt-4 pb-8 md:py-16 bg-background overflow-hidden">
+      <section className="py-10 md:py-16 bg-background overflow-hidden">
         <div className="container mx-auto px-4">
           <div
             ref={hero.ref}
