@@ -9,7 +9,7 @@ export default function Index() {
     <div className="overflow-hidden">
       {/* Hero Section - Full Width Background */}
       <section
-        className="relative min-h-[85vh] flex items-center bg-cover bg-center bg-no-repeat pt-20 md:pt-0"
+        className="relative min-h-[85vh] flex items-center justify-center bg-cover bg-center bg-no-repeat"
         style={{ backgroundImage: `url(${heroImage})` }}
       >
         {/* Dark Gradient Overlay */}
