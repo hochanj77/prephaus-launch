@@ -85,6 +85,14 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Wave Divider */}
+      <div className="relative -mb-1">
+        <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto block" preserveAspectRatio="none">
+          <path d="M0,0 L0,40 Q360,80 720,40 Q1080,0 1440,40 L1440,0 Z" fill="hsl(var(--secondary))" fillOpacity="0.85" />
+          <path d="M0,40 Q360,80 720,40 Q1080,0 1440,40 L1440,80 L0,80 Z" className="fill-accent/10" />
+        </svg>
+      </div>
+
       {/* Announcements Section */}
       {announcements.length > 0 && (
         <section className="py-12 md:py-20 bg-accent/10">
