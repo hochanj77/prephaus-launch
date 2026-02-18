@@ -193,10 +193,6 @@ export default function CatalogRequest() {
                   This form collects information we will use to send you updates about promotions, special offers, and news.
                   We will not share or sell your personal information. You can unsubscribe at any time.
                 </p>
-                <Link to="/privacy" className="text-sm text-primary underline">
-                  Privacy Policy
-                </Link>
-
                 <div className="flex items-center gap-2">
                   <Checkbox
                     id="terms"
