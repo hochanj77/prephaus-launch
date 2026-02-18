@@ -41,6 +41,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isAdminLoading, setIsAdminLoading] = useState(true);
   const [isStudent, setIsStudent] = useState(false);
   const [studentProfile, setStudentProfile] = useState<StudentProfile | null>(null);
+  const initialLoadRef = useRef(true);
 
   const checkRoles = async (userId: string) => {
     setIsAdminLoading(true);
@@ -87,7 +88,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   useEffect(() => {
-    const initialLoad = useRef(true);
+    
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
@@ -95,14 +96,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser(session?.user ?? null);
         setLoading(false);
 
-        if (!initialLoad.current) {
+        if (!initialLoadRef.current) {
           if (event === 'SIGNED_IN') {
             toast.success('Signed in successfully');
           } else if (event === 'SIGNED_OUT') {
             toast.info('You have been signed out');
           }
         }
-        initialLoad.current = false;
+        initialLoadRef.current = false;
 
         if (session?.user) {
           setTimeout(() => {
