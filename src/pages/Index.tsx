@@ -1,5 +1,10 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Megaphone } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { format } from "date-fns";
 import heroImage from "@/assets/ivy-league-campus.jpg";
 import { usePageContent } from "@/hooks/useSiteContent";
 
@@ -30,6 +35,20 @@ export default function Index() {
   const { data: pageContent } = usePageContent("home");
   const hero = { ...heroDefaults, ...pageContent?.hero };
   const cta = { ...ctaDefaults, ...pageContent?.cta_section };
+
+  const { data: announcements = [] } = useQuery({
+    queryKey: ['published-announcements'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('announcements')
+        .select('*')
+        .eq('published', true)
+        .order('published_at', { ascending: false })
+        .limit(5);
+      if (error) throw error;
+      return data;
+    },
+  });
 
   return (
     <div className="overflow-hidden">
@@ -65,6 +84,33 @@ export default function Index() {
           </div>
         </div>
       </section>
+
+      {/* Announcements Section */}
+      {announcements.length > 0 && (
+        <section className="py-10 md:py-16 bg-background">
+          <div className="container mx-auto px-4">
+            <div className="flex items-center gap-3 mb-6 md:mb-8">
+              <Megaphone className="h-6 w-6 text-accent" />
+              <h2 className="text-2xl md:text-3xl font-bold text-secondary">Announcements</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+              {announcements.map((a) => (
+                <Card key={a.id} className="border-border/50">
+                  <CardContent className="p-5 md:p-6">
+                    <h3 className="font-semibold text-lg text-foreground mb-2">{a.title}</h3>
+                    <p className="text-muted-foreground text-sm line-clamp-3 mb-3">{a.content}</p>
+                    {a.published_at && (
+                      <p className="text-xs text-muted-foreground/70">
+                        {format(new Date(a.published_at), 'MMM d, yyyy')}
+                      </p>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* CTA Section */}
       <section className="py-10 md:py-16 bg-muted">
