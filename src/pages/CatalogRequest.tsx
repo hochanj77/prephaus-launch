@@ -104,7 +104,7 @@ export default function CatalogRequest() {
 
   return (
     <div className="pt-20 md:pt-24">
-      <section className="py-8 md:py-12 bg-background">
+      <section className="py-10 md:py-16 bg-background">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto">
             <div className="text-center mb-8">

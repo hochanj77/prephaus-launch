@@ -47,7 +47,7 @@
    return (
     <div className="pt-20 md:pt-24">
        {/* Hero Section */}
-      <section className="py-8 md:py-12 bg-muted">
+      <section className="py-10 md:py-16 bg-muted">
          <div className="container mx-auto px-4">
            <div className="max-w-3xl mx-auto text-center animate-fade-in-up">
             <h1 className="text-3xl md:text-5xl font-bold text-secondary mb-4 md:mb-6">
