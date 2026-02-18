@@ -77,7 +77,7 @@ export default function ParentPortal() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-muted px-4">
+    <div className="min-h-screen flex items-center justify-center bg-muted px-4 pt-28 md:pt-36 pb-8">
       <div className="w-full max-w-md animate-fade-in-up">
         <div className="bg-card rounded-2xl p-8 shadow-2xl border border-border">
           <div className="text-center mb-8">

@@ -45,7 +45,7 @@
  
  export default function Consulting() {
    return (
-    <div className="pt-16 md:pt-24">
+    <div className="pt-28 md:pt-36">
        {/* Hero Section */}
       <section className="py-10 md:py-16 bg-muted">
          <div className="container mx-auto px-4">
