@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -16,6 +17,8 @@ export default function Portal() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -66,6 +69,10 @@ export default function Portal() {
     setError(null);
     setSuccess(null);
 
+    if (!firstName.trim() || !lastName.trim()) {
+      setError("Please enter your first and last name.");
+      return;
+    }
     if (!email || !password) {
       setError("Please enter both email and password.");
       return;
@@ -89,11 +96,23 @@ export default function Portal() {
         setError(errorMessage);
         toast({ variant: "destructive", title: "Sign Up Failed", description: errorMessage });
       } else {
+        // Auto-create student record after signup
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session?.user) {
+          await supabase.from('students').insert({
+            first_name: firstName.trim(),
+            last_name: lastName.trim(),
+            email: email,
+            user_id: session.user.id,
+          });
+        }
         const successMessage = 'Account created! Please check your email to verify your account before signing in.';
         setSuccess(successMessage);
         toast({ title: "Account Created", description: successMessage });
         setEmail('');
         setPassword('');
+        setFirstName('');
+        setLastName('');
       }
     } catch (err) {
       const errorMessage = "Sign up failed. Please check your connection and try again.";
@@ -219,6 +238,31 @@ export default function Portal() {
                     <AlertDescription className="text-foreground">{success}</AlertDescription>
                   </Alert>
                 )}
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-first-name" className="text-foreground">First Name</Label>
+                    <Input
+                      id="signup-first-name"
+                      type="text"
+                      placeholder="First name"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-last-name" className="text-foreground">Last Name</Label>
+                    <Input
+                      id="signup-last-name"
+                      type="text"
+                      placeholder="Last name"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="signup-email" className="text-foreground">Email</Label>
