@@ -105,7 +105,7 @@ export default function About() {
   const excellence = { ...defaults.excellence, ...pageContent?.excellence };
 
   return (
-    <div className="pt-28 md:pt-36">
+    <div className="pt-20 md:pt-24">
 
       {/* Welcome Section */}
       <section className="py-10 md:py-16 bg-background overflow-hidden">
