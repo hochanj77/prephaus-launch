@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Label } from '@/components/ui/label';
-import { Loader2, Save, Globe, CheckCircle } from 'lucide-react';
+import { Loader2, Save, Globe, CheckCircle, Upload, FileText, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface SiteContentRow {
@@ -84,7 +84,6 @@ const contentSchema: Record<string, Record<string, { label: string; type: 'text'
       { label: 'Google Business Name', type: 'text' },
     ],
     catalog: [
-      { label: 'Catalog URL', type: 'url' },
       { label: 'Catalog Description', type: 'textarea' },
     ],
   },
@@ -174,15 +173,23 @@ const SiteContentTab = () => {
           {Object.entries(contentSchema).map(([page, sections]) => (
             <TabsContent key={page} value={page} className="space-y-6">
               {Object.entries(sections).map(([sectionKey, fields]) => (
-                <SectionEditor
-                  key={`${page}-${sectionKey}`}
-                  page={page}
-                  sectionKey={sectionKey}
-                  fields={fields}
-                  existingContent={contentByPage[page]?.[sectionKey]}
-                  userId={user?.id}
-                  queryClient={queryClient}
-                />
+                <div key={`${page}-${sectionKey}`} className="space-y-4">
+                  <SectionEditor
+                    page={page}
+                    sectionKey={sectionKey}
+                    fields={fields}
+                    existingContent={contentByPage[page]?.[sectionKey]}
+                    userId={user?.id}
+                    queryClient={queryClient}
+                  />
+                  {page === 'global' && sectionKey === 'catalog' && (
+                    <CatalogUploader
+                      existingContent={contentByPage[page]?.[sectionKey]}
+                      userId={user?.id}
+                      queryClient={queryClient}
+                    />
+                  )}
+                </div>
               ))}
             </TabsContent>
           ))}
@@ -295,6 +302,133 @@ const SectionEditor = ({ page, sectionKey, fields, existingContent, userId, quer
             {saved ? 'Saved' : 'Save Changes'}
           </Button>
         </div>
+      </CardContent>
+    </Card>
+  );
+};
+
+interface CatalogUploaderProps {
+  existingContent?: SiteContentRow;
+  userId?: string;
+  queryClient: ReturnType<typeof useQueryClient>;
+}
+
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+
+const CatalogUploader = ({ existingContent, userId, queryClient }: CatalogUploaderProps) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
+
+  const catalogUrl = existingContent?.content?.['catalog_url'] || '';
+  const fileName = catalogUrl ? catalogUrl.split('/').pop() : '';
+
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.type !== 'application/pdf') {
+      toast.error('Please upload a PDF file');
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const filePath = `course-catalog.pdf`;
+
+      // Remove old file first
+      await supabase.storage.from('catalog').remove([filePath]);
+
+      const { error: uploadError } = await supabase.storage
+        .from('catalog')
+        .upload(filePath, file, { upsert: true });
+      if (uploadError) throw uploadError;
+
+      const publicUrl = `${SUPABASE_URL}/storage/v1/object/public/catalog/${filePath}`;
+
+      // Save URL to site_content
+      const newContent = { ...(existingContent?.content || {}), catalog_url: publicUrl };
+      if (existingContent) {
+        const { error } = await supabase
+          .from('site_content')
+          .update({ content: newContent, updated_by: userId || null })
+          .eq('id', existingContent.id);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from('site_content')
+          .insert({ page: 'global', section_key: 'catalog', content: newContent, updated_by: userId || null });
+        if (error) throw error;
+      }
+
+      queryClient.invalidateQueries({ queryKey: ['site_content_admin'] });
+      queryClient.invalidateQueries({ queryKey: ['site_content'] });
+      toast.success('Catalog PDF uploaded successfully');
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to upload catalog');
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
+  const handleRemove = async () => {
+    setUploading(true);
+    try {
+      await supabase.storage.from('catalog').remove(['course-catalog.pdf']);
+      const newContent = { ...(existingContent?.content || {}) };
+      delete (newContent as Record<string, string>)['catalog_url'];
+      if (existingContent) {
+        await supabase
+          .from('site_content')
+          .update({ content: newContent, updated_by: userId || null })
+          .eq('id', existingContent.id);
+      }
+      queryClient.invalidateQueries({ queryKey: ['site_content_admin'] });
+      queryClient.invalidateQueries({ queryKey: ['site_content'] });
+      toast.success('Catalog PDF removed');
+    } catch {
+      toast.error('Failed to remove catalog');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  return (
+    <Card className="border-dashed">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-base">Catalog PDF Upload</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        {catalogUrl ? (
+          <div className="flex items-center gap-3 p-3 rounded-md bg-muted">
+            <FileText className="h-5 w-5 text-primary shrink-0" />
+            <a href={catalogUrl} target="_blank" rel="noopener noreferrer" className="text-sm text-primary underline truncate flex-1">
+              {fileName}
+            </a>
+            <Button variant="ghost" size="icon" onClick={handleRemove} disabled={uploading}>
+              <Trash2 className="h-4 w-4 text-destructive" />
+            </Button>
+          </div>
+        ) : (
+          <p className="text-sm text-muted-foreground">No catalog PDF uploaded yet.</p>
+        )}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="application/pdf"
+          className="hidden"
+          onChange={handleUpload}
+        />
+        <Button
+          variant="outline"
+          size="sm"
+          className="gap-2"
+          onClick={() => fileInputRef.current?.click()}
+          disabled={uploading}
+        >
+          {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+          {catalogUrl ? 'Replace PDF' : 'Upload PDF'}
+        </Button>
       </CardContent>
     </Card>
   );
