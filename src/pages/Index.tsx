@@ -1,10 +1,8 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import { Megaphone } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { format } from "date-fns";
 import heroImage from "@/assets/ivy-league-campus.jpg";
 import { usePageContent } from "@/hooks/useSiteContent";
 
@@ -85,31 +83,27 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Announcements Section */}
+      {/* Announcements Marquee Banner */}
       {announcements.length > 0 && (
-        <section className="py-10 md:py-16 bg-background">
-          <div className="container mx-auto px-4">
-            <div className="flex items-center gap-3 mb-6 md:mb-8">
-              <Megaphone className="h-6 w-6 text-accent" />
-              <h2 className="text-2xl md:text-3xl font-bold text-secondary">Announcements</h2>
+        <div className="bg-secondary text-secondary-foreground overflow-hidden">
+          <div className="flex items-center">
+            <div className="shrink-0 flex items-center gap-2 px-4 py-2.5 md:px-6 bg-accent text-accent-foreground font-semibold text-sm">
+              <Megaphone className="h-4 w-4" />
+              <span>News</span>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-              {announcements.map((a) => (
-                <Card key={a.id} className="border-border/50">
-                  <CardContent className="p-5 md:p-6">
-                    <h3 className="font-semibold text-lg text-foreground mb-2">{a.title}</h3>
-                    <p className="text-muted-foreground text-sm line-clamp-3 mb-3">{a.content}</p>
-                    {a.published_at && (
-                      <p className="text-xs text-muted-foreground/70">
-                        {format(new Date(a.published_at), 'MMM d, yyyy')}
-                      </p>
-                    )}
-                  </CardContent>
-                </Card>
-              ))}
+            <div className="overflow-hidden relative flex-1">
+              <div className="animate-marquee whitespace-nowrap py-2.5 flex gap-12">
+                {[...announcements, ...announcements].map((a, i) => (
+                  <span key={`${a.id}-${i}`} className="inline-flex items-center gap-2 text-sm">
+                    <span className="font-semibold">{a.title}</span>
+                    <span className="text-secondary-foreground/70">—</span>
+                    <span className="text-secondary-foreground/80">{a.content}</span>
+                  </span>
+                ))}
+              </div>
             </div>
           </div>
-        </section>
+        </div>
       )}
 
       {/* CTA Section */}
