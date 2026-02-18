@@ -101,7 +101,7 @@ const StudentDashboard = () => {
     <div className="pt-20 md:pt-24 pb-10 md:pb-16">
       <div className="container mx-auto px-4">
         {/* Welcome Header */}
-        <div className="mb-6 md:mb-8">
+        <div className="mb-4 md:mb-6">
           <div className="flex items-center gap-2 sm:gap-3 mb-2">
             <div className="p-1.5 sm:p-2 rounded-full bg-accent/10">
               <User className="h-4 w-4 sm:h-5 sm:w-5 text-accent" />
