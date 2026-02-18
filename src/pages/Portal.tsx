@@ -152,9 +152,9 @@ export default function Portal() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-muted px-4">
+    <div className="min-h-screen flex items-center justify-center bg-muted px-4 pt-20 md:pt-28 pb-8">
       <div className="w-full max-w-md animate-fade-in-up">
-        <div className="bg-card rounded-2xl p-8 shadow-2xl border border-border">
+        <div className="bg-card rounded-2xl p-6 sm:p-8 shadow-2xl border border-border">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-secondary mb-2">
               Portal <span className="text-accent">Login</span>
@@ -239,7 +239,7 @@ export default function Portal() {
                   </Alert>
                 )}
 
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="space-y-2">
                     <Label htmlFor="signup-first-name" className="text-foreground">First Name</Label>
                     <Input
@@ -248,6 +248,8 @@ export default function Portal() {
                       placeholder="First name"
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
+                      autoCapitalize="off"
+                      autoCorrect="off"
                       required
                     />
                   </div>
@@ -259,6 +261,8 @@ export default function Portal() {
                       placeholder="Last name"
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
+                      autoCapitalize="off"
+                      autoCorrect="off"
                       required
                     />
                   </div>
