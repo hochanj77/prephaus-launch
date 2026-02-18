@@ -103,11 +103,11 @@ export default function Index() {
               </div>
               <h2 className="text-2xl md:text-3xl font-bold text-secondary">Latest Announcements</h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+            <div className="flex flex-wrap justify-center gap-5 md:gap-6">
               {announcements.map((a, i) => (
                 <Card
                   key={a.id}
-                  className="group border border-border/50 bg-card hover:border-accent/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-accent/10"
+                  className="group border border-border/50 bg-card hover:border-accent/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-accent/10 w-full md:max-w-sm lg:max-w-md"
                   style={{ animationDelay: `${i * 100}ms` }}
                 >
                   <CardContent className="p-6">
