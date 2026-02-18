@@ -25,15 +25,12 @@ const contentSchema: Record<string, Record<string, { label: string; type: 'text'
       { label: 'Headline', type: 'text' },
       { label: 'Subheading', type: 'textarea' },
       { label: 'CTA Primary Text', type: 'text' },
-      { label: 'CTA Primary Link', type: 'url' },
       { label: 'CTA Secondary Text', type: 'text' },
-      { label: 'CTA Secondary Link', type: 'url' },
     ],
     cta_section: [
       { label: 'Headline', type: 'text' },
       { label: 'Subheading', type: 'textarea' },
       { label: 'Button Text', type: 'text' },
-      { label: 'Button Link', type: 'url' },
     ],
   },
   courses: {
@@ -44,7 +41,6 @@ const contentSchema: Record<string, Record<string, { label: string; type: 'text'
     cta: [
       { label: 'Text', type: 'textarea' },
       { label: 'Button Text', type: 'text' },
-      { label: 'Button Link', type: 'url' },
     ],
   },
   about: {
@@ -78,9 +74,7 @@ const contentSchema: Record<string, Record<string, { label: string; type: 'text'
       { label: 'Hours Weekend', type: 'text' },
     ],
     social_links: [
-      { label: 'Instagram URL', type: 'url' },
       { label: 'Instagram Handle', type: 'text' },
-      { label: 'Google Business URL', type: 'url' },
       { label: 'Google Business Name', type: 'text' },
     ],
     catalog: [
@@ -155,7 +149,7 @@ const SiteContentTab = () => {
           <div>
             <CardTitle>Website Content Editor</CardTitle>
             <CardDescription>
-              Edit text, links, contact info, and social media across your site. Changes take effect immediately.
+              Edit text, contact info, and social media across your site. Changes take effect immediately.
             </CardDescription>
           </div>
         </div>
