@@ -110,6 +110,11 @@ const StudentDashboard = () => {
               Welcome, {studentProfile.first_name}!
             </h1>
           </div>
+          {studentProfile.student_number && (
+            <p className="text-sm text-muted-foreground ml-12">
+              Student ID: <span className="font-semibold text-foreground">{studentProfile.student_number}</span>
+            </p>
+          )}
           <p className="text-muted-foreground ml-12">
             View your grades, resources, and announcements below.
           </p>
