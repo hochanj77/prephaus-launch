@@ -3,15 +3,9 @@ import { Button } from "@/components/ui/button";
 import { BookOpen } from "lucide-react";
 import { usePageContent } from "@/hooks/useSiteContent";
 
-const courses = [
-  { id: 1, title: "SAT Prep" },
-  { id: 2, title: "ACT Prep" },
-  { id: 3, title: "BCA Prep" },
-  { id: 4, title: "Columbia SHP" },
-  { id: 5, title: "Math Contests" },
-  { id: 6, title: "Writing Contests" },
-  { id: 7, title: "Science Contest" },
-  { id: 8, title: "Private Lessons" },
+const defaultPrograms = [
+  "SAT Prep", "ACT Prep", "BCA Prep", "Columbia SHP",
+  "Math Contests", "Writing Contests", "Science Contest", "Private Lessons",
 ];
 
 const heroDefaults = {
@@ -29,6 +23,14 @@ export default function Courses() {
   const { data: pageContent } = usePageContent("courses");
   const hero = { ...heroDefaults, ...pageContent?.hero };
   const cta = { ...ctaDefaults, ...pageContent?.cta };
+
+  let programs = defaultPrograms;
+  if (pageContent?.programs_list?.programs) {
+    try {
+      const parsed = JSON.parse(pageContent.programs_list.programs);
+      if (Array.isArray(parsed) && parsed.length > 0) programs = parsed;
+    } catch { /* use defaults */ }
+  }
 
   return (
     <div className="pt-16 md:pt-24">
@@ -50,16 +52,16 @@ export default function Courses() {
       <section className="py-10 md:py-16 bg-background">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
-            {courses.map((course, index) => (
+            {programs.map((title, index) => (
               <div
-                key={course.id}
+                key={index}
                 className="bg-card rounded-xl md:rounded-2xl p-5 md:p-8 shadow-lg border border-border hover-lift animate-fade-in-up text-center"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 mx-auto">
                   <BookOpen className="h-6 w-6 text-primary" />
                 </div>
-                <h3 className="text-lg md:text-xl font-bold text-secondary">{course.title}</h3>
+                <h3 className="text-lg md:text-xl font-bold text-secondary">{title}</h3>
               </div>
             ))}
           </div>
@@ -82,4 +84,3 @@ export default function Courses() {
     </div>
   );
 }
-

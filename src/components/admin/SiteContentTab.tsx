@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Label } from '@/components/ui/label';
-import { Loader2, Save, Globe, CheckCircle, Upload, FileText, Trash2 } from 'lucide-react';
+import { Loader2, Save, Globe, CheckCircle, Upload, FileText, Trash2, Plus, GripVertical, X } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface SiteContentRow {
@@ -105,6 +105,7 @@ const sectionLabels: Record<string, string> = {
   contact_info: 'Contact Information',
   social_links: 'Social Media Links',
   catalog: 'Course Catalog',
+  programs_list: 'Programs List',
 };
 
 const SiteContentTab = () => {
@@ -166,6 +167,13 @@ const SiteContentTab = () => {
 
           {Object.entries(contentSchema).map(([page, sections]) => (
             <TabsContent key={page} value={page} className="space-y-6">
+              {page === 'courses' && (
+                <ProgramsListEditor
+                  existingContent={contentByPage['courses']?.['programs_list']}
+                  userId={user?.id}
+                  queryClient={queryClient}
+                />
+              )}
               {Object.entries(sections).map(([sectionKey, fields]) => (
                 <div key={`${page}-${sectionKey}`} className="space-y-4">
                   <SectionEditor
@@ -423,6 +431,146 @@ const CatalogUploader = ({ existingContent, userId, queryClient }: CatalogUpload
           {uploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
           {catalogUrl ? 'Replace PDF' : 'Upload PDF'}
         </Button>
+      </CardContent>
+    </Card>
+  );
+};
+
+const DEFAULT_PROGRAMS = ['SAT Prep', 'ACT Prep', 'BCA Prep', 'Columbia SHP', 'Math Contests', 'Writing Contests', 'Science Contest', 'Private Lessons'];
+
+interface ProgramsListEditorProps {
+  existingContent?: SiteContentRow;
+  userId?: string;
+  queryClient: ReturnType<typeof useQueryClient>;
+}
+
+const ProgramsListEditor = ({ existingContent, userId, queryClient }: ProgramsListEditorProps) => {
+  const [programs, setPrograms] = useState<string[]>(() => {
+    const stored = existingContent?.content?.['programs'];
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) return parsed;
+      } catch { /* fall through */ }
+    }
+    return DEFAULT_PROGRAMS;
+  });
+  const [newProgram, setNewProgram] = useState('');
+  const [saved, setSaved] = useState(false);
+
+  const saveMutation = useMutation({
+    mutationFn: async (list: string[]) => {
+      const content = { programs: JSON.stringify(list) };
+      if (existingContent) {
+        const { error } = await supabase
+          .from('site_content')
+          .update({ content, updated_by: userId || null })
+          .eq('id', existingContent.id);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from('site_content')
+          .insert({ page: 'courses', section_key: 'programs_list', content, updated_by: userId || null });
+        if (error) throw error;
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['site_content_admin'] });
+      queryClient.invalidateQueries({ queryKey: ['site_content'] });
+      toast.success('Programs list saved');
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    },
+    onError: () => toast.error('Failed to save programs list'),
+  });
+
+  const addProgram = useCallback(() => {
+    const trimmed = newProgram.trim();
+    if (!trimmed || programs.includes(trimmed)) return;
+    setPrograms(prev => [...prev, trimmed]);
+    setNewProgram('');
+    setSaved(false);
+  }, [newProgram, programs]);
+
+  const removeProgram = useCallback((index: number) => {
+    setPrograms(prev => prev.filter((_, i) => i !== index));
+    setSaved(false);
+  }, []);
+
+  const moveProgram = useCallback((index: number, direction: -1 | 1) => {
+    setPrograms(prev => {
+      const next = [...prev];
+      const target = index + direction;
+      if (target < 0 || target >= next.length) return prev;
+      [next[index], next[target]] = [next[target], next[index]];
+      return next;
+    });
+    setSaved(false);
+  }, []);
+
+  return (
+    <Card className="border-dashed">
+      <CardHeader className="pb-3">
+        <CardTitle className="text-base">Programs List</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="space-y-2">
+          {programs.map((program, index) => (
+            <div key={index} className="flex items-center gap-2 p-2 rounded-md bg-muted">
+              <div className="flex flex-col">
+                <button
+                  type="button"
+                  className="text-muted-foreground hover:text-foreground text-xs leading-none disabled:opacity-30"
+                  onClick={() => moveProgram(index, -1)}
+                  disabled={index === 0}
+                >▲</button>
+                <button
+                  type="button"
+                  className="text-muted-foreground hover:text-foreground text-xs leading-none disabled:opacity-30"
+                  onClick={() => moveProgram(index, 1)}
+                  disabled={index === programs.length - 1}
+                >▼</button>
+              </div>
+              <span className="flex-1 text-sm">{program}</span>
+              <button
+                type="button"
+                className="text-muted-foreground hover:text-destructive"
+                onClick={() => removeProgram(index)}
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+          ))}
+        </div>
+        <div className="flex gap-2">
+          <Input
+            value={newProgram}
+            onChange={(e) => setNewProgram(e.target.value)}
+            placeholder="New program name"
+            onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addProgram())}
+          />
+          <Button variant="outline" size="sm" onClick={addProgram} className="gap-1 shrink-0">
+            <Plus className="h-4 w-4" /> Add
+          </Button>
+        </div>
+        <div className="flex justify-end pt-2">
+          <Button
+            onClick={() => saveMutation.mutate(programs)}
+            disabled={saveMutation.isPending}
+            size="sm"
+            variant={saved ? 'outline' : 'default'}
+            className="gap-2"
+          >
+            {saveMutation.isPending ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : saved ? (
+              <CheckCircle className="h-4 w-4 text-green-500" />
+            ) : (
+              <Save className="h-4 w-4" />
+            )}
+            {saved ? 'Saved' : 'Save Changes'}
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );
