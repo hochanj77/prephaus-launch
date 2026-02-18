@@ -98,15 +98,15 @@ const StudentDashboard = () => {
   });
 
   return (
-    <div className="pt-20 md:pt-28 pb-16">
+    <div className="pt-16 md:pt-24 pb-10 md:pb-16">
       <div className="container mx-auto px-4">
         {/* Welcome Header */}
-        <div className="mb-8">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 rounded-full bg-accent/10">
-              <User className="h-5 w-5 text-accent" />
+        <div className="mb-6 md:mb-8">
+          <div className="flex items-center gap-2 sm:gap-3 mb-2">
+            <div className="p-1.5 sm:p-2 rounded-full bg-accent/10">
+              <User className="h-4 w-4 sm:h-5 sm:w-5 text-accent" />
             </div>
-            <h1 className="text-2xl md:text-3xl font-bold text-secondary">
+            <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-secondary">
               Welcome, {studentProfile.first_name}!
             </h1>
           </div>
@@ -120,7 +120,7 @@ const StudentDashboard = () => {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
           {/* Main Content — Grades */}
           <div className="lg:col-span-2 space-y-6">
             {/* Grades Card */}
@@ -152,33 +152,57 @@ const StudentDashboard = () => {
                       <h3 className="font-semibold text-secondary mb-3 flex items-center gap-2">
                         <Badge variant="outline">{semester}</Badge>
                       </h3>
-                      <div className="rounded-md border">
-                        <Table>
-                          <TableHeader>
-                            <TableRow>
-                              <TableHead>Class</TableHead>
-                              <TableHead>Attitude</TableHead>
-                              <TableHead>Homework</TableHead>
-                              <TableHead>Participation</TableHead>
-                              <TableHead>Test/Quiz</TableHead>
-                              <TableHead>Comments</TableHead>
-                            </TableRow>
-                          </TableHeader>
-                          <TableBody>
+                      <div>
+                          {/* Mobile card view */}
+                          <div className="block md:hidden space-y-3 p-3">
                             {semGrades.map((g) => (
-                              <TableRow key={g.id}>
-                                <TableCell className="font-medium">{g.class_name}</TableCell>
-                                <TableCell>{g.attitude || '—'}</TableCell>
-                                <TableCell>{g.homework || '—'}</TableCell>
-                                <TableCell>{g.participation || '—'}</TableCell>
-                                <TableCell>{g.test_quiz || '—'}</TableCell>
-                                <TableCell className="text-sm text-muted-foreground max-w-[200px]">
-                                  {g.comments || '—'}
-                                </TableCell>
-                              </TableRow>
+                              <div key={g.id} className="border border-border rounded-lg p-3 space-y-2">
+                                <p className="font-semibold text-sm text-secondary">{g.class_name}</p>
+                                <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-xs">
+                                  <span className="text-muted-foreground">Attitude</span>
+                                  <span>{g.attitude || '—'}</span>
+                                  <span className="text-muted-foreground">Homework</span>
+                                  <span>{g.homework || '—'}</span>
+                                  <span className="text-muted-foreground">Participation</span>
+                                  <span>{g.participation || '—'}</span>
+                                  <span className="text-muted-foreground">Test/Quiz</span>
+                                  <span>{g.test_quiz || '—'}</span>
+                                </div>
+                                {g.comments && (
+                                  <p className="text-xs text-muted-foreground border-t border-border pt-2">{g.comments}</p>
+                                )}
+                              </div>
                             ))}
-                          </TableBody>
-                        </Table>
+                          </div>
+                          {/* Desktop table view */}
+                          <div className="hidden md:block rounded-md border">
+                            <Table>
+                              <TableHeader>
+                                <TableRow>
+                                  <TableHead>Class</TableHead>
+                                  <TableHead>Attitude</TableHead>
+                                  <TableHead>Homework</TableHead>
+                                  <TableHead>Participation</TableHead>
+                                  <TableHead>Test/Quiz</TableHead>
+                                  <TableHead>Comments</TableHead>
+                                </TableRow>
+                              </TableHeader>
+                              <TableBody>
+                                {semGrades.map((g) => (
+                                  <TableRow key={g.id}>
+                                    <TableCell className="font-medium">{g.class_name}</TableCell>
+                                    <TableCell>{g.attitude || '—'}</TableCell>
+                                    <TableCell>{g.homework || '—'}</TableCell>
+                                    <TableCell>{g.participation || '—'}</TableCell>
+                                    <TableCell>{g.test_quiz || '—'}</TableCell>
+                                    <TableCell className="text-sm text-muted-foreground max-w-[200px]">
+                                      {g.comments || '—'}
+                                    </TableCell>
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </div>
                       </div>
                     </div>
                   ))
@@ -193,7 +217,7 @@ const StudentDashboard = () => {
             <Card>
               <CardHeader>
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-green-100 text-green-600">
+                  <div className="p-2 rounded-lg bg-accent/10 text-accent">
                     <BookOpen className="h-5 w-5" />
                   </div>
                   <CardTitle className="text-lg">Resources</CardTitle>
