@@ -32,7 +32,7 @@ export default function Social() {
   ];
 
   return (
-    <div className="pt-28 md:pt-36">
+    <div className="pt-20 md:pt-24">
       <section className="py-10 md:py-16 bg-background">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
