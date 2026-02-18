@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Megaphone, CalendarDays } from "lucide-react";
@@ -7,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { format } from "date-fns";
 import heroImage from "@/assets/ivy-league-campus.jpg";
 import { usePageContent } from "@/hooks/useSiteContent";
+import { useAuth } from "@/contexts/AuthContext";
 
 const heroDefaults = {
   headline: "Where Academic Potential Finds a Home.",
@@ -32,9 +34,22 @@ function SmartLink({ to, children, ...props }: { to: string; children: React.Rea
 }
 
 export default function Index() {
+  const navigate = useNavigate();
+  const { user, isAdmin, isStudent, loading, isAdminLoading } = useAuth();
   const { data: pageContent } = usePageContent("home");
   const hero = { ...heroDefaults, ...pageContent?.hero };
   const cta = { ...ctaDefaults, ...pageContent?.cta_section };
+
+  // Redirect logged-in users to their dashboard
+  useEffect(() => {
+    if (!loading && !isAdminLoading && user) {
+      if (isAdmin) {
+        navigate('/admin', { replace: true });
+      } else if (isStudent) {
+        navigate('/dashboard', { replace: true });
+      }
+    }
+  }, [user, loading, isAdmin, isStudent, isAdminLoading, navigate]);
 
   const { data: announcements = [] } = useQuery({
     queryKey: ['published-announcements'],

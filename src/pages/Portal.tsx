@@ -52,9 +52,8 @@ export default function Portal() {
       if (error) {
         setError("Invalid credentials.");
         toast({ variant: "destructive", title: "Sign In Failed", description: "Invalid credentials." });
-      } else {
-        toast({ title: "Signed In", description: "Redirecting..." });
       }
+      // Redirect is handled by the useEffect watching user/role state
     } catch (err) {
       const errorMessage = "Sign in failed. Please check your connection and try again.";
       setError(errorMessage);
