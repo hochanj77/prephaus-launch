@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Megaphone } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Megaphone, CalendarDays } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { format } from "date-fns";
 import heroImage from "@/assets/ivy-league-campus.jpg";
 import { usePageContent } from "@/hooks/useSiteContent";
 
@@ -83,27 +85,47 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Announcements Marquee Banner */}
+      {/* Announcements Section */}
       {announcements.length > 0 && (
-        <div className="bg-secondary text-secondary-foreground overflow-hidden">
-          <div className="flex items-center">
-            <div className="shrink-0 flex items-center gap-2 px-4 py-2.5 md:px-6 bg-accent text-accent-foreground font-semibold text-sm">
-              <Megaphone className="h-4 w-4" />
-              <span>News</span>
-            </div>
-            <div className="overflow-hidden relative flex-1">
-              <div className="animate-marquee whitespace-nowrap py-2.5 flex gap-12">
-                {[...announcements, ...announcements].map((a, i) => (
-                  <span key={`${a.id}-${i}`} className="inline-flex items-center gap-2 text-sm">
-                    <span className="font-semibold">{a.title}</span>
-                    <span className="text-secondary-foreground/70">—</span>
-                    <span className="text-secondary-foreground/80">{a.content}</span>
-                  </span>
-                ))}
+        <section className="py-12 md:py-20 bg-secondary">
+          <div className="container mx-auto px-4">
+            <div className="flex items-center gap-3 mb-8 md:mb-10 justify-center">
+              <div className="p-2.5 rounded-full bg-accent/20">
+                <Megaphone className="h-6 w-6 text-accent" />
               </div>
+              <h2 className="text-2xl md:text-3xl font-bold text-secondary-foreground">Latest Announcements</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+              {announcements.map((a, i) => (
+                <Card
+                  key={a.id}
+                  className="group border-none bg-secondary-foreground/5 backdrop-blur-sm hover:bg-secondary-foreground/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                  style={{ animationDelay: `${i * 100}ms` }}
+                >
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-3 mb-3">
+                      <div className="h-2 w-2 rounded-full bg-accent mt-2 shrink-0 animate-pulse" />
+                      <h3 className="font-bold text-lg text-secondary-foreground group-hover:text-accent transition-colors">
+                        {a.title}
+                      </h3>
+                    </div>
+                    <p className="text-secondary-foreground/70 text-sm leading-relaxed line-clamp-3 mb-4 pl-5">
+                      {a.content}
+                    </p>
+                    {a.published_at && (
+                      <div className="flex items-center gap-1.5 pl-5 text-secondary-foreground/50">
+                        <CalendarDays className="h-3.5 w-3.5" />
+                        <p className="text-xs font-medium">
+                          {format(new Date(a.published_at), 'MMMM d, yyyy')}
+                        </p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           </div>
-        </div>
+        </section>
       )}
 
       {/* CTA Section */}
