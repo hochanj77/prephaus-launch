@@ -23,7 +23,7 @@ export default function ParentPortal() {
       if (isAdmin) {
         navigate("/admin");
       } else {
-        navigate("/");
+        navigate("/dashboard");
       }
     }
   }, [user, loading, isAdmin, isAdminLoading, navigate]);
