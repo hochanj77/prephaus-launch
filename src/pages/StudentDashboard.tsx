@@ -98,7 +98,7 @@ const StudentDashboard = () => {
   });
 
   return (
-    <div className="pt-16 md:pt-24 pb-10 md:pb-16">
+    <div className="pt-28 md:pt-36 pb-10 md:pb-16">
       <div className="container mx-auto px-4">
         {/* Welcome Header */}
         <div className="mb-6 md:mb-8">

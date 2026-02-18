@@ -144,7 +144,7 @@ const Auth = () => {
   }
 
   return (
-    <div className="container max-w-md py-16">
+    <div className="container max-w-md pt-28 md:pt-36 pb-16">
       <Card>
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">Welcome to PrepHaus</CardTitle>
