@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
+import AnnouncementsTab from './AnnouncementsTab';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -157,12 +158,13 @@ const SiteContentTab = () => {
       </CardHeader>
       <CardContent>
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="mb-6">
+          <TabsList className="mb-6 flex-wrap">
             {Object.keys(contentSchema).map((page) => (
               <TabsTrigger key={page} value={page}>
                 {pageLabels[page] || page}
               </TabsTrigger>
             ))}
+            <TabsTrigger value="announcements">Announcements</TabsTrigger>
           </TabsList>
 
           {Object.entries(contentSchema).map(([page, sections]) => (
@@ -195,6 +197,9 @@ const SiteContentTab = () => {
               ))}
             </TabsContent>
           ))}
+          <TabsContent value="announcements">
+            <AnnouncementsTab />
+          </TabsContent>
         </Tabs>
       </CardContent>
     </Card>
