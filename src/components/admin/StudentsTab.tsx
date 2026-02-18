@@ -6,13 +6,14 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
-import { Plus, Search, Edit, Trash2, FileText, ClipboardList, Loader2 } from 'lucide-react';
+import { Plus, Search, Trash2, FileText, Download, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import StudentDetails from './StudentDetails';
+import * as XLSX from 'xlsx';
 
 interface Student {
   id: string;
@@ -28,6 +29,7 @@ interface Student {
   notes: string | null;
   active: boolean;
   created_at: string;
+  student_number: string | null;
 }
 
 const StudentsTab = () => {
@@ -67,32 +69,61 @@ const StudentsTab = () => {
     (student) =>
       `${student.first_name} ${student.last_name}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
       student.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      student.school?.toLowerCase().includes(searchTerm.toLowerCase())
+      student.school?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      student.student_number?.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const handleExportExcel = () => {
+    const exportData = filteredStudents.map((s) => ({
+      'Student ID': s.student_number || '-',
+      'First Name': s.first_name,
+      'Last Name': s.last_name,
+      'Email': s.email || '',
+      'Phone': s.phone || '',
+      'Grade': s.grade_level || '',
+      'School': s.school || '',
+      'Parent Name': s.parent_name || '',
+      'Parent Email': s.parent_email || '',
+      'Parent Phone': s.parent_phone || '',
+      'Status': s.active ? 'Active' : 'Inactive',
+      'Notes': s.notes || '',
+    }));
+    const ws = XLSX.utils.json_to_sheet(exportData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Students');
+    XLSX.writeFile(wb, 'students_export.xlsx');
+    toast.success('Students exported to Excel');
+  };
 
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Student Management</CardTitle>
-        <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              Add Student
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-2xl">
-            <DialogHeader>
-              <DialogTitle>Add New Student</DialogTitle>
-            </DialogHeader>
-            <StudentForm
-              onSuccess={() => {
-                setIsAddDialogOpen(false);
-                queryClient.invalidateQueries({ queryKey: ['students'] });
-              }}
-            />
-          </DialogContent>
-        </Dialog>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={handleExportExcel}>
+            <Download className="h-4 w-4 mr-2" />
+            Export Excel
+          </Button>
+          <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+            <DialogTrigger asChild>
+              <Button>
+                <Plus className="h-4 w-4 mr-2" />
+                Add Student
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle>Add New Student</DialogTitle>
+              </DialogHeader>
+              <StudentForm
+                onSuccess={() => {
+                  setIsAddDialogOpen(false);
+                  queryClient.invalidateQueries({ queryKey: ['students'] });
+                }}
+              />
+            </DialogContent>
+          </Dialog>
+        </div>
       </CardHeader>
       <CardContent>
         <div className="flex items-center gap-4 mb-6">
@@ -116,6 +147,7 @@ const StudentsTab = () => {
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead>Student ID</TableHead>
                   <TableHead>Name</TableHead>
                   <TableHead>Email</TableHead>
                   <TableHead>Grade</TableHead>
@@ -127,13 +159,16 @@ const StudentsTab = () => {
               <TableBody>
                 {filteredStudents.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                    <TableCell colSpan={7} className="text-center py-8 text-muted-foreground">
                       No students found
                     </TableCell>
                   </TableRow>
                 ) : (
                   filteredStudents.map((student) => (
                     <TableRow key={student.id}>
+                      <TableCell className="font-mono text-sm">
+                        {student.student_number || '-'}
+                      </TableCell>
                       <TableCell className="font-medium">
                         {student.first_name} {student.last_name}
                       </TableCell>
@@ -157,13 +192,27 @@ const StudentsTab = () => {
                           >
                             <FileText className="h-4 w-4" />
                           </Button>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => deleteMutation.mutate(student.id)}
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
+                          <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                              <Button variant="ghost" size="icon">
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                              <AlertDialogHeader>
+                                <AlertDialogTitle>Delete Student</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                  Are you sure you want to delete {student.first_name} {student.last_name}? This action cannot be undone.
+                                </AlertDialogDescription>
+                              </AlertDialogHeader>
+                              <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction onClick={() => deleteMutation.mutate(student.id)}>
+                                  Delete
+                                </AlertDialogAction>
+                              </AlertDialogFooter>
+                            </AlertDialogContent>
+                          </AlertDialog>
                         </div>
                       </TableCell>
                     </TableRow>
