@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState, useRef } from 'react';
+import { toast } from 'sonner';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -86,11 +87,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   useEffect(() => {
+    const initialLoad = useRef(true);
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
+
+        if (!initialLoad.current) {
+          if (event === 'SIGNED_IN') {
+            toast.success('Signed in successfully');
+          } else if (event === 'SIGNED_OUT') {
+            toast.info('You have been signed out');
+          }
+        }
+        initialLoad.current = false;
 
         if (session?.user) {
           setTimeout(() => {
