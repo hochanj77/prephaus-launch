@@ -103,7 +103,7 @@ export default function CatalogRequest() {
   };
 
   return (
-    <div className="pt-16 md:pt-24">
+    <div className="pt-28 md:pt-36">
       <section className="py-10 md:py-16 bg-background">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto">

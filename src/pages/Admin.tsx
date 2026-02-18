@@ -36,7 +36,7 @@ const Admin = () => {
   }
 
   return (
-    <div className="container px-4 pt-16 md:pt-24 pb-8">
+    <div className="container px-4 pt-28 md:pt-36 pb-8">
       <div className="mb-6 md:mb-8">
         <h1 className="text-2xl md:text-3xl font-bold text-foreground">Admin Dashboard</h1>
         <p className="text-sm md:text-base text-muted-foreground mt-1">Manage students, grades, content, and communications</p>
