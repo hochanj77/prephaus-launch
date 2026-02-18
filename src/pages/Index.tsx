@@ -87,7 +87,7 @@ export default function Index() {
 
       {/* Announcements Section */}
       {announcements.length > 0 && (
-        <section className="py-12 md:py-20 bg-muted">
+        <section className="py-12 md:py-20 bg-background">
           <div className="container mx-auto px-4">
             <div className="flex items-center gap-3 mb-8 md:mb-10 justify-center">
               <div className="p-2.5 rounded-full bg-accent/20">
@@ -128,8 +128,13 @@ export default function Index() {
         </section>
       )}
 
+      {/* Section Divider */}
+      <div className="container mx-auto px-4">
+        <div className="border-t border-border/40" />
+      </div>
+
       {/* CTA Section */}
-      <section className="py-10 md:py-16 bg-muted">
+      <section className="py-10 md:py-16 bg-background">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-2xl md:text-4xl font-bold text-secondary mb-4 md:mb-6">
             {cta.headline}
