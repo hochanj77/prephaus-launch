@@ -87,33 +87,33 @@ export default function Index() {
 
       {/* Announcements Section */}
       {announcements.length > 0 && (
-        <section className="py-12 md:py-20 bg-secondary">
+        <section className="py-12 md:py-20 bg-muted">
           <div className="container mx-auto px-4">
             <div className="flex items-center gap-3 mb-8 md:mb-10 justify-center">
               <div className="p-2.5 rounded-full bg-accent/20">
                 <Megaphone className="h-6 w-6 text-accent" />
               </div>
-              <h2 className="text-2xl md:text-3xl font-bold text-secondary-foreground">Latest Announcements</h2>
+              <h2 className="text-2xl md:text-3xl font-bold text-secondary">Latest Announcements</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
               {announcements.map((a, i) => (
                 <Card
                   key={a.id}
-                  className="group border-none bg-secondary-foreground/5 backdrop-blur-sm hover:bg-secondary-foreground/10 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                  className="group border border-border/50 bg-card hover:border-accent/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-accent/10"
                   style={{ animationDelay: `${i * 100}ms` }}
                 >
                   <CardContent className="p-6">
                     <div className="flex items-start gap-3 mb-3">
                       <div className="h-2 w-2 rounded-full bg-accent mt-2 shrink-0 animate-pulse" />
-                      <h3 className="font-bold text-lg text-secondary-foreground group-hover:text-accent transition-colors">
+                      <h3 className="font-bold text-lg text-foreground group-hover:text-accent transition-colors">
                         {a.title}
                       </h3>
                     </div>
-                    <p className="text-secondary-foreground/70 text-sm leading-relaxed line-clamp-3 mb-4 pl-5">
+                    <p className="text-muted-foreground text-sm leading-relaxed mb-4 pl-5">
                       {a.content}
                     </p>
                     {a.published_at && (
-                      <div className="flex items-center gap-1.5 pl-5 text-secondary-foreground/50">
+                      <div className="flex items-center gap-1.5 pl-5 text-muted-foreground/60">
                         <CalendarDays className="h-3.5 w-3.5" />
                         <p className="text-xs font-medium">
                           {format(new Date(a.published_at), 'MMMM d, yyyy')}
