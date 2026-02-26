@@ -34,12 +34,12 @@ const subjectOptions = [
 ];
 
 const contactDefaults = {
-  address_line1: "268 Broad Ave Floor 2B",
+  address_line1: "268 Broad Ave Floor 2",
   address_line2: "Palisades Park, NJ 07650",
   phone: "(201) 525-8577",
-  email: "info@prephaus.com",
-  hours_weekday: "Mon-Fri: 9am - 8pm",
-  hours_weekend: "Sat-Sun: 10am - 5pm",
+  email: "info@prephaus.academy",
+  hours_weekday: "Mon-Fri: 1:30pm - 9:00pm",
+  hours_weekend: "Sat: 9:00am - 4:00pm",
 };
 
 export default function Contact() {
