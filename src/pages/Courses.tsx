@@ -5,7 +5,8 @@ import { usePageContent } from "@/hooks/useSiteContent";
 
 const defaultPrograms = [
   "SAT Prep", "ACT Prep", "BCA Prep", "Columbia SHP",
-  "Math Contests", "Writing Contests", "Science Contest", "Private Lessons",
+  "Private Lessons", "School Subjects",
+  "Math Contests", "Writing Contests", "Science Contest",
 ];
 
 const heroDefaults = {
