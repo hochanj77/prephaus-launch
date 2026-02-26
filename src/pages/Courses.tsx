@@ -52,8 +52,27 @@ export default function Courses() {
       {/* Courses Section */}
       <section className="py-10 md:py-16 bg-background">
         <div className="container mx-auto px-4">
+          <h2 className="text-xl md:text-2xl font-bold text-secondary mb-6 text-center">Programs</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
-            {programs.map((title, index) => (
+            {programs.filter((_, i) => i < 6).map((title, index) => (
+              <div
+                key={index}
+                className="group bg-card rounded-xl md:rounded-2xl p-5 md:p-8 shadow-lg border border-border hover:shadow-2xl hover:-translate-y-2 hover:border-primary/40 transition-all duration-300 ease-out animate-fade-in-up text-center cursor-pointer"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <div className="w-12 h-12 rounded-xl bg-primary/10 group-hover:bg-primary/20 group-hover:scale-110 flex items-center justify-center mb-4 mx-auto transition-all duration-300">
+                  <BookOpen className="h-6 w-6 text-primary group-hover:text-accent transition-colors duration-300" />
+                </div>
+                <h3 className="text-lg md:text-xl font-bold text-secondary group-hover:text-primary transition-colors duration-300">{title}</h3>
+              </div>
+            ))}
+          </div>
+
+          <div className="my-10 md:my-14">
+            <h2 className="text-xl md:text-2xl font-bold text-secondary mb-6 text-center">Contests</h2>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
+            {programs.filter((_, i) => i >= 6).map((title, index) => (
               <div
                 key={index}
                 className="group bg-card rounded-xl md:rounded-2xl p-5 md:p-8 shadow-lg border border-border hover:shadow-2xl hover:-translate-y-2 hover:border-primary/40 transition-all duration-300 ease-out animate-fade-in-up text-center cursor-pointer"
