@@ -277,19 +277,6 @@ export default function Contact() {
                 />
               </div>
 
-              <div className="bg-warm rounded-xl p-5">
-                <h3 className="text-lg font-bold text-secondary mb-2">
-                  Prefer to Talk?
-                </h3>
-                <p className="text-muted-foreground text-sm mb-4">
-                  Schedule a free phone or in-person consultation with one of our academic advisors.
-                </p>
-                <Button variant="hero" size="default" asChild className="w-full">
-                  <a href={`tel:${c.phone.replace(/\D/g, '')}`}>
-                    Call {c.phone}
-                  </a>
-                </Button>
-              </div>
             </div>
           </div>
         </div>
