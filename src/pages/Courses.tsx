@@ -56,13 +56,13 @@ export default function Courses() {
             {programs.map((title, index) => (
               <div
                 key={index}
-                className="bg-card rounded-xl md:rounded-2xl p-5 md:p-8 shadow-lg border border-border hover-lift animate-fade-in-up text-center"
+                className="group bg-card rounded-xl md:rounded-2xl p-5 md:p-8 shadow-lg border border-border hover:shadow-2xl hover:-translate-y-2 hover:border-primary/40 transition-all duration-300 ease-out animate-fade-in-up text-center cursor-pointer"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 mx-auto">
-                  <BookOpen className="h-6 w-6 text-primary" />
+                <div className="w-12 h-12 rounded-xl bg-primary/10 group-hover:bg-primary/20 group-hover:scale-110 flex items-center justify-center mb-4 mx-auto transition-all duration-300">
+                  <BookOpen className="h-6 w-6 text-primary group-hover:text-accent transition-colors duration-300" />
                 </div>
-                <h3 className="text-lg md:text-xl font-bold text-secondary">{title}</h3>
+                <h3 className="text-lg md:text-xl font-bold text-secondary group-hover:text-primary transition-colors duration-300">{title}</h3>
               </div>
             ))}
           </div>
