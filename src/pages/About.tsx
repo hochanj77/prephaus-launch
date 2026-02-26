@@ -133,7 +133,11 @@ export default function About() {
               <img
                 src={classroomImage}
                 alt="PrepHaus learning environment"
-                className="rounded-2xl shadow-2xl relative z-10 transition-transform duration-500 group-hover:scale-[1.02]"
+                className={cn(
+                  "rounded-2xl shadow-2xl relative z-10 transition-all duration-1000 ease-out group-hover:scale-[1.02]",
+                  hero.inView ? "opacity-100 scale-100 blur-0" : "opacity-0 scale-95 blur-sm"
+                )}
+                style={{ transitionDelay: "300ms" }}
               />
             </div>
           </div>
