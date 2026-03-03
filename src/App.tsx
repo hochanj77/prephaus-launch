@@ -15,6 +15,7 @@ import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import Portal from "./pages/Portal";
 import StudentDashboard from "./pages/StudentDashboard";
+import ParentDashboard from "./pages/ParentDashboard";
 import NotFound from "./pages/NotFound";
 import CatalogRequest from "./pages/CatalogRequest";
 
@@ -39,6 +40,7 @@ const App = () => (
               <Route path="/courses" element={<Courses />} />
               <Route path="/portal" element={<Portal />} />
               <Route path="/dashboard" element={<StudentDashboard />} />
+              <Route path="/parent-dashboard" element={<ParentDashboard />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/social" element={<Social />} />
               <Route path="/consulting" element={<Consulting />} />
