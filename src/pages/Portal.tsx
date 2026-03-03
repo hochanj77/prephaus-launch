@@ -7,18 +7,21 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Lock, User, Loader2, AlertCircle } from "lucide-react";
+import { Lock, User, Loader2, AlertCircle, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export default function Portal() {
   const navigate = useNavigate();
-  const { user, loading, isAdmin, isStudent, isAdminLoading, signIn, signUp } = useAuth();
+  const { user, loading, isAdmin, isStudent, isParent, isAdminLoading, signIn, signUp } = useAuth();
   const { toast } = useToast();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [accountType, setAccountType] = useState<"student" | "parent">("student");
+  const [studentEmail, setStudentEmail] = useState("");
+  const [studentId, setStudentId] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -30,10 +33,11 @@ export default function Portal() {
         navigate("/admin");
       } else if (isStudent) {
         navigate("/dashboard");
+      } else if (isParent) {
+        navigate("/parent-dashboard");
       }
-      // If user exists but is neither admin nor student, stay on portal with a message
     }
-  }, [user, loading, isAdmin, isStudent, isAdminLoading, navigate]);
+  }, [user, loading, isAdmin, isStudent, isParent, isAdminLoading, navigate]);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,12 +52,10 @@ export default function Portal() {
     setIsSubmitting(true);
     try {
       const { error } = await signIn(email, password);
-
       if (error) {
         setError("Invalid credentials.");
         toast({ variant: "destructive", title: "Sign In Failed", description: "Invalid credentials." });
       }
-      // Redirect is handled by the useEffect watching user/role state
     } catch (err) {
       const errorMessage = "Sign in failed. Please check your connection and try again.";
       setError(errorMessage);
@@ -81,8 +83,35 @@ export default function Portal() {
       return;
     }
 
+    // Parent-specific validation
+    if (accountType === "parent") {
+      if (!studentEmail.trim() || !studentId.trim()) {
+        setError("Please enter your child's email and Student ID to link your account.");
+        return;
+      }
+    }
+
     setIsSubmitting(true);
     try {
+      // If parent, verify the student exists before creating the account
+      let linkedStudentId: string | null = null;
+      if (accountType === "parent") {
+        const { data: matchedStudent, error: matchErr } = await supabase
+          .from("students")
+          .select("id")
+          .eq("email", studentEmail.trim())
+          .eq("student_number", studentId.trim())
+          .eq("active", true)
+          .maybeSingle();
+
+        if (matchErr || !matchedStudent) {
+          setError("No active student found with that email and Student ID. Please check and try again.");
+          setIsSubmitting(false);
+          return;
+        }
+        linkedStudentId = matchedStudent.id;
+      }
+
       const { error } = await signUp(email, password);
 
       if (error) {
@@ -95,7 +124,7 @@ export default function Portal() {
         setError(errorMessage);
         toast({ variant: "destructive", title: "Sign Up Failed", description: errorMessage });
       } else {
-        // Auto-create student record after signup
+        // Create the record after signup
         const { data: { session } } = await supabase.auth.getSession();
         if (session?.user) {
           await supabase.from('students').insert({
@@ -103,6 +132,8 @@ export default function Portal() {
             last_name: lastName.trim(),
             email: email,
             user_id: session.user.id,
+            account_type: accountType,
+            linked_student_id: linkedStudentId,
           });
         }
         const successMessage = 'Account created! Please check your email to verify your account before signing in.';
@@ -112,6 +143,8 @@ export default function Portal() {
         setPassword('');
         setFirstName('');
         setLastName('');
+        setStudentEmail('');
+        setStudentId('');
       }
     } catch (err) {
       const errorMessage = "Sign up failed. Please check your connection and try again.";
@@ -131,7 +164,7 @@ export default function Portal() {
   }
 
   // User is logged in but has no role
-  if (user && !isAdmin && !isStudent) {
+  if (user && !isAdmin && !isStudent && !isParent) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-muted px-4">
         <div className="w-full max-w-md">
@@ -224,7 +257,7 @@ export default function Portal() {
             </TabsContent>
 
             <TabsContent value="signup">
-              <form onSubmit={handleSignUp} className="space-y-6">
+              <form onSubmit={handleSignUp} className="space-y-5">
                 {error && (
                   <Alert variant="destructive">
                     <AlertCircle className="h-4 w-4" />
@@ -238,6 +271,37 @@ export default function Portal() {
                   </Alert>
                 )}
 
+                {/* Account Type Toggle */}
+                <div className="space-y-2">
+                  <Label className="text-foreground">I am a...</Label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setAccountType("student")}
+                      className={`flex items-center justify-center gap-2 p-3 rounded-lg border-2 transition-all text-sm font-medium ${
+                        accountType === "student"
+                          ? "border-accent bg-accent/10 text-accent"
+                          : "border-border bg-background text-muted-foreground hover:border-muted-foreground"
+                      }`}
+                    >
+                      <User className="h-4 w-4" />
+                      Student
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setAccountType("parent")}
+                      className={`flex items-center justify-center gap-2 p-3 rounded-lg border-2 transition-all text-sm font-medium ${
+                        accountType === "parent"
+                          ? "border-accent bg-accent/10 text-accent"
+                          : "border-border bg-background text-muted-foreground hover:border-muted-foreground"
+                      }`}
+                    >
+                      <Users className="h-4 w-4" />
+                      Parent
+                    </button>
+                  </div>
+                </div>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="space-y-2">
                     <Label htmlFor="signup-first-name" className="text-foreground">First Name</Label>
@@ -247,8 +311,6 @@ export default function Portal() {
                       placeholder="First name"
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
-                      autoCapitalize="off"
-                      autoCorrect="off"
                       required
                     />
                   </div>
@@ -260,8 +322,6 @@ export default function Portal() {
                       placeholder="Last name"
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
-                      autoCapitalize="off"
-                      autoCorrect="off"
                       required
                     />
                   </div>
@@ -299,6 +359,38 @@ export default function Portal() {
                   </div>
                 </div>
 
+                {/* Parent linking fields */}
+                {accountType === "parent" && (
+                  <div className="space-y-4 p-4 rounded-lg border border-border bg-muted/50">
+                    <p className="text-sm font-medium text-secondary">Link to your child's account</p>
+                    <p className="text-xs text-muted-foreground">
+                      Enter your child's email and Student ID to connect your account to their profile.
+                    </p>
+                    <div className="space-y-2">
+                      <Label htmlFor="student-email" className="text-foreground">Child's Email</Label>
+                      <Input
+                        id="student-email"
+                        type="email"
+                        placeholder="student@example.com"
+                        value={studentEmail}
+                        onChange={(e) => setStudentEmail(e.target.value)}
+                        required={accountType === "parent"}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="student-id" className="text-foreground">Child's Student ID</Label>
+                      <Input
+                        id="student-id"
+                        type="text"
+                        placeholder="e.g. JJ100"
+                        value={studentId}
+                        onChange={(e) => setStudentId(e.target.value)}
+                        required={accountType === "parent"}
+                      />
+                    </div>
+                  </div>
+                )}
+
                 <Button variant="accent" size="lg" className="w-full" type="submit" disabled={isSubmitting}>
                   {isSubmitting ? (
                     <>
@@ -317,4 +409,3 @@ export default function Portal() {
     </div>
   );
 }
-

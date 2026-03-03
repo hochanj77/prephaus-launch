@@ -221,6 +221,39 @@ export type Database = {
         }
         Relationships: []
       }
+      messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          read: boolean
+          recipient_id: string | null
+          sender_id: string
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          read?: boolean
+          recipient_id?: string | null
+          sender_id: string
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          read?: boolean
+          recipient_id?: string | null
+          sender_id?: string
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       progress_notes: {
         Row: {
           content: string
@@ -431,6 +464,7 @@ export type Database = {
       }
       students: {
         Row: {
+          account_type: string
           active: boolean | null
           created_at: string | null
           date_of_birth: string | null
@@ -439,6 +473,7 @@ export type Database = {
           grade_level: string | null
           id: string
           last_name: string
+          linked_student_id: string | null
           notes: string | null
           parent_email: string | null
           parent_name: string | null
@@ -451,6 +486,7 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          account_type?: string
           active?: boolean | null
           created_at?: string | null
           date_of_birth?: string | null
@@ -459,6 +495,7 @@ export type Database = {
           grade_level?: string | null
           id?: string
           last_name: string
+          linked_student_id?: string | null
           notes?: string | null
           parent_email?: string | null
           parent_name?: string | null
@@ -471,6 +508,7 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          account_type?: string
           active?: boolean | null
           created_at?: string | null
           date_of_birth?: string | null
@@ -479,6 +517,7 @@ export type Database = {
           grade_level?: string | null
           id?: string
           last_name?: string
+          linked_student_id?: string | null
           notes?: string | null
           parent_email?: string | null
           parent_name?: string | null
@@ -491,6 +530,13 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "students_linked_student_id_fkey"
+            columns: ["linked_student_id"]
+            isOneToOne: false
+            referencedRelation: "students"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "students_tutor_id_fkey"
             columns: ["tutor_id"]

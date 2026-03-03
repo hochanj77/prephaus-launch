@@ -17,7 +17,9 @@ interface AuthContextType {
   isAdmin: boolean;
   isAdminLoading: boolean;
   isStudent: boolean;
+  isParent: boolean;
   studentProfile: StudentProfile | null;
+  linkedStudentProfile: StudentProfile | null;
   signUp: (email: string, password: string) => Promise<{ error: Error | null }>;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<void>;
@@ -40,7 +42,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isAdmin, setIsAdmin] = useState(false);
   const [isAdminLoading, setIsAdminLoading] = useState(true);
   const [isStudent, setIsStudent] = useState(false);
+  const [isParent, setIsParent] = useState(false);
   const [studentProfile, setStudentProfile] = useState<StudentProfile | null>(null);
+  const [linkedStudentProfile, setLinkedStudentProfile] = useState<StudentProfile | null>(null);
   const initialLoadRef = useRef(true);
 
   const checkRoles = async (userId: string) => {
@@ -64,7 +68,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Check if this user is linked to a student record
       const { data: studentData, error: studentError } = await supabase
         .from('students')
-        .select('id, first_name, last_name, student_number')
+        .select('id, first_name, last_name, student_number, account_type, linked_student_id')
         .eq('user_id', userId)
         .eq('active', true)
         .maybeSingle();
@@ -72,24 +76,50 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (studentError) {
         console.error('Error checking student profile:', studentError);
         setIsStudent(false);
+        setIsParent(false);
         setStudentProfile(null);
+        setLinkedStudentProfile(null);
+      } else if (studentData) {
+        const isParentAccount = studentData.account_type === 'parent';
+        setIsParent(isParentAccount);
+        setIsStudent(!isParentAccount);
+        setStudentProfile({
+          id: studentData.id,
+          first_name: studentData.first_name,
+          last_name: studentData.last_name,
+          student_number: studentData.student_number,
+        });
+
+        // If parent, fetch linked student profile
+        if (isParentAccount && studentData.linked_student_id) {
+          const { data: linkedData } = await supabase
+            .from('students')
+            .select('id, first_name, last_name, student_number')
+            .eq('id', studentData.linked_student_id)
+            .maybeSingle();
+          setLinkedStudentProfile(linkedData || null);
+        } else {
+          setLinkedStudentProfile(null);
+        }
       } else {
-        setIsStudent(!!studentData);
-        setStudentProfile(studentData || null);
+        setIsStudent(false);
+        setIsParent(false);
+        setStudentProfile(null);
+        setLinkedStudentProfile(null);
       }
     } catch (err) {
       console.error('Error checking roles:', err);
       setIsAdmin(false);
       setIsStudent(false);
+      setIsParent(false);
       setStudentProfile(null);
+      setLinkedStudentProfile(null);
     } finally {
       setIsAdminLoading(false);
     }
   };
 
   useEffect(() => {
-    
-
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
         setSession(session);
@@ -112,7 +142,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         } else {
           setIsAdmin(false);
           setIsStudent(false);
+          setIsParent(false);
           setStudentProfile(null);
+          setLinkedStudentProfile(null);
           setIsAdminLoading(false);
         }
       }
@@ -150,7 +182,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     await supabase.auth.signOut();
     setIsAdmin(false);
     setIsStudent(false);
+    setIsParent(false);
     setStudentProfile(null);
+    setLinkedStudentProfile(null);
   };
 
   const value = {
@@ -160,7 +194,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     isAdmin,
     isAdminLoading,
     isStudent,
+    isParent,
     studentProfile,
+    linkedStudentProfile,
     signUp,
     signIn,
     signOut,
@@ -168,4 +204,3 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
-
