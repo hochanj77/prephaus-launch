@@ -4,11 +4,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2, Plus, Pencil, Key, Trash2, Shield, AlertCircle, UserPlus } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
+import { Loader2, Pencil, Key, Trash2, UserPlus, Lock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 interface AuthUser {
@@ -38,9 +37,13 @@ export default function UsersTab() {
   // Form state
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
-  const [newRole, setNewRole] = useState("user");
   const [editEmail, setEditEmail] = useState("");
   const [resetPassword, setResetPassword] = useState("");
+
+  // Password verification state
+  const [adminPassword, setAdminPassword] = useState("");
+  const [isVerified, setIsVerified] = useState(false);
+  const [verifying, setVerifying] = useState(false);
 
   const { data: users = [], isLoading } = useQuery<AuthUser[]>({
     queryKey: ["admin-users"],
@@ -50,15 +53,28 @@ export default function UsersTab() {
     },
   });
 
+  const verifyPassword = async (): Promise<boolean> => {
+    setVerifying(true);
+    try {
+      await adminUsersAction("verify_password", { password: adminPassword });
+      setIsVerified(true);
+      return true;
+    } catch (err: any) {
+      toast({ variant: "destructive", title: "Verification Failed", description: err.message || "Incorrect password" });
+      return false;
+    } finally {
+      setVerifying(false);
+    }
+  };
+
   const createMutation = useMutation({
-    mutationFn: () => adminUsersAction("create", { email: newEmail, password: newPassword, role: newRole }),
+    mutationFn: () => adminUsersAction("create", { email: newEmail, password: newPassword, role: "admin" }),
     onSuccess: () => {
-      toast({ title: "User Created", description: `Account created for ${newEmail}` });
+      toast({ title: "Admin Created", description: `Admin account created for ${newEmail}` });
       queryClient.invalidateQueries({ queryKey: ["admin-users"] });
       setCreateOpen(false);
       setNewEmail("");
       setNewPassword("");
-      setNewRole("user");
     },
     onError: (err: Error) => toast({ variant: "destructive", title: "Error", description: err.message }),
   });
@@ -68,7 +84,7 @@ export default function UsersTab() {
     onSuccess: () => {
       toast({ title: "Email Updated" });
       queryClient.invalidateQueries({ queryKey: ["admin-users"] });
-      setEditUser(null);
+      closeEditDialog();
     },
     onError: (err: Error) => toast({ variant: "destructive", title: "Error", description: err.message }),
   });
@@ -77,17 +93,7 @@ export default function UsersTab() {
     mutationFn: (params: { user_id: string; password: string }) => adminUsersAction("update_password", params),
     onSuccess: () => {
       toast({ title: "Password Updated" });
-      setPasswordUser(null);
-      setResetPassword("");
-    },
-    onError: (err: Error) => toast({ variant: "destructive", title: "Error", description: err.message }),
-  });
-
-  const toggleRoleMutation = useMutation({
-    mutationFn: (params: { user_id: string; role: string; remove: boolean }) => adminUsersAction("update_role", params),
-    onSuccess: () => {
-      toast({ title: "Role Updated" });
-      queryClient.invalidateQueries({ queryKey: ["admin-users"] });
+      closePasswordDialog();
     },
     onError: (err: Error) => toast({ variant: "destructive", title: "Error", description: err.message }),
   });
@@ -95,11 +101,25 @@ export default function UsersTab() {
   const deleteMutation = useMutation({
     mutationFn: (user_id: string) => adminUsersAction("delete", { user_id }),
     onSuccess: () => {
-      toast({ title: "User Deleted" });
+      toast({ title: "Admin Deleted" });
       queryClient.invalidateQueries({ queryKey: ["admin-users"] });
     },
     onError: (err: Error) => toast({ variant: "destructive", title: "Error", description: err.message }),
   });
+
+  const closeEditDialog = () => {
+    setEditUser(null);
+    setAdminPassword("");
+    setIsVerified(false);
+    setEditEmail("");
+  };
+
+  const closePasswordDialog = () => {
+    setPasswordUser(null);
+    setAdminPassword("");
+    setIsVerified(false);
+    setResetPassword("");
+  };
 
   if (isLoading) {
     return (
@@ -113,20 +133,21 @@ export default function UsersTab() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-bold text-foreground">User Accounts</h2>
-          <p className="text-sm text-muted-foreground">Manage authentication accounts, emails, passwords, and roles</p>
+          <h2 className="text-xl font-bold text-foreground">Admin Accounts</h2>
+          <p className="text-sm text-muted-foreground">Manage admin authentication accounts, emails, and passwords</p>
         </div>
 
         <Dialog open={createOpen} onOpenChange={setCreateOpen}>
           <DialogTrigger asChild>
             <Button className="gap-2">
               <UserPlus className="h-4 w-4" />
-              <span className="hidden sm:inline">Create User</span>
+              <span className="hidden sm:inline">Create Admin</span>
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Create New User</DialogTitle>
+              <DialogTitle>Create New Admin</DialogTitle>
+              <DialogDescription>Create a new administrator account with full access.</DialogDescription>
             </DialogHeader>
             <form
               onSubmit={(e) => {
@@ -143,20 +164,9 @@ export default function UsersTab() {
                 <Label>Password</Label>
                 <Input type="password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} required minLength={6} />
               </div>
-              <div className="space-y-2">
-                <Label>Role</Label>
-                <select
-                  value={newRole}
-                  onChange={(e) => setNewRole(e.target.value)}
-                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                >
-                  <option value="user">User</option>
-                  <option value="admin">Admin</option>
-                </select>
-              </div>
               <Button type="submit" className="w-full" disabled={createMutation.isPending}>
                 {createMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-                Create Account
+                Create Admin Account
               </Button>
             </form>
           </DialogContent>
@@ -171,15 +181,7 @@ export default function UsersTab() {
                 <div className="space-y-1">
                   <p className="font-medium text-foreground">{u.email}</p>
                   <div className="flex items-center gap-2 flex-wrap">
-                    {u.roles.length > 0 ? (
-                      u.roles.map((r) => (
-                        <Badge key={r} variant={r === "admin" ? "default" : "secondary"}>
-                          {r}
-                        </Badge>
-                      ))
-                    ) : (
-                      <Badge variant="outline">No role</Badge>
-                    )}
+                    <Badge variant="default">admin</Badge>
                     <span className="text-xs text-muted-foreground">
                       Last sign in: {u.last_sign_in_at ? new Date(u.last_sign_in_at).toLocaleDateString() : "Never"}
                     </span>
@@ -187,15 +189,17 @@ export default function UsersTab() {
                 </div>
 
                 <div className="flex items-center gap-1.5 flex-wrap">
-                  {/* Edit Email */}
+                  {/* Edit Email - requires password verification */}
                   <Dialog
                     open={editUser?.id === u.id}
                     onOpenChange={(open) => {
                       if (open) {
                         setEditUser(u);
                         setEditEmail(u.email);
+                        setAdminPassword("");
+                        setIsVerified(false);
                       } else {
-                        setEditUser(null);
+                        closeEditDialog();
                       }
                     }}
                   >
@@ -208,35 +212,66 @@ export default function UsersTab() {
                     <DialogContent>
                       <DialogHeader>
                         <DialogTitle>Update Email</DialogTitle>
+                        <DialogDescription>
+                          {!isVerified ? "Enter your admin password to proceed." : `Change email for ${u.email}`}
+                        </DialogDescription>
                       </DialogHeader>
-                      <form
-                        onSubmit={(e) => {
-                          e.preventDefault();
-                          updateEmailMutation.mutate({ user_id: u.id, email: editEmail });
-                        }}
-                        className="space-y-4"
-                      >
-                        <div className="space-y-2">
-                          <Label>New Email</Label>
-                          <Input type="email" value={editEmail} onChange={(e) => setEditEmail(e.target.value)} required />
-                        </div>
-                        <Button type="submit" className="w-full" disabled={updateEmailMutation.isPending}>
-                          {updateEmailMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-                          Update Email
-                        </Button>
-                      </form>
+
+                      {!isVerified ? (
+                        <form
+                          onSubmit={async (e) => {
+                            e.preventDefault();
+                            await verifyPassword();
+                          }}
+                          className="space-y-4"
+                        >
+                          <div className="space-y-2">
+                            <Label>Your Admin Password</Label>
+                            <Input
+                              type="password"
+                              value={adminPassword}
+                              onChange={(e) => setAdminPassword(e.target.value)}
+                              required
+                              placeholder="Enter your password to verify"
+                            />
+                          </div>
+                          <Button type="submit" className="w-full gap-2" disabled={verifying}>
+                            {verifying ? <Loader2 className="h-4 w-4 animate-spin" /> : <Lock className="h-4 w-4" />}
+                            Verify Identity
+                          </Button>
+                        </form>
+                      ) : (
+                        <form
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                            updateEmailMutation.mutate({ user_id: u.id, email: editEmail });
+                          }}
+                          className="space-y-4"
+                        >
+                          <div className="space-y-2">
+                            <Label>New Email</Label>
+                            <Input type="email" value={editEmail} onChange={(e) => setEditEmail(e.target.value)} required />
+                          </div>
+                          <Button type="submit" className="w-full" disabled={updateEmailMutation.isPending}>
+                            {updateEmailMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+                            Update Email
+                          </Button>
+                        </form>
+                      )}
                     </DialogContent>
                   </Dialog>
 
-                  {/* Reset Password */}
+                  {/* Reset Password - requires password verification */}
                   <Dialog
                     open={passwordUser?.id === u.id}
                     onOpenChange={(open) => {
                       if (open) {
                         setPasswordUser(u);
                         setResetPassword("");
+                        setAdminPassword("");
+                        setIsVerified(false);
                       } else {
-                        setPasswordUser(null);
+                        closePasswordDialog();
                       }
                     }}
                   >
@@ -249,43 +284,54 @@ export default function UsersTab() {
                     <DialogContent>
                       <DialogHeader>
                         <DialogTitle>Reset Password for {u.email}</DialogTitle>
+                        <DialogDescription>
+                          {!isVerified ? "Enter your admin password to proceed." : "Set a new password for this account."}
+                        </DialogDescription>
                       </DialogHeader>
-                      <form
-                        onSubmit={(e) => {
-                          e.preventDefault();
-                          updatePasswordMutation.mutate({ user_id: u.id, password: resetPassword });
-                        }}
-                        className="space-y-4"
-                      >
-                        <div className="space-y-2">
-                          <Label>New Password</Label>
-                          <Input type="password" value={resetPassword} onChange={(e) => setResetPassword(e.target.value)} required minLength={6} />
-                        </div>
-                        <Button type="submit" className="w-full" disabled={updatePasswordMutation.isPending}>
-                          {updatePasswordMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-                          Reset Password
-                        </Button>
-                      </form>
+
+                      {!isVerified ? (
+                        <form
+                          onSubmit={async (e) => {
+                            e.preventDefault();
+                            await verifyPassword();
+                          }}
+                          className="space-y-4"
+                        >
+                          <div className="space-y-2">
+                            <Label>Your Admin Password</Label>
+                            <Input
+                              type="password"
+                              value={adminPassword}
+                              onChange={(e) => setAdminPassword(e.target.value)}
+                              required
+                              placeholder="Enter your password to verify"
+                            />
+                          </div>
+                          <Button type="submit" className="w-full gap-2" disabled={verifying}>
+                            {verifying ? <Loader2 className="h-4 w-4 animate-spin" /> : <Lock className="h-4 w-4" />}
+                            Verify Identity
+                          </Button>
+                        </form>
+                      ) : (
+                        <form
+                          onSubmit={(e) => {
+                            e.preventDefault();
+                            updatePasswordMutation.mutate({ user_id: u.id, password: resetPassword });
+                          }}
+                          className="space-y-4"
+                        >
+                          <div className="space-y-2">
+                            <Label>New Password</Label>
+                            <Input type="password" value={resetPassword} onChange={(e) => setResetPassword(e.target.value)} required minLength={6} />
+                          </div>
+                          <Button type="submit" className="w-full" disabled={updatePasswordMutation.isPending}>
+                            {updatePasswordMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+                            Reset Password
+                          </Button>
+                        </form>
+                      )}
                     </DialogContent>
                   </Dialog>
-
-                  {/* Toggle Admin */}
-                  <Button
-                    variant={u.roles.includes("admin") ? "destructive" : "outline"}
-                    size="sm"
-                    className="gap-1.5"
-                    onClick={() =>
-                      toggleRoleMutation.mutate({
-                        user_id: u.id,
-                        role: "admin",
-                        remove: u.roles.includes("admin"),
-                      })
-                    }
-                    disabled={toggleRoleMutation.isPending}
-                  >
-                    <Shield className="h-3.5 w-3.5" />
-                    {u.roles.includes("admin") ? "Remove Admin" : "Make Admin"}
-                  </Button>
 
                   {/* Delete */}
                   <Button
@@ -293,7 +339,7 @@ export default function UsersTab() {
                     size="sm"
                     className="text-destructive hover:text-destructive"
                     onClick={() => {
-                      if (confirm(`Delete user ${u.email}? This cannot be undone.`)) {
+                      if (confirm(`Delete admin ${u.email}? This cannot be undone.`)) {
                         deleteMutation.mutate(u.id);
                       }
                     }}
