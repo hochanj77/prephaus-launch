@@ -17,6 +17,7 @@ import Admin from "./pages/Admin";
 import Portal from "./pages/Portal";
 import StudentDashboard from "./pages/StudentDashboard";
 import ParentDashboard from "./pages/ParentDashboard";
+import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 import CatalogRequest from "./pages/CatalogRequest";
 

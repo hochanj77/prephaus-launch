@@ -36,6 +36,30 @@ export default function Portal() {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [resetEmail, setResetEmail] = useState("");
+
+  const handleForgotPassword = async () => {
+    if (!resetEmail) return;
+    setIsSubmitting(true);
+    setError(null);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      if (error) {
+        toast.error(error.message);
+      } else {
+        toast.success("Password reset link sent! Check your email.");
+        setShowForgotPassword(false);
+        setResetEmail("");
+      }
+    } catch {
+      toast.error("Failed to send reset link.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   useEffect(() => {
     if (!loading && !isAdminLoading && user) {
