@@ -2,10 +2,11 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Loader2, Users, GraduationCap, Globe } from 'lucide-react';
+import { Loader2, Users, GraduationCap, Globe, UserCog } from 'lucide-react';
 import StudentsTab from '@/components/admin/StudentsTab';
 import GradesTab from '@/components/admin/GradesTab';
 import SiteContentTab from '@/components/admin/SiteContentTab';
+import UsersTab from '@/components/admin/UsersTab';
 
 const Admin = () => {
   const { user, loading, isAdmin, isAdminLoading } = useAuth();
@@ -43,7 +44,7 @@ const Admin = () => {
       </div>
 
       <Tabs defaultValue="students" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3 lg:w-auto lg:inline-grid lg:grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid lg:grid-cols-4">
           <TabsTrigger value="students" className="gap-2">
             <Users className="h-4 w-4" />
             <span className="hidden sm:inline">Students</span>
@@ -51,6 +52,10 @@ const Admin = () => {
           <TabsTrigger value="grades" className="gap-2">
             <GraduationCap className="h-4 w-4" />
             <span className="hidden sm:inline">Grades</span>
+          </TabsTrigger>
+          <TabsTrigger value="users" className="gap-2">
+            <UserCog className="h-4 w-4" />
+            <span className="hidden sm:inline">Users</span>
           </TabsTrigger>
           <TabsTrigger value="website" className="gap-2">
             <Globe className="h-4 w-4" />
@@ -66,6 +71,10 @@ const Admin = () => {
           <GradesTab />
         </TabsContent>
 
+        <TabsContent value="users">
+          <UsersTab />
+        </TabsContent>
+
         <TabsContent value="website">
           <SiteContentTab />
         </TabsContent>
@@ -75,4 +84,3 @@ const Admin = () => {
 };
 
 export default Admin;
-
