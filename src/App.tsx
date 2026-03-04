@@ -17,6 +17,7 @@ import Admin from "./pages/Admin";
 import Portal from "./pages/Portal";
 import StudentDashboard from "./pages/StudentDashboard";
 import ParentDashboard from "./pages/ParentDashboard";
+import ResetPassword from "./pages/ResetPassword";
 import NotFound from "./pages/NotFound";
 import CatalogRequest from "./pages/CatalogRequest";
 
@@ -49,6 +50,7 @@ const App = () => (
                 <Route path="/auth" element={<Navigate to="/portal" replace />} />
                 <Route path="/admin" element={<Admin />} />
                 <Route path="/catalog" element={<CatalogRequest />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
                 {/* Redirect old parent-portal URL */}
                 <Route path="/parent-portal" element={<Navigate to="/portal" replace />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
