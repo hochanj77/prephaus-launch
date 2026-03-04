@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X, Settings, LogOut, LayoutDashboard } from "lucide-react";
 import prephausLogo from "@/assets/prephaus-horizontal-logo.png";
 import { Button } from "@/components/ui/button";
@@ -21,8 +21,11 @@ export function Header() {
   const location = useLocation();
   const { user, isAdmin, isStudent, isParent, signOut } = useAuth();
 
+  const navigate = useNavigate();
+
   const handleLogout = async () => {
     await signOut();
+    navigate('/portal');
   };
 
   useEffect(() => {
