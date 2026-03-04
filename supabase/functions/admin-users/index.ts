@@ -12,7 +12,6 @@ Deno.serve(async (req) => {
   }
 
   try {
-    // Verify the calling user is an admin
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
@@ -24,7 +23,6 @@ Deno.serve(async (req) => {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
 
-    // Client with caller's token to verify admin
     const callerClient = createClient(supabaseUrl, Deno.env.get("SUPABASE_ANON_KEY")!, {
       global: { headers: { Authorization: authHeader } },
     });
@@ -37,7 +35,6 @@ Deno.serve(async (req) => {
       });
     }
 
-    // Check admin role using service role client
     const adminClient = createClient(supabaseUrl, serviceRoleKey);
     const { data: roleData } = await adminClient
       .from("user_roles")
@@ -56,23 +53,58 @@ Deno.serve(async (req) => {
     const body = await req.json();
     const { action } = body;
 
-    // LIST users
+    // LIST admin users only
     if (action === "list") {
+      // Get all admin role entries
+      const { data: adminRoles } = await adminClient
+        .from("user_roles")
+        .select("user_id")
+        .eq("role", "admin");
+
+      const adminUserIds = (adminRoles || []).map((r) => r.user_id);
+
       const { data, error } = await adminClient.auth.admin.listUsers({ perPage: 100 });
       if (error) throw error;
 
-      // Get roles for all users
-      const { data: roles } = await adminClient.from("user_roles").select("*");
-
-      const users = data.users.map((u) => ({
-        id: u.id,
-        email: u.email,
-        created_at: u.created_at,
-        last_sign_in_at: u.last_sign_in_at,
-        roles: (roles || []).filter((r) => r.user_id === u.id).map((r) => r.role),
-      }));
+      // Filter to only admin users
+      const users = data.users
+        .filter((u) => adminUserIds.includes(u.id))
+        .map((u) => ({
+          id: u.id,
+          email: u.email,
+          created_at: u.created_at,
+          last_sign_in_at: u.last_sign_in_at,
+          roles: ["admin"],
+        }));
 
       return new Response(JSON.stringify({ users }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // VERIFY PASSWORD - re-authenticate calling admin before sensitive actions
+    if (action === "verify_password") {
+      const { password } = body;
+      if (!password || !caller.email) {
+        return new Response(JSON.stringify({ error: "Password required" }), {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      const { error: signInErr } = await adminClient.auth.signInWithPassword({
+        email: caller.email,
+        password,
+      });
+
+      if (signInErr) {
+        return new Response(JSON.stringify({ error: "Incorrect password" }), {
+          status: 401,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+
+      return new Response(JSON.stringify({ verified: true }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -94,7 +126,6 @@ Deno.serve(async (req) => {
       });
       if (createErr) throw createErr;
 
-      // Assign role if specified
       if (role && newUser.user) {
         await adminClient.from("user_roles").insert({
           user_id: newUser.user.id,
@@ -107,7 +138,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    // UPDATE email
+    // UPDATE email (requires prior verify_password call from client)
     if (action === "update_email") {
       const { user_id, email } = body;
       if (!user_id || !email) {
@@ -125,7 +156,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    // UPDATE password
+    // UPDATE password (requires prior verify_password call from client)
     if (action === "update_password") {
       const { user_id, password } = body;
       if (!user_id || !password) {
@@ -174,7 +205,6 @@ Deno.serve(async (req) => {
         });
       }
 
-      // Prevent deleting yourself
       if (user_id === caller.id) {
         return new Response(JSON.stringify({ error: "Cannot delete your own account" }), {
           status: 400,
