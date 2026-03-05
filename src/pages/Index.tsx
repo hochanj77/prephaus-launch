@@ -65,7 +65,7 @@ export default function Index() {
         <div className="absolute inset-0 bg-gradient-to-r from-secondary/90 via-secondary/75 to-secondary/50" />
 
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-2xl animate-fade-in-up">
+          <div className="max-w-2xl animate-fade-in-up mt-8 md:mt-12">
             <h1 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4 md:mb-6">
               {hero.headline}
             </h1>
