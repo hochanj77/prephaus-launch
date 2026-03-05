@@ -1,9 +1,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const allowedOrigin = Deno.env.get("CORS_ORIGIN") || "https://prephaus.lovable.app";
-
 const corsHeaders = {
-  "Access-Control-Allow-Origin": allowedOrigin,
+  "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
@@ -64,10 +62,19 @@ Deno.serve(async (req) => {
 
       const adminUserIds = (adminRoles || []).map((r) => r.user_id);
 
-      const { data, error } = await adminClient.auth.admin.listUsers({ perPage: 100 });
-      if (error) throw error;
+      // Paginate through all auth users to find admin accounts
+      let allAuthUsers: any[] = [];
+      let page = 1;
+      const perPage = 100;
+      while (true) {
+        const { data, error } = await adminClient.auth.admin.listUsers({ page, perPage });
+        if (error) throw error;
+        allAuthUsers = allAuthUsers.concat(data.users);
+        if (data.users.length < perPage) break;
+        page++;
+      }
 
-      const users = data.users
+      const users = allAuthUsers
         .filter((u) => adminUserIds.includes(u.id))
         .filter(
           (u) =>
